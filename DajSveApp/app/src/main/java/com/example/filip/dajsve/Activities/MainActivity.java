@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         listView = (ListView) findViewById(R.id.listview);
         listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayFragment);
         listView.setAdapter(listAdapter);
@@ -35,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment;
-                fragment = new SvePonudeFragment();
+                Fragment fragment = null;
                 switch (position){
                     case 0:
                         fragment = new SvePonudeFragment();
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.relativelayout, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.linearlayout, fragment).commit();
                 drawerLayout.closeDrawers();
             }
         });
