@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 /**
  * Created by Filip on 8.11.2016..
  */
@@ -28,5 +30,13 @@ public class Grad {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public static List<Grad> getAll(){
+
+        //ovo jos nisam napravio i nemam pojma sta trebam
+        List<Grad> lista = null;
+
+        return lista;
     }
 }
