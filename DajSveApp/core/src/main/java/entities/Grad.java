@@ -11,6 +11,9 @@ public class Grad {
     int id;
     String naziv;
 
+    public Grad() {
+    }
+
     public Grad(int id, String naziv) {
         this.id = id;
         this.naziv = naziv;
