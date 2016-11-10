@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ import entities.Grad;
 import static android.R.attr.data;
 import static android.R.attr.fragment;
 import static android.R.attr.homeLayout;
+import static android.R.attr.spinnerDropDownItemStyle;
 
 public class MainActivity extends AppCompatActivity implements DataLoadedListener{
 
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     ArrayAdapter<String> listAdapter;
     String arrayFragment[] = {"Sve ponude", "Favoriti", "Moje kategorije", "Mapa", "Facebook pregled"};
     DrawerLayout drawerLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +63,24 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
         //dohvaćanje resursa Gradovi i postavljanje u spinner
-        Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.gradovi_array, R.layout.spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGradovi.setAdapter(spinnerAdapter);
+        WebServiceCaller wsCaller = new WebServiceCaller();
+
+        List<Grad> listaEntitetaGrad = wsCaller.GetDataFromWeb();
         //!!!kraj dohvaćanje resursa gradovi
 
+
+
+        //Inicijalizacija spinnera, i adaptera za nazive gradova
+        Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
+        ArrayAdapter<String> adapterGradovi;
+        List<String> listaGradova = new ArrayList<>();
+        //dodavanje dohvacenih gradova u novu listu
+        for(Grad grad : listaEntitetaGrad){
+            listaGradova.add(grad.getNaziv());
+        }
+        //prikaz gradova iz liste
+            adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
+            spinnerGradovi.setAdapter(adapterGradovi);
 
         //postavljanje početnog fragmenta glavne aktivnosti
         Fragment home = new SvePonudeFragment();
@@ -103,11 +119,8 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
         //pocetak
-        WebServiceCaller wsCaller = new WebServiceCaller();
 
-        String rez = wsCaller.GetDataFromWeb();
 
-        Toast.makeText(this, rez, Toast.LENGTH_LONG).show();
     //kraj
     }
 
@@ -120,31 +133,9 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
     @Override
-    public void onDataLoaded(ArrayList<Grad> gradovi) {
-//        ArrayList<Grad> gradovi = new ArrayList<Grad>();
+    public void onDataLoaded(ArrayList<Grad> grads) {
 
 
-        if(gradovi!=null){
-            //ovdje trebam podatke ispisat
-        }
-
-        /*List<ExpandableStoreItem> storeItemList = new ArrayList<ExpandableStoreItem>();
-
-        if(stores != null) {
-            for (Store store : stores) {
-                storeItemList.add(new ExpandableStoreItem(store));
-            }
-            RecyclerView mRecycler = (RecyclerView) findViewById(R.id.main_recycler);
-            if(mRecycler != null) {
-                adapter = new StoreRecyclerAdapter(this, storeItemList);
-                mRecycler.setAdapter(adapter);
-                mRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-                // https://github.com/bignerdranch/expandable-recycler-view/blob/master/expandablerecyclerview/src/main/java/com/bignerdranch/expandablerecyclerview/Adapter/ExpandableRecyclerAdapter.java
-                // store states and reload states
-                adapter.expandParent(0);
-            }
-        }*/
     }
 
 }

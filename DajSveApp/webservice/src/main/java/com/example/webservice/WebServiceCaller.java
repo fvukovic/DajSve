@@ -32,12 +32,12 @@ import entities.Grad;
 
 public class WebServiceCaller{
 
-    public String GetDataFromWeb(){
+    public List<Grad> GetDataFromWeb(){
         TextView Naziv[];
         TextView Id[];
         int a = 0;
 
-        //Rijesno parsiranje xmla gradovi, provjerit gdje se parsiraju ovi podaci. Da li u ovoj klasi ili negdje drugdje..
+
 
         try{
             String address = "http://www.dajsve.com/rss.ashx?svigradovi=1";
@@ -60,7 +60,7 @@ public class WebServiceCaller{
                 NodeList cityList = fstElmnt.getElementsByTagName("Naziv");
                 Element nameElement = (Element) cityList.item(0);
                 cityList = nameElement.getChildNodes();
-                String townName =  ("Name = " + ((Node) cityList.item(0)).getNodeValue());
+                String townName =  ( ((Node) cityList.item(0)).getNodeValue());
 
                 NodeList idList = fstElmnt.getElementsByTagName("Id");
                 Element idElement = (Element) idList.item(0);
@@ -77,6 +77,13 @@ public class WebServiceCaller{
                 System.out.println(item.getNaziv());
             }
 
+            for(Grad x : citiesList){
+                x.getNaziv();
+            }
+
+
+            return citiesList;
+
 
 
         } catch(MalformedURLException e){
@@ -91,7 +98,7 @@ public class WebServiceCaller{
         //ove exceptione moramo imat jer inace javlja gresku, i moras imat try catch
 
 
-        return "";
+        return null;
 
     }
 

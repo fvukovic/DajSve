@@ -1,28 +1,4 @@
 <resources>
     <string name="app_name">DajSve</string>
-    <string></string>
-    <string-array name="gradovi_array">
-        <item>Zagreb</item>
-        <item>Split</item>
-        <item>Rijeka</item>
-        <item>Osijek</item>
-        <item>Varaždin</item>
-        <item>Zadar</item>
-        <item>Samobor</item>
-        <item>Pula</item>
-        <item>Karlovac</item>
-        <item>Sisak</item>
-        <item>Slavonski Brod</item>
-        <item>Šibenik</item>
-        <item>Dubrovnik</item>
-        <item>Koprivnica</item>
-        <item>Velika Gorica</item>
-        <item>Sesvete</item>
-        <item>Bjelovar</item>
-        <item>Krapina</item>
-        <item>Vukovar</item>
-        <item>Požega</item>
-        <item>Virovitica</item>
-        <item>Gospić</item>
-    </string-array>
+
 </resources>
