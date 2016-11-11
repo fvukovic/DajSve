@@ -5,6 +5,7 @@ import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
 
 import com.example.core.DataLoadedListener;
 import com.example.core.DataLoader;
@@ -44,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     ArrayAdapter<String> listAdapter;
     String arrayFragment[] = {"Sve ponude", "Favoriti", "Moje kategorije", "Mapa", "Facebook pregled"};
     DrawerLayout drawerLayout;
-
+    ActionBarDrawerToggle drawerListener;
 
 
     @Override
@@ -61,6 +66,20 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         listView.setAdapter(listAdapter);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
+        //klasa za otvaranje i zatvaranje drawera
+        drawerListener = new ActionBarDrawerToggle(this,drawerLayout,null, R.string.open_drawer,R.string.close_drawer )
+        {
+            @Override
+            public void onDrawerClosed(View drawerView){
+                super.onDrawerClosed(drawerView);
+                Toast.makeText(MainActivity.this, "Drawer closed", Toast.LENGTH_SHORT).show();
+            }
+            public void onDrawerOpened(View drawerView){
+                super.onDrawerOpened(drawerView);
+                Toast.makeText(MainActivity.this, "Drawer opened", Toast.LENGTH_SHORT).show();
+            }
+        };
+        drawerLayout.setDrawerListener(drawerListener);
 
         //dohvaćanje resursa Gradovi i postavljanje u spinner
         WebServiceCaller wsCaller = new WebServiceCaller();
