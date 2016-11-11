@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -23,7 +24,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
-
+import android.support.v7.app.AppCompatActivity;
 import com.example.core.DataLoadedListener;
 import com.example.core.DataLoader;
 import com.example.filip.dajsve.Fragments.FavoritiFragment;
@@ -50,12 +51,14 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     String arrayFragment[] = {"Sve ponude", "Favoriti", "Moje kategorije", "Mapa", "Facebook pregled"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
-
+    ActionBarActivity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActionBar ab = getSupportActionBar();
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -80,6 +83,10 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
             }
         };
         drawerLayout.setDrawerListener(drawerListener);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         //dohvaćanje resursa Gradovi i postavljanje u spinner
         WebServiceCaller wsCaller = new WebServiceCaller();
@@ -142,7 +149,22 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
     //kraj
     }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState){
+        super.onPostCreate(savedInstanceState);
+        drawerListener.syncState();
+    }
 
+    //kada kliknem na hamburger
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (drawerListener.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
     public void loadData(){
         DataLoader dataLoader;
         dataLoader = new WebServiceDataLoader();
