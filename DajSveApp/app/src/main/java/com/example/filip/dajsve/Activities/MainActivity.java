@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Grad;
+import entities.Ponuda;
 
 import static android.R.attr.data;
 import static android.R.attr.fragment;
@@ -94,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         List<Grad> listaEntitetaGrad = wsCaller.GetDataFromWeb();
         //!!!kraj dohvaćanje resursa gradovi
 
+        //dohvacanje ponuda
+        List<Ponuda> listaEntitetaPonuda = wsCaller.dohvatiPodatke();
+        //!!!kraj dohvaćanje resursa gradovi i podaci za ponude
 
 
         //Inicijalizacija spinnera, i adaptera za nazive gradova
