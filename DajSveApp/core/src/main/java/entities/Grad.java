@@ -37,7 +37,6 @@ public class Grad {
 
     public static List<Grad> getAll(){
 
-        //ovo jos nisam napravio i nemam pojma sta trebam
         List<Grad> lista = null;
 
         return lista;

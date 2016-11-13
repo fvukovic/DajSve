@@ -35,6 +35,7 @@ import com.example.filip.dajsve.R;
 import com.example.webservice.WebServiceCaller;
 import android.os.StrictMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import entities.Grad;
@@ -89,14 +90,18 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
 
+        // ovdje sam zakomentirao ispod radi testiranja nove arhitekture
+
+
+        loadData();
+
+
+
         //dohvaćanje resursa Gradovi i postavljanje u spinner
-        WebServiceCaller wsCaller = new WebServiceCaller();
+        /*WebServiceCaller wsCaller = new WebServiceCaller();
 
-        List<Grad> listaEntitetaGrad = wsCaller.GetDataFromWeb();
-        //!!!kraj dohvaćanje resursa gradovi
-
-        //dohvacanje ponuda
-        List<Ponuda> listaEntitetaPonuda = wsCaller.dohvatiPodatke();
+        List<Grad> listaEntitetaGrad = wsCaller.dohvatiGradove();
+        List<Ponuda> listaEntitetaPonuda = wsCaller.dohvatiPonude();*/
         //!!!kraj dohvaćanje resursa gradovi i podaci za ponude
 
 
@@ -105,9 +110,13 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         ArrayAdapter<String> adapterGradovi;
         List<String> listaGradova = new ArrayList<>();
         //dodavanje dohvacenih gradova u novu listu
-        for(Grad grad : listaEntitetaGrad){
+
+        //VAZNOOOO ˇ
+
+        /*for(Grad grad : listaEntitetaGrad){
             listaGradova.add(grad.getNaziv());
-        }
+        }*/
+
         //prikaz gradova iz liste
             adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
             spinnerGradovi.setAdapter(adapterGradovi);
@@ -178,9 +187,41 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
     @Override
-    public void onDataLoaded(ArrayList<Grad> grads) {
+    public void onDataLoaded(List<Grad> gradovi) {
 
+        Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
+        ArrayAdapter<String> adapterGradovi;
+        List<String> listaGradova = new ArrayList<>();
+
+        for(Grad grad : gradovi){
+
+
+            //ovo radi
+//            System.out.println(grad.getNaziv());
+
+            //ovo ne radi
+            listaGradova.add(grad.getNaziv());
+            //odnosno mozda radi, ali onda ne radi ovaj adapter kak spada
+
+        }
+
+        for(String gradic : listaGradova){
+            System.out.println(gradic);
+        }
+
+        adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
+
+        String sc = adapterGradovi.getItem(0);
+        System.out.println(sc);
+        //ovo također radi, dakle, jedino je ova linija ispod upitna. Moguće da je nemoguće bindati spinner izvan MainActivitija
+
+        spinnerGradovi.setAdapter(adapterGradovi);
+
+
+        //proba ---> provjerava se je li spinner ima gradove
+        String text = (String) spinnerGradovi.getItemAtPosition(1);
+        System.out.println(text);
+        //i ovo radi... dakle, nesto je sa prikazivanjem spinnera, ovdje je sve ok
 
     }
-
 }

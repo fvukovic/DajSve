@@ -23,7 +23,7 @@ import entities.Ponuda;
 
 public class SvePonudeFragment extends Fragment {
 
-    WebServiceCaller wsCaller = new WebServiceCaller();
+    /*WebServiceCaller wsCaller = new WebServiceCaller();
 
     private RecyclerView rv;
     private List<Ponuda> ponuda;
@@ -46,13 +46,13 @@ public class SvePonudeFragment extends Fragment {
     }
 
     private void initializeData(){
-        ponuda = wsCaller.dohvatiPodatke();
+        ponuda = wsCaller.dohvatiPonude();
     }
 
     private void initializeAdapter(){
         RVAdapter adapter = new RVAdapter(ponuda);
         rv.setAdapter(adapter);
-    }
+    }*/
 
 
 

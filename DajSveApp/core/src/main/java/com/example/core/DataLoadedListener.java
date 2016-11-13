@@ -1,6 +1,7 @@
 package com.example.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import entities.Grad;
 
@@ -9,5 +10,5 @@ import entities.Grad;
  */
 
 public interface DataLoadedListener {
-    void onDataLoaded(ArrayList<Grad> gradovi);
+    void onDataLoaded(List<Grad> gradovi);
 }
