@@ -31,7 +31,7 @@ public class WebServiceCaller{
         this.webServiceHandler = webServiceHandler;
     }
 
-    public void dohvatiGradove(){
+    public List<Grad> dohvatiGradove(){
 
         try{
             String address = "http://www.dajsve.com/rss.ashx?svigradovi=1";
@@ -43,9 +43,11 @@ public class WebServiceCaller{
             doc.getDocumentElement().normalize();
             NodeList nodeList = doc.getElementsByTagName("Grad");
 
-//            List<Grad> listaGradova = handleGradovi(nodeList);
+            List<Grad> listaGradova = handleGradovi(nodeList);
 
             handleGradovi(nodeList);
+
+            return listaGradova;
 
         } catch(MalformedURLException e){
             e.printStackTrace();
@@ -56,7 +58,7 @@ public class WebServiceCaller{
         }catch(SAXException se){
             se.printStackTrace();
         }
-
+        return null;
     }
 
     public List<Ponuda> dohvatiPonude(){
@@ -94,7 +96,7 @@ public class WebServiceCaller{
         return ponudaLista2;
     }
 
-    private void handleGradovi(NodeList nodeList) {
+    private List<Grad> handleGradovi(NodeList nodeList) {
         List<Grad> citiesList = new ArrayList<Grad>();
 
         for(int i=0; i<nodeList.getLength(); i++){
@@ -117,8 +119,9 @@ public class WebServiceCaller{
 
         if(webServiceHandler != null){
             webServiceHandler.onDataArrived(citiesList, true);
-        }
 
+        }
+        return citiesList;
     }
 
     private List<Ponuda> handlePonude(NodeList nodeList){

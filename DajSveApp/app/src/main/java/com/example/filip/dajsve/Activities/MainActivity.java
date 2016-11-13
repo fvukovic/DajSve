@@ -33,6 +33,8 @@ import com.example.filip.dajsve.Fragments.SvePonudeFragment;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
 import com.example.filip.dajsve.R;
 import com.example.webservice.WebServiceCaller;
+import com.example.webservice.WebServiceHandler;
+
 import android.os.StrictMode;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,10 +100,10 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
         //dohvaćanje resursa Gradovi i postavljanje u spinner
-        /*WebServiceCaller wsCaller = new WebServiceCaller();
+        WebServiceCaller wsCaller = new WebServiceCaller(null);
 
         List<Grad> listaEntitetaGrad = wsCaller.dohvatiGradove();
-        List<Ponuda> listaEntitetaPonuda = wsCaller.dohvatiPonude();*/
+        List<Ponuda> listaEntitetaPonuda = wsCaller.dohvatiPonude();
         //!!!kraj dohvaćanje resursa gradovi i podaci za ponude
 
 
@@ -111,11 +113,9 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         List<String> listaGradova = new ArrayList<>();
         //dodavanje dohvacenih gradova u novu listu
 
-        //VAZNOOOO ˇ
-
-        /*for(Grad grad : listaEntitetaGrad){
+        for(Grad grad : listaEntitetaGrad){
             listaGradova.add(grad.getNaziv());
-        }*/
+        }
 
         //prikaz gradova iz liste
             adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
