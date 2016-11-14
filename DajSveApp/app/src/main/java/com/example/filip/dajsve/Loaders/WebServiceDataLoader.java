@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Grad;
+import entities.Ponuda;
 
 /**
  * Created by Filip on 9.11.2016..
@@ -17,15 +18,21 @@ import entities.Grad;
 public class WebServiceDataLoader extends DataLoader {
 
     private boolean gradoviUcitani = false;
+    private boolean ponudeUcitane = false;
+
+    public List<Grad> gradovi;
+    public List<Ponuda> ponude;
 
     @Override
     public void loadData(DataLoadedListener dataLoadedListener){
         super.loadData(dataLoadedListener);
 
         WebServiceCaller gradoviWs = new WebServiceCaller(gradoviHandler);
+        WebServiceCaller ponudeWs = new WebServiceCaller(ponudeHandler);
 //        WebServiceCaller ponudeWs = new WebServiceCaller(discountsHandler);
 
         gradoviWs.dohvatiGradove();
+        ponudeWs.dohvatiPonude();
 //        discountsWs.getAll("getAll", Discount.class);
 
     }
@@ -34,19 +41,33 @@ public class WebServiceDataLoader extends DataLoader {
         @Override
         public void onDataArrived(Object result, boolean ok) {
             if(ok){
-                List<Grad> gradovi = (List<Grad>) result;
+                gradovi = (List<Grad>) result;
                 /*for(Grad grad : gradovi){
                     grad.save();
                 }*/
                 gradoviUcitani = true;
-                provjeriJesuLiPodaciUcitani(gradovi);
+                provjeriJesuLiPodaciUcitani();
             }
         }
     };
 
-    private void provjeriJesuLiPodaciUcitani(List<Grad> gradovi){
-        if(gradoviUcitani){
-            mDataLoadedListener.onDataLoaded(gradovi);
+    WebServiceHandler ponudeHandler = new WebServiceHandler() {
+        @Override
+        public void onDataArrived(Object result, boolean ok) {
+            if(ok){
+                ponude = (List<Ponuda>) result;
+                /*for(Grad grad : gradovi){
+                    grad.save();
+                }*/
+                ponudeUcitane = true;
+                provjeriJesuLiPodaciUcitani();
+            }
+        }
+    };
+
+    private void provjeriJesuLiPodaciUcitani(){
+        if(gradoviUcitani && ponudeUcitane){
+            mDataLoadedListener.onDataLoaded(gradovi, ponude);
         }
     }
 

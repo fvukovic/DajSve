@@ -31,7 +31,7 @@ public class WebServiceCaller{
         this.webServiceHandler = webServiceHandler;
     }
 
-    public List<Grad> dohvatiGradove(){
+    public void dohvatiGradove(){
 
         try{
             String address = "http://www.dajsve.com/rss.ashx?svigradovi=1";
@@ -43,11 +43,7 @@ public class WebServiceCaller{
             doc.getDocumentElement().normalize();
             NodeList nodeList = doc.getElementsByTagName("Grad");
 
-            List<Grad> listaGradova = handleGradovi(nodeList);
-
             handleGradovi(nodeList);
-
-            return listaGradova;
 
         } catch(MalformedURLException e){
             e.printStackTrace();
@@ -58,11 +54,10 @@ public class WebServiceCaller{
         }catch(SAXException se){
             se.printStackTrace();
         }
-        return null;
+
     }
 
-    public List<Ponuda> dohvatiPonude(){
-
+    public void dohvatiPonude(){
 
         try {
             String address = "http://www.dajsve.com/rss.ashx?svigradovi";
@@ -75,9 +70,7 @@ public class WebServiceCaller{
             NodeList nodeList = doc.getElementsByTagName("item");
             System.out.println("****** Ukupno dohvacenih ponuda: "+nodeList.getLength());
 
-            List<Ponuda> listaPonuda = handlePonude(nodeList);
-
-            return listaPonuda;
+            handlePonude(nodeList);
 
         }catch(MalformedURLException e){
             e.printStackTrace();
@@ -89,14 +82,9 @@ public class WebServiceCaller{
             se.printStackTrace();
         }
 
-        List<Ponuda> ponudaLista2 = new ArrayList<>();
-        Ponuda listElement = new Ponuda("proba", Integer.parseInt("123"),Integer.parseInt("50"),Integer.parseInt("50"), "nekiurl",Integer.parseInt("22"), "kategorija", "grad", "datum");
-        ponudaLista2.add(listElement);
-
-        return ponudaLista2;
     }
 
-    private List<Grad> handleGradovi(NodeList nodeList) {
+    private void handleGradovi(NodeList nodeList) {
         List<Grad> citiesList = new ArrayList<Grad>();
 
         for(int i=0; i<nodeList.getLength(); i++){
@@ -119,12 +107,11 @@ public class WebServiceCaller{
 
         if(webServiceHandler != null){
             webServiceHandler.onDataArrived(citiesList, true);
-
         }
-        return citiesList;
+
     }
 
-    private List<Ponuda> handlePonude(NodeList nodeList){
+    private void handlePonude(NodeList nodeList){
         List<Ponuda> ponudaLista = new ArrayList<>();
 
         String tekstPonude = "nema podataka";
@@ -211,6 +198,10 @@ public class WebServiceCaller{
             ponudaLista.add(listElement);
 
         }
-        return ponudaLista;
+
+        if(webServiceHandler != null){
+            webServiceHandler.onDataArrived(ponudaLista, true);
+        }
+
     }
 }

@@ -29,6 +29,7 @@ import com.example.core.DataLoadedListener;
 import com.example.core.DataLoader;
 import com.example.filip.dajsve.Fragments.FavoritiFragment;
 import com.example.filip.dajsve.Fragments.MojeKategorijeFragment;
+import com.example.filip.dajsve.Fragments.RVAdapter;
 import com.example.filip.dajsve.Fragments.SvePonudeFragment;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
 import com.example.filip.dajsve.R;
@@ -50,12 +51,16 @@ import static android.R.attr.spinnerDropDownItemStyle;
 
 public class MainActivity extends AppCompatActivity implements DataLoadedListener{
 
+    private RecyclerView rv;
     ListView listView;
     ArrayAdapter<String> listAdapter;
     String arrayFragment[] = {"Sve ponude", "Favoriti", "Moje kategorije", "Mapa", "Facebook pregled"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
     ActionBarActivity activity;
+
+    List<Grad> gradLista = null;
+    List<Ponuda> ponudaLista = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,47 +84,24 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
             @Override
             public void onDrawerClosed(View drawerView){
                 super.onDrawerClosed(drawerView);
-                Toast.makeText(MainActivity.this, "Drawer closed", Toast.LENGTH_SHORT).show();
             }
             public void onDrawerOpened(View drawerView){
                 super.onDrawerOpened(drawerView);
-                Toast.makeText(MainActivity.this, "Drawer opened", Toast.LENGTH_SHORT).show();
             }
         };
         drawerLayout.setDrawerListener(drawerListener);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
-        // ovdje sam zakomentirao ispod radi testiranja nove arhitekture
-
-
         loadData();
-
-
 
         //dohvaćanje resursa Gradovi i postavljanje u spinner
         WebServiceCaller wsCaller = new WebServiceCaller(null);
 
-        List<Grad> listaEntitetaGrad = wsCaller.dohvatiGradove();
-        List<Ponuda> listaEntitetaPonuda = wsCaller.dohvatiPonude();
+//        List<Grad> listaEntitetaGrad = wsCaller.dohvatiGradove();
+//        List<Ponuda> listaEntitetaPonuda = wsCaller.dohvatiPonude();
         //!!!kraj dohvaćanje resursa gradovi i podaci za ponude
 
-
-        //Inicijalizacija spinnera, i adaptera za nazive gradova
-        Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
-        ArrayAdapter<String> adapterGradovi;
-        List<String> listaGradova = new ArrayList<>();
-        //dodavanje dohvacenih gradova u novu listu
-
-        for(Grad grad : listaEntitetaGrad){
-            listaGradova.add(grad.getNaziv());
-        }
-
-        //prikaz gradova iz liste
-            adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
-            spinnerGradovi.setAdapter(adapterGradovi);
 
         //postavljanje početnog fragmenta glavne aktivnosti
         Fragment home = new SvePonudeFragment();
@@ -157,10 +139,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         //!!!kraj postavljanje listenera za klik na item u meniju
 
 
-        //pocetak
-
-
-    //kraj
     }
     @Override
     protected void onPostCreate(Bundle savedInstanceState){
@@ -187,41 +165,27 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
     @Override
-    public void onDataLoaded(List<Grad> gradovi) {
+    public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude) {
+
 
         Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
         ArrayAdapter<String> adapterGradovi;
         List<String> listaGradova = new ArrayList<>();
 
+        gradLista = gradovi;
+        ponudaLista = ponude;
+
         for(Grad grad : gradovi){
-
-
-            //ovo radi
-//            System.out.println(grad.getNaziv());
-
-            //ovo ne radi
             listaGradova.add(grad.getNaziv());
-            //odnosno mozda radi, ali onda ne radi ovaj adapter kak spada
-
-        }
-
-        for(String gradic : listaGradova){
-            System.out.println(gradic);
         }
 
         adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
 
-        String sc = adapterGradovi.getItem(0);
-        System.out.println(sc);
-        //ovo također radi, dakle, jedino je ova linija ispod upitna. Moguće da je nemoguće bindati spinner izvan MainActivitija
-
         spinnerGradovi.setAdapter(adapterGradovi);
 
+    }
 
-        //proba ---> provjerava se je li spinner ima gradove
-        String text = (String) spinnerGradovi.getItemAtPosition(1);
-        System.out.println(text);
-        //i ovo radi... dakle, nesto je sa prikazivanjem spinnera, ovdje je sve ok
-
+    public List<Ponuda> preuzmiPonude(){
+        return ponudaLista;
     }
 }
