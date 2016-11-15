@@ -15,7 +15,8 @@ import com.example.filip.dajsve.R;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-
+import com.squareup.picasso.Picasso;
+import android.content.Context;
 import entities.Ponuda;
 
 /**
@@ -60,15 +61,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
     public void onBindViewHolder(PonudeViewHolder PonudeViewHolder, int i) {
         PonudeViewHolder.ponudaNaziv.setText(ponuda.get(i).getNaziv());
         PonudeViewHolder.ponudaOpis.setText("Cijena: "+ponuda.get(i).getCijena()+ " kuna");
-        try {
-            InputStream input = new java.net.URL(ponuda.get(i).getURL()).openStream();
-            Bitmap bitmap;
-            bitmap = BitmapFactory.decodeStream(input);
-            PonudeViewHolder.ponudaSlika.setImageBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //PonudeViewHolder.ponudaSlika.setImageResource(ponuda.get(i).getNaziv());
+        Context context =PonudeViewHolder.ponudaSlika.getContext();
+        Picasso.with(context).load(ponuda.get(i).getURL()).into(PonudeViewHolder.ponudaSlika);
     }
 
     @Override
