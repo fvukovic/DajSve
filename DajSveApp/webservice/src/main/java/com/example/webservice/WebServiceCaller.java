@@ -1,5 +1,4 @@
 package com.example.webservice;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -125,6 +124,7 @@ public class WebServiceCaller{
         String datum = "nema podataka";
 
 
+
         for(int i=0; i<nodeList.getLength(); i++){
 
             Node node = nodeList.item(i);
@@ -194,8 +194,10 @@ public class WebServiceCaller{
                 datum=  (datumList.item(0).getNodeValue());
             }
 
-            Ponuda listElement = new Ponuda(tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike,Integer.parseInt(usteda), kategorija, grad, datum);
+            Ponuda listElement = new Ponuda(i,tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike,Integer.parseInt(usteda), kategorija, grad, datum);
             ponudaLista.add(listElement);
+          //ovo treba rijesiti nekako...onaj FlowManger nekako tu importat
+            //  listElement.save();
 
         }
 

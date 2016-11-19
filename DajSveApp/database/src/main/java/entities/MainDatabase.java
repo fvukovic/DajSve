@@ -1,5 +1,4 @@
 package entities;
-
 import com.raizlabs.android.dbflow.annotation.Database;
 
 /**

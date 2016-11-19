@@ -1,53 +1,39 @@
 package com.example.filip.dajsve.Activities;
 
-import android.graphics.Color;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
-import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
+
 import com.example.core.DataLoadedListener;
 import com.example.core.DataLoader;
 import com.example.filip.dajsve.Fragments.FavoritiFragment;
 import com.example.filip.dajsve.Fragments.MojeKategorijeFragment;
-import com.example.filip.dajsve.Fragments.RVAdapter;
 import com.example.filip.dajsve.Fragments.SvePonudeFragment;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
 import com.example.filip.dajsve.R;
 import com.example.webservice.WebServiceCaller;
-import com.example.webservice.WebServiceHandler;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
-import android.os.StrictMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import entities.Grad;
 import entities.Ponuda;
-
-import static android.R.attr.data;
-import static android.R.attr.fragment;
-import static android.R.attr.homeLayout;
-import static android.R.attr.spinnerDropDownItemStyle;
 
 public class MainActivity extends AppCompatActivity implements DataLoadedListener{
 
@@ -66,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        FlowManager.init(new FlowConfig.Builder(this).build());
 
         ActionBar ab = getSupportActionBar();
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -98,9 +86,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         //dohvaćanje resursa Gradovi i postavljanje u spinner
         WebServiceCaller wsCaller = new WebServiceCaller(null);
 
-//        List<Grad> listaEntitetaGrad = wsCaller.dohvatiGradove();
-//        List<Ponuda> listaEntitetaPonuda = wsCaller.dohvatiPonude();
-        //!!!kraj dohvaćanje resursa gradovi i podaci za ponude
+//
 
 
         //postavljanje početnog fragmenta glavne aktivnosti
@@ -168,6 +154,8 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude) {
 
 
+
+
         Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
         ArrayAdapter<String> adapterGradovi;
         List<String> listaGradova = new ArrayList<>();
@@ -176,8 +164,13 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         ponudaLista = ponude;
 
         for(Grad grad : gradovi){
-            listaGradova.add(grad.getNaziv());
+            listaGradova.add(grad.getNaziv()) ;
+            grad.save();
+
         }
+        List<Grad> stores = new ArrayList<Grad>();
+        stores = (ArrayList<Grad>) Grad.getAll();
+            System.out.println("OVDJE IMA OVOLIKO KOMADA: "+ stores.size());
 
         adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
 
