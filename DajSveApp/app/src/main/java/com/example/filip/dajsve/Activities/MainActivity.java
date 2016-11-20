@@ -1,6 +1,8 @@
 package com.example.filip.dajsve.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,12 +18,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.core.DataLoadedListener;
 import com.example.core.DataLoader;
 import com.example.filip.dajsve.Fragments.FavoritiFragment;
 import com.example.filip.dajsve.Fragments.MojeKategorijeFragment;
 import com.example.filip.dajsve.Fragments.SvePonudeFragment;
+import com.example.filip.dajsve.Loaders.DatabaseDataLoader;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
 import com.example.filip.dajsve.R;
 import com.example.webservice.WebServiceCaller;
@@ -36,7 +40,7 @@ import entities.Grad;
 import entities.Ponuda;
 
 public class MainActivity extends AppCompatActivity implements DataLoadedListener{
-
+    SvePonudeFragment svePonudeFragment = new SvePonudeFragment();
     private RecyclerView rv;
     ListView listView;
     ArrayAdapter<String> listAdapter;
@@ -146,6 +150,16 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         DataLoader dataLoader;
         dataLoader = new WebServiceDataLoader();
 
+        if(Ponuda.getAll().isEmpty() || Grad.getAll().isEmpty()){
+            System.out.println("Dohvaćamo web podatke");
+            Toast.makeText(this, "Dohvaćamo podatke s weba", Toast.LENGTH_LONG).show();
+            dataLoader = new WebServiceDataLoader();
+        } else {
+            System.out.println("Dohvaćamo lokalne podatke");
+            Toast.makeText(this, "Dohvaćamo podatke lokalno", Toast.LENGTH_LONG).show();
+            dataLoader = new DatabaseDataLoader();
+        }
+
         dataLoader.loadData(this);
     }
 
@@ -153,28 +167,37 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     @Override
     public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude) {
 
-
-
-
         Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
         ArrayAdapter<String> adapterGradovi;
         List<String> listaGradova = new ArrayList<>();
+        ArrayList<Ponuda> ponudaArrayList = new ArrayList<Ponuda>();
 
-        gradLista = gradovi;
         ponudaLista = ponude;
+        gradLista = gradovi;
 
-        for(Grad grad : gradovi){
-            listaGradova.add(grad.getNaziv()) ;
-            grad.save();
-
+        for(Grad grad : gradovi ){
+            listaGradova.add(grad.getNaziv());
         }
-        List<Grad> stores = new ArrayList<Grad>();
-        stores = (ArrayList<Grad>) Grad.getAll();
-            System.out.println("OVDJE IMA OVOLIKO KOMADA: "+ stores.size());
+
+        for(Ponuda ponuda : ponude){
+            ponudaArrayList.add(ponuda);
+        }
+
+
+        //novo---------------
+        /*Fragment fragmentGet = svePonudeFragment;
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("Ponuda", ponudaArrayList);
+        fragmentGet.setArguments(bundle);*/
+
+        //staro---------------
+        /*System.out.println("Trenutno je dostupno "+ gradoviIzBaze.size() + " grada");
+        System.out.println("Ovdje ima " + ponudeIzBaze.size() + " ponuda");*/
 
         adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
 
         spinnerGradovi.setAdapter(adapterGradovi);
+
 
     }
 

@@ -1,5 +1,8 @@
 package entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -12,7 +15,7 @@ import java.util.List;
  * Created by Helena on 12.11.2016..
  */
 @Table(database = MainDatabase.class)
-public class Ponuda extends BaseModel{
+public class Ponuda extends BaseModel implements Parcelable{
 
     @Column
     @PrimaryKey int id;
@@ -133,4 +136,52 @@ public class Ponuda extends BaseModel{
 
         return ponudaList;
     }
+
+
+    public Ponuda(Parcel in){
+        String[] data = new String[9];
+
+        in.readStringArray(data);
+        this.id = in.readInt();
+        this.tekstPonude = in.readString();
+        this.cijena = in.readInt();
+        this.popust = in.readInt();
+        this.cijenaOriginal = in.readInt();
+        this.urlSlike = in.readString();
+        this.usteda = in.readInt();
+        this.kategorija = in.readString();
+        this.grad = in.readString();
+        this.datumPonude = in.readString();
+
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(tekstPonude);
+        dest.writeInt(cijena);
+        dest.writeInt(popust);
+        dest.writeInt(cijenaOriginal);
+        dest.writeString(urlSlike);
+        dest.writeInt(usteda);
+        dest.writeString(kategorija);
+        dest.writeString(grad);
+        dest.writeString(datumPonude);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Ponuda createFromParcel(Parcel in) {
+            return new Ponuda(in);
+        }
+
+        public Ponuda[] newArray(int size) {
+            return new Ponuda[size];
+        }
+    };
+
 }

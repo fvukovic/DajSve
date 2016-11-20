@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,57 +31,53 @@ public class WebServiceCaller{
         this.webServiceHandler = webServiceHandler;
     }
 
-    public void dohvatiGradove(){
+    public void dohvatiSve(final Type entityType){
 
-        try{
-            String address = "http://www.dajsve.com/rss.ashx?svigradovi=1";
-            URL gradoviXmlUrl = new URL(address);
+        if(entityType == Ponuda.class)
+            try {
+                String address = "http://www.dajsve.com/rss.ashx?svigradovi";
+                URL ponudeXmlUrl = new URL(address);
 
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(gradoviXmlUrl.openStream());
-            doc.getDocumentElement().normalize();
-            NodeList nodeList = doc.getElementsByTagName("Grad");
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
+                Document doc = db.parse(ponudeXmlUrl.openStream());
+                doc.getDocumentElement().normalize();
+                NodeList nodeList = doc.getElementsByTagName("item");
+                System.out.println("****** Ukupno dohvacenih ponuda: "+nodeList.getLength());
 
-            handleGradovi(nodeList);
+                handlePonude(nodeList);
 
-        } catch(MalformedURLException e){
-            e.printStackTrace();
-        } catch (ParserConfigurationException pce){
-            pce.printStackTrace();
-        }catch(IOException ioe){
-            ioe.printStackTrace();
-        }catch(SAXException se){
-            se.printStackTrace();
-        }
+            }catch(MalformedURLException e){
+                e.printStackTrace();
+            } catch (ParserConfigurationException pce){
+                pce.printStackTrace();
+            }catch(IOException ioe){
+                ioe.printStackTrace();
+            }catch(SAXException se){
+                se.printStackTrace();
+            }
+        else if(entityType == Grad.class)
+            try{
+                String address = "http://www.dajsve.com/rss.ashx?svigradovi=1";
+                URL gradoviXmlUrl = new URL(address);
 
-    }
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
+                Document doc = db.parse(gradoviXmlUrl.openStream());
+                doc.getDocumentElement().normalize();
+                NodeList nodeList = doc.getElementsByTagName("Grad");
 
-    public void dohvatiPonude(){
+                handleGradovi(nodeList);
 
-        try {
-            String address = "http://www.dajsve.com/rss.ashx?svigradovi";
-            URL ponudeXmlUrl = new URL(address);
-
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(ponudeXmlUrl.openStream());
-            doc.getDocumentElement().normalize();
-            NodeList nodeList = doc.getElementsByTagName("item");
-            System.out.println("****** Ukupno dohvacenih ponuda: "+nodeList.getLength());
-
-            handlePonude(nodeList);
-
-        }catch(MalformedURLException e){
-            e.printStackTrace();
-        } catch (ParserConfigurationException pce){
-            pce.printStackTrace();
-        }catch(IOException ioe){
-            ioe.printStackTrace();
-        }catch(SAXException se){
-            se.printStackTrace();
-        }
-
+            } catch(MalformedURLException e){
+                e.printStackTrace();
+            } catch (ParserConfigurationException pce){
+                pce.printStackTrace();
+            }catch(IOException ioe){
+                ioe.printStackTrace();
+            }catch(SAXException se){
+                se.printStackTrace();
+            }
     }
 
     private void handleGradovi(NodeList nodeList) {
@@ -122,8 +119,6 @@ public class WebServiceCaller{
         String kategorija = "nemapodataka";
         String grad = "nema podataka";
         String datum = "nema podataka";
-
-
 
         for(int i=0; i<nodeList.getLength(); i++){
 
@@ -196,8 +191,6 @@ public class WebServiceCaller{
 
             Ponuda listElement = new Ponuda(i,tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike,Integer.parseInt(usteda), kategorija, grad, datum);
             ponudaLista.add(listElement);
-          //ovo treba rijesiti nekako...onaj FlowManger nekako tu importat
-            //  listElement.save();
 
         }
 

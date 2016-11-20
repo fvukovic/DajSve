@@ -1,5 +1,6 @@
 package com.example.core;
 import java.util.ArrayList;
+import java.util.List;
 
 import entities.Grad;
 import entities.Ponuda;
@@ -10,8 +11,8 @@ import entities.Ponuda;
 
 public abstract class DataLoader {
 
-    public ArrayList<Grad> gradovi;
-    public ArrayList<Ponuda> ponude;
+    public List<Grad> gradovi;
+    public List<Ponuda> ponude;
 
     protected DataLoadedListener mDataLoadedListener;
 
@@ -19,11 +20,11 @@ public abstract class DataLoader {
         this.mDataLoadedListener = dataLoadedListener;
     }
 
-    public boolean dataLoaded(){
+    /*public boolean dataLoaded(){
         if(gradovi == null || ponude == null){
             return false;
         } else{
             return true;
         }
-    }
+    }*/
 }

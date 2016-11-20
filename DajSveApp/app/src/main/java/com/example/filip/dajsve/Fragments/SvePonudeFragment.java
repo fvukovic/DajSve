@@ -41,6 +41,11 @@ public class SvePonudeFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
 
+        //novo---------------
+        /*Bundle data = getActivity().getIntent().getExtras();
+        ArrayList<Ponuda> listaPonuda= data.getParcelable("ponude");*/
+
+        //staro---------------
         MainActivity mainActivity = (MainActivity) getActivity();
         List<Ponuda> preuzetePonude = mainActivity.preuzmiPonude();
 
@@ -48,6 +53,11 @@ public class SvePonudeFragment extends Fragment {
             System.out.println(ponuda.getNaziv());
         }
 
+        /*for(Ponuda ponuda : listaPonuda){
+            System.out.println(ponuda.getNaziv());
+        }*/
+
+        //                    ˇ promijeniti u preuzete ponude, kao i gore u for petlji
         initializeAdapter(preuzetePonude);
 
         return rootView;

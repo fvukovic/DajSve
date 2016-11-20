@@ -29,11 +29,9 @@ public class WebServiceDataLoader extends DataLoader {
 
         WebServiceCaller gradoviWs = new WebServiceCaller(gradoviHandler);
         WebServiceCaller ponudeWs = new WebServiceCaller(ponudeHandler);
-//        WebServiceCaller ponudeWs = new WebServiceCaller(discountsHandler);
 
-        gradoviWs.dohvatiGradove();
-        ponudeWs.dohvatiPonude();
-//        discountsWs.getAll("getAll", Discount.class);
+        gradoviWs.dohvatiSve(Grad.class);
+        ponudeWs.dohvatiSve(Ponuda.class);
 
     }
 
@@ -42,9 +40,9 @@ public class WebServiceDataLoader extends DataLoader {
         public void onDataArrived(Object result, boolean ok) {
             if(ok){
                 gradovi = (List<Grad>) result;
-                /*for(Grad grad : gradovi){
+                for(Grad grad : gradovi){
                     grad.save();
-                }*/
+                }
                 gradoviUcitani = true;
                 provjeriJesuLiPodaciUcitani();
             }
@@ -56,9 +54,9 @@ public class WebServiceDataLoader extends DataLoader {
         public void onDataArrived(Object result, boolean ok) {
             if(ok){
                 ponude = (List<Ponuda>) result;
-                /*for(Grad grad : gradovi){
-                    grad.save();
-                }*/
+                for(Ponuda ponuda : ponude){
+                    ponuda.save();
+                }
                 ponudeUcitane = true;
                 provjeriJesuLiPodaciUcitani();
             }
@@ -67,7 +65,7 @@ public class WebServiceDataLoader extends DataLoader {
 
     private void provjeriJesuLiPodaciUcitani(){
         if(gradoviUcitani && ponudeUcitane){
-            mDataLoadedListener.onDataLoaded(gradovi, ponude);
+            mDataLoadedListener.onDataLoaded(Grad.getAll(), Ponuda.getAll());
         }
     }
 
