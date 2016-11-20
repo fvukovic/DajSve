@@ -185,10 +185,10 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
         //novo---------------
-        /*Fragment fragmentGet = svePonudeFragment;
+        Fragment fragmentGet = svePonudeFragment;
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("Ponuda", ponudaArrayList);
-        fragmentGet.setArguments(bundle);*/
+        fragmentGet.setArguments(bundle);
 
         //staro---------------
         /*System.out.println("Trenutno je dostupno "+ gradoviIzBaze.size() + " grada");

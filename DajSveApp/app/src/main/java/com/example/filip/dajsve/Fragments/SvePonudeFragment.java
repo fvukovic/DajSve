@@ -42,23 +42,43 @@ public class SvePonudeFragment extends Fragment {
         rv.setLayoutManager(llm);
 
         //novo---------------
-        /*Bundle data = getActivity().getIntent().getExtras();
-        ArrayList<Ponuda> listaPonuda= data.getParcelable("ponude");*/
+
+
+        ArrayList<Ponuda> listaPonuda = null;
+        String extraStr;
+
+
+
+        Bundle data = getActivity().getIntent().getExtras();
+        if(data != null){
+            listaPonuda = data.getParcelable("ponude");
+        }else{
+            Ponuda ponuda = new Ponuda(0,"Tekst ponude", 200, 25, 200, "", 50, "Nove ponude", "Zagreb", "datum");
+            listaPonuda.add(ponuda);
+        }
+
+        /*try {
+            Bundle data = getActivity().getIntent().getExtras();
+            listaPonuda = data.getParcelable("ponude");
+        } catch (NullPointerException e ) {
+            Ponuda ponuda = new Ponuda(0,"Tekst ponude", 200, 25, 200, "", 50, "Nove ponude", "Zagreb", "datum");
+            listaPonuda.add(ponuda);
+        }*/
 
         //staro---------------
-        MainActivity mainActivity = (MainActivity) getActivity();
-        List<Ponuda> preuzetePonude = mainActivity.preuzmiPonude();
+        /*MainActivity mainActivity = (MainActivity) getActivity();
+        List<Ponuda> preuzetePonude = mainActivity.preuzmiPonude();*/
 
-        for(Ponuda ponuda : preuzetePonude){
+        /*for(Ponuda ponuda : preuzetePonude){
             System.out.println(ponuda.getNaziv());
-        }
+        }*/
 
         /*for(Ponuda ponuda : listaPonuda){
             System.out.println(ponuda.getNaziv());
         }*/
 
-        //                    ˇ promijeniti u preuzete ponude, kao i gore u for petlji
-        initializeAdapter(preuzetePonude);
+
+        initializeAdapter(listaPonuda);
 
         return rootView;
     }
