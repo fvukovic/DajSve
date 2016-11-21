@@ -40,6 +40,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
         }
     }
 
+
+
     List<Ponuda> ponuda;
     RVAdapter(List<Ponuda> ponuda){
         this.ponuda = ponuda;

@@ -1,5 +1,6 @@
 package com.example.filip.dajsve.Fragments;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -41,51 +42,26 @@ public class SvePonudeFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
 
-        //novo---------------
+        ArrayList<Ponuda> lista = new ArrayList<>();
+        RVAdapter adapter = new RVAdapter(lista);
 
-
-        ArrayList<Ponuda> listaPonuda = null;
-        String extraStr;
-
-
-
-        Bundle data = getActivity().getIntent().getExtras();
-        if(data != null){
-            listaPonuda = data.getParcelable("ponude");
-        }else{
-            Ponuda ponuda = new Ponuda(0,"Tekst ponude", 200, 25, 200, "", 50, "Nove ponude", "Zagreb", "datum");
-            listaPonuda.add(ponuda);
-        }
-
-        /*try {
-            Bundle data = getActivity().getIntent().getExtras();
-            listaPonuda = data.getParcelable("ponude");
-        } catch (NullPointerException e ) {
-            Ponuda ponuda = new Ponuda(0,"Tekst ponude", 200, 25, 200, "", 50, "Nove ponude", "Zagreb", "datum");
-            listaPonuda.add(ponuda);
-        }*/
-
-        //staro---------------
-        /*MainActivity mainActivity = (MainActivity) getActivity();
-        List<Ponuda> preuzetePonude = mainActivity.preuzmiPonude();*/
-
-        /*for(Ponuda ponuda : preuzetePonude){
-            System.out.println(ponuda.getNaziv());
-        }*/
-
-        /*for(Ponuda ponuda : listaPonuda){
-            System.out.println(ponuda.getNaziv());
-        }*/
-
-
-        initializeAdapter(listaPonuda);
+        rv.setAdapter(adapter);
 
         return rootView;
     }
 
-    private void initializeAdapter(List<Ponuda> preuzetePonude){
+
+    public void initializeAdapter(List<Ponuda> preuzetePonude){
+
         RVAdapter adapter = new RVAdapter(preuzetePonude);
+
         rv.setAdapter(adapter);
+
+        Fragment frg = getFragmentManager().findFragmentByTag("sve_ponude_fragment_tag");
+        final android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
     }
 
 }

@@ -87,12 +87,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
         loadData();
 
-        //dohvaćanje resursa Gradovi i postavljanje u spinner
-        WebServiceCaller wsCaller = new WebServiceCaller(null);
-
-//
-
-
         //postavljanje početnog fragmenta glavne aktivnosti
         Fragment home = new SvePonudeFragment();
         FragmentManager fragmento = getSupportFragmentManager();
@@ -184,21 +178,18 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         }
 
 
-        //novo---------------
-        Fragment fragmentGet = svePonudeFragment;
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("Ponuda", ponudaArrayList);
-        fragmentGet.setArguments(bundle);
-
-        //staro---------------
-        /*System.out.println("Trenutno je dostupno "+ gradoviIzBaze.size() + " grada");
-        System.out.println("Ovdje ima " + ponudeIzBaze.size() + " ponuda");*/
-
         adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
 
         spinnerGradovi.setAdapter(adapterGradovi);
 
+        //novo---------------
+        Fragment fragmentGet = svePonudeFragment;
+        /*Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("ponude", ponudaArrayList);
+        fragmentGet.setArguments(bundle);*/
+        //tu su
 
+        ((SvePonudeFragment)fragmentGet).initializeAdapter(ponudaArrayList);
     }
 
     public List<Ponuda> preuzmiPonude(){
