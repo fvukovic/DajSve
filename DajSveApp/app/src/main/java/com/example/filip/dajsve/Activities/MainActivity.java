@@ -1,5 +1,6 @@
 package com.example.filip.dajsve.Activities;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -24,6 +25,7 @@ import com.example.core.DataLoadedListener;
 import com.example.core.DataLoader;
 import com.example.filip.dajsve.Fragments.FavoritiFragment;
 import com.example.filip.dajsve.Fragments.MojeKategorijeFragment;
+import com.example.filip.dajsve.Fragments.RVAdapter;
 import com.example.filip.dajsve.Fragments.SvePonudeFragment;
 import com.example.filip.dajsve.Loaders.DatabaseDataLoader;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
@@ -160,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
     @Override
     public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude) {
-
         Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
         ArrayAdapter<String> adapterGradovi;
         List<String> listaGradova = new ArrayList<>();
@@ -169,30 +170,18 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         ponudaLista = ponude;
         gradLista = gradovi;
 
-        for(Grad grad : gradovi ){
+        for (Grad grad : gradovi) {
             listaGradova.add(grad.getNaziv());
         }
 
-        for(Ponuda ponuda : ponude){
+        for (Ponuda ponuda : ponude) {
             ponudaArrayList.add(ponuda);
         }
-
-
         adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
-
         spinnerGradovi.setAdapter(adapterGradovi);
 
-        //novo---------------
-        Fragment fragmentGet = svePonudeFragment;
-        /*Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("ponude", ponudaArrayList);
-        fragmentGet.setArguments(bundle);*/
-        //tu su
 
-        ((SvePonudeFragment)fragmentGet).initializeAdapter(ponudaArrayList);
+
     }
 
-    public List<Ponuda> preuzmiPonude(){
-        return ponudaLista;
-    }
 }
