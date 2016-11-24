@@ -39,12 +39,12 @@ public class SvePonudeFragment extends Fragment implements DataLoadedListener {
         Ponuda nova =new Ponuda(1,null,1,1,1,"nema podataka",1,null,null,null);
         List<Ponuda> novaLista= new ArrayList<Ponuda>();
         novaLista.add(nova);
-        RVAdapter adapter = new RVAdapter(novaLista);
+        RVAdapter adapter = new RVAdapter(novaLista,getContext());
         rv.setAdapter(adapter);}
         else {
             ArrayList<Ponuda> novaLista= new ArrayList<Ponuda>();
             novaLista= (ArrayList<Ponuda>) Ponuda.getAll();
-            RVAdapter adapter = new RVAdapter(novaLista);
+            RVAdapter adapter = new RVAdapter(novaLista,getContext());
             rv.setAdapter(adapter);
         }
         return rootView;
@@ -57,7 +57,7 @@ public class SvePonudeFragment extends Fragment implements DataLoadedListener {
         for (Ponuda ponuda : ponude) {
             ponudaArrayList.add(ponuda);
         }
-        RVAdapter adapter = new RVAdapter(ponudaArrayList);
+        RVAdapter adapter = new RVAdapter(ponudaArrayList,getContext());
         this.adapter= adapter;
         getFragmentManager()
                 .beginTransaction()
