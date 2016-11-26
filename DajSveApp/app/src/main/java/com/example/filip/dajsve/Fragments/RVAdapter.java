@@ -47,13 +47,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
     }
 
 
-
     List<Ponuda> ponuda;
     Context context;
-   public  RVAdapter(List<Ponuda> ponuda,Context context){
+    public RVAdapter(List<Ponuda> ponuda,Context context){
         this.ponuda = ponuda;
         this.context=context;
-
     }
 
     @Override
@@ -79,6 +77,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
         final ArrayList<Ponuda> ponudaArrayList=new ArrayList<Ponuda>();
         ponudaArrayList.add(ponuda.get(i));
 
+        System.out.println("Trenutno ima: " + getItemCount());
+
+
         PonudeViewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +96,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
 
             }
         });
+
+    }
+
+
+    public void clear() {
+        Ponuda.deleteAll();
     }
 
 

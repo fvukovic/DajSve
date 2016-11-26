@@ -43,13 +43,11 @@ import entities.Ponuda;
 
 public class MainActivity extends AppCompatActivity implements DataLoadedListener{
     SvePonudeFragment svePonudeFragment = new SvePonudeFragment();
-    private RecyclerView rv;
     ListView listView;
     ArrayAdapter<String> listAdapter;
     String arrayFragment[] = {"Sve ponude", "Favoriti", "Moje kategorije", "Mapa", "Facebook pregled"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
-    ActionBarActivity activity;
 
     List<Grad> gradLista = null;
     List<Ponuda> ponudaLista = null;
@@ -136,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+
         if (drawerListener.onOptionsItemSelected(item)) {
             return true;
         }
@@ -143,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         return super.onOptionsItemSelected(item);
     }
     public void loadData(){
+        System.out.println("Poziva se funkcija za dohvat podataka");
         DataLoader dataLoader;
         dataLoader = new WebServiceDataLoader();
 
@@ -179,8 +179,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         }
         adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
         spinnerGradovi.setAdapter(adapterGradovi);
-
-
 
     }
 

@@ -1,11 +1,14 @@
 package entities;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
@@ -133,10 +136,12 @@ public class Ponuda extends BaseModel implements Parcelable{
     public static List<Ponuda> getAll(){
         List<Ponuda> ponudaList;
         ponudaList= new Select().from(Ponuda.class).queryList();
-
         return ponudaList;
     }
 
+    public static void deleteAll(){
+        new Delete().from(Ponuda.class).execute();
+    }
 
     public Ponuda(Parcel in){
         String[] data = new String[9];
