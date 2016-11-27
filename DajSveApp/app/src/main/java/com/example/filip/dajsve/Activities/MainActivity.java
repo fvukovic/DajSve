@@ -30,7 +30,9 @@ import com.example.filip.dajsve.Fragments.SvePonudeFragment;
 import com.example.filip.dajsve.Loaders.DatabaseDataLoader;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
 import com.example.filip.dajsve.R;
+import com.example.map.MapFragment;
 import com.example.webservice.WebServiceCaller;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
@@ -109,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                         break;
                     case 2:
                         fragment = new MojeKategorijeFragment();
+                        break;
+                    case 3:
+                        fragment = new MapFragment();
                         break;
                     default:
                         fragment = new SvePonudeFragment();
