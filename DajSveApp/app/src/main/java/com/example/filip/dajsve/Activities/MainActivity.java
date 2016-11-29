@@ -25,6 +25,7 @@ import com.example.core.DataLoadedListener;
 import com.example.core.DataLoader;
 import com.example.filip.dajsve.Fragments.FavoritiFragment;
 import com.example.filip.dajsve.Fragments.MojeKategorijeFragment;
+import com.example.filip.dajsve.Fragments.NovePonudeFragment;
 import com.example.filip.dajsve.Fragments.RVAdapter;
 import com.example.filip.dajsve.Fragments.SvePonudeFragment;
 import com.example.filip.dajsve.Loaders.DatabaseDataLoader;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     SvePonudeFragment svePonudeFragment = new SvePonudeFragment();
     ListView listView;
     ArrayAdapter<String> listAdapter;
-    String arrayFragment[] = {"Sve ponude", "Favoriti", "Moje kategorije", "Mapa", "Facebook pregled"};
+    String arrayFragment[] = {"Nove ponude", "Sve ponude", "Favoriti", "Moje kategorije", "Mapa"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         loadData();
 
         //postavljanje početnog fragmenta glavne aktivnosti
-        Fragment home = new SvePonudeFragment();
+        Fragment home = new NovePonudeFragment();
         FragmentManager fragmento = getSupportFragmentManager();
         fragmento.beginTransaction()
                 .replace(R.id.linearlayout, home)
@@ -104,20 +105,24 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 Fragment fragment = null;
                 switch (position){
                     case 0:
-                        fragment = new SvePonudeFragment();
+                        fragment = new NovePonudeFragment();
                         break;
                     case 1:
-                        fragment = new FavoritiFragment();
+                        fragment = new SvePonudeFragment();
                         break;
                     case 2:
-                        fragment = new MojeKategorijeFragment();
+                        fragment = new FavoritiFragment();
                         break;
                     case 3:
+                        fragment = new MojeKategorijeFragment();
+                        break;
+                    case 4:
                         fragment = new MapFragment();
                         break;
                     default:
-                        fragment = new SvePonudeFragment();
+                        fragment = new NovePonudeFragment();
                         break;
+
                 }
 
                 FragmentManager fragmentManager = getSupportFragmentManager();

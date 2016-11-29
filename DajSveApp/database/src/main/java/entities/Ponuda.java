@@ -12,6 +12,7 @@ import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -136,6 +137,12 @@ public class Ponuda extends BaseModel implements Parcelable{
     public static List<Ponuda> getAll(){
         List<Ponuda> ponudaList;
         ponudaList= new Select().from(Ponuda.class).queryList();
+        return ponudaList;
+    }
+
+    public static List<Ponuda> getNew(){
+        List<Ponuda> ponudaList;
+        ponudaList = new Select().from(Ponuda.class).where(Ponuda_Table.kategorija.like("%Novo%")).queryList();
         return ponudaList;
     }
 
