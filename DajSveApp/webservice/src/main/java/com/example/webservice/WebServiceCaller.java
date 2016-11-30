@@ -1,4 +1,6 @@
 package com.example.webservice;
+import android.os.Looper;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -193,7 +195,6 @@ public class WebServiceCaller{
             ponudaLista.add(listElement);
 
         }
-
         if(webServiceHandler != null){
             webServiceHandler.onDataArrived(ponudaLista, true);
         }

@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,10 +20,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.core.DataLoadedListener;
+import com.example.core.DataLoader;
 import com.example.filip.dajsve.Activities.MainActivity;
+import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
 import com.example.filip.dajsve.R;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 import java.util.logging.Handler;
 
 import entities.Grad;
@@ -33,12 +38,13 @@ import static android.support.v4.widget.SwipeRefreshLayout.*;
  * Created by Filip on 28.10.2016..
  */
 
-public class SvePonudeFragment extends Fragment implements DataLoadedListener, OnRefreshListener {
+public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
 
     private RecyclerView rv;
     public  RVAdapter adapter;
     public SwipeRefreshLayout mSwipeRefreshLayout;
-    android.os.Handler handlerAzuriranje;
+    Thread dretvaRefresh;
+    boolean daDretvaRadi = true;
 
 
     @Nullable
@@ -51,88 +57,51 @@ public class SvePonudeFragment extends Fragment implements DataLoadedListener, O
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-
+        System.out.println("OVOLIKO : "+Ponuda.getAll().size());
         rv.setLayoutManager(llm);
-        if(Ponuda.getAll().isEmpty()){
-            Ponuda nova = new Ponuda(1,null,1,1,1,"nema podataka",1,null,null,null);
-            List<Ponuda> novaLista= new ArrayList<Ponuda>();
-            novaLista.add(nova);
-            RVAdapter adapter = new RVAdapter(novaLista,getContext());
-            rv.setAdapter(adapter);}
-        else {
-            ArrayList<Ponuda> novaLista= new ArrayList<Ponuda>();
-            novaLista= (ArrayList<Ponuda>) Ponuda.getAll();
-            RVAdapter adapter = new RVAdapter(novaLista,getContext());
-            rv.setAdapter(adapter);
-        }
+        ArrayList<Ponuda> novaLista= new ArrayList<Ponuda>();
+        novaLista= (ArrayList<Ponuda>) Ponuda.getAll();
+        RVAdapter adapter = new RVAdapter(novaLista,getContext());
+        rv.setAdapter(adapter);
 
         return rootView;
     }
+        class task extends AsyncTask<Void , Void, Void>{
 
-
-    @Override
-    public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude) {
-
-    }
-
-    /*protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            azurirajPodatke();
-        }
-    };
-
-
-    @Override
-    public void onCompletion(String result) {
-
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    private final Runnable refreshing = new Runnable(){
-        public void run(){
-            try {
-                if(isRefreshing()){
-                    handlerAzuriranje.postDelayed(this, 1000);
-                }else{
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    mainActivity.forceUpdate();
-                    setLayout();
-                }
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                System.out.println("USAO SAM U POST IN");
+                ArrayList<Ponuda> novaLista= new ArrayList<Ponuda>();
+                novaLista= (ArrayList<Ponuda>) Ponuda.getAll();
+                RVAdapter adapter = new RVAdapter(novaLista,getContext());
+                super.onPostExecute(aVoid);
+                 mSwipeRefreshLayout.setRefreshing(false);
             }
-            catch (Exception e) {
-                e.printStackTrace();
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                Looper.prepare();
+                Ponuda.deleteAll();
+                ((MainActivity)getActivity()).loadData();
+                return null;
+
             }
         }
-    };
 
-    private boolean isRefreshing(){
-        return mSwipeRefreshLayout.isRefreshing();
-    }*/
+
+
 
     @Override
     public void onRefresh() {
+        System.out.println("dali se refresta: "+ mSwipeRefreshLayout.isRefreshing());
         System.out.println("Refreshana je stranica");
-        Ponuda.deleteAll();
-        ((MainActivity)getActivity()).loadData();
+        new task().execute();
 
-        /*Runnable refrashanjeStranice = new Runnable() {
-            @Override
-            public void run() {
-                azurirajPodatke();
-            }
-        };*/
-        /*System.out.println("Pokrećemo novi thread");
-        new Thread(refrashanjeStranice).start();*/
 
     }
 
-    private void azurirajPodatke() {
 
-        Ponuda.deleteAll();
-        ((MainActivity)getActivity()).loadData();
-    }
 }
+
+
 

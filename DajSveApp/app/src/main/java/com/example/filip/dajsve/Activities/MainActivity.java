@@ -3,6 +3,7 @@ package com.example.filip.dajsve.Activities;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     SvePonudeFragment svePonudeFragment = new SvePonudeFragment();
     ListView listView;
     ArrayAdapter<String> listAdapter;
-    String arrayFragment[] = {"Nove ponude", "Sve ponude", "Favoriti", "Moje kategorije", "Mapa"};
+    String arrayFragment[] = {"Sve ponude", "Favoriti", "Moje kategorije", "Mapa", "Facebook pregled"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
 
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         loadData();
 
         //postavljanje početnog fragmenta glavne aktivnosti
-        Fragment home = new NovePonudeFragment();
+        Fragment home = new SvePonudeFragment();
         FragmentManager fragmento = getSupportFragmentManager();
         fragmento.beginTransaction()
                 .replace(R.id.linearlayout, home)
@@ -105,10 +106,10 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 Fragment fragment = null;
                 switch (position){
                     case 0:
-                        fragment = new NovePonudeFragment();
+                        fragment = new SvePonudeFragment();
                         break;
                     case 1:
-                        fragment = new SvePonudeFragment();
+                        fragment = new FavoritiFragment();
                         break;
                     case 2:
                         fragment = new FavoritiFragment();
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         return super.onOptionsItemSelected(item);
     }
     public void loadData(){
+        System.out.println("KOja je dretva: "+ Looper.myLooper());
         System.out.println("Poziva se funkcija za dohvat podataka");
         DataLoader dataLoader;
         dataLoader = new WebServiceDataLoader();
@@ -167,28 +169,31 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         }
 
         dataLoader.loadData(this);
+        System.out.print("molim te ko boga dragoga"+ Looper.myLooper());
     }
 
 
     @Override
     public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude) {
-        Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
-        ArrayAdapter<String> adapterGradovi;
-        List<String> listaGradova = new ArrayList<>();
-        ArrayList<Ponuda> ponudaArrayList = new ArrayList<Ponuda>();
 
-        ponudaLista = ponude;
-        gradLista = gradovi;
+        if(  Looper.myLooper() == Looper.getMainLooper()) {
+            Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
+            ArrayAdapter<String> adapterGradovi;
+            List<String> listaGradova = new ArrayList<>();
+            ArrayList<Ponuda> ponudaArrayList = new ArrayList<Ponuda>();
 
-        for (Grad grad : gradovi) {
-            listaGradova.add(grad.getNaziv());
+            ponudaLista = ponude;
+            gradLista = gradovi;
+
+            for (Grad grad : gradovi) {
+                listaGradova.add(grad.getNaziv());
+            }
+            for (Ponuda ponuda : ponude) {
+                ponudaArrayList.add(ponuda);
+            }
+            adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
+            spinnerGradovi.setAdapter(adapterGradovi);
         }
-
-        for (Ponuda ponuda : ponude) {
-            ponudaArrayList.add(ponuda);
-        }
-        adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
-        spinnerGradovi.setAdapter(adapterGradovi);
 
     }
 
