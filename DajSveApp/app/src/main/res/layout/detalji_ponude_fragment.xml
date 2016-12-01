@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
@@ -36,41 +37,75 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ponuda_description"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="31dp"
-        android:id="@+id/ponuda_cijena" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ponuda_cijena"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/ponuda_popust" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ponuda_popust"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/ponuda_original" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="33dp"
         android:id="@+id/ponuda_datum"
         android:layout_below="@+id/ponuda_cijena"
-        android:layout_alignParentStart="true" />
+        android:layout_alignStart="@+id/ponuda_cijena" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/ponuda_datum"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/mapa_prikaz">
+
+    </FrameLayout>
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ponuda_datum"
+        android:layout_marginTop="18dp"
+        android:id="@+id/ponuda_cijena"
+        android:layout_below="@+id/ponuda_description"
+        android:layout_alignStart="@+id/ponuda_description" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ponuda_usteda"
+        android:layout_alignBaseline="@+id/ponuda_popust"
+        android:layout_alignBottom="@+id/ponuda_popust"
+        android:layout_alignStart="@+id/ponuda_original" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ponuda_popust"
+        android:layout_above="@+id/mapa_prikaz"
+        android:layout_alignStart="@+id/ponuda_datum"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:text="Dodaj u favorite!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/favoriti_dodavanje"
         android:layout_alignParentEnd="true"
-        android:id="@+id/ponuda_usteda" />
+        android:id="@+id/hover_poruka" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:id="@+id/favoriti_dodavanje"
+        android:layout_marginTop="12dp"
+        android:baselineAlignBottom="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/hover_poruka"
+        android:layout_marginStart="19dp" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ponuda_original"
+        android:layout_alignBaseline="@+id/ponuda_cijena"
+        android:layout_alignBottom="@+id/ponuda_cijena"
+        android:layout_alignEnd="@+id/favoriti_dodavanje"
+        android:layout_marginEnd="45dp" />
+
 </RelativeLayout>

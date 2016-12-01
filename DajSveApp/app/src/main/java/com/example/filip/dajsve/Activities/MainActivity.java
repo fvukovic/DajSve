@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     SvePonudeFragment svePonudeFragment = new SvePonudeFragment();
     ListView listView;
     ArrayAdapter<String> listAdapter;
-    String arrayFragment[] = {"Sve ponude", "Favoriti", "Moje kategorije", "Mapa", "Facebook pregled"};
+    String arrayFragment[] = {"Nove ponude", "Sve ponude", "Favoriti", "Moje kategorije", "Mapa"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         loadData();
 
         //postavljanje početnog fragmenta glavne aktivnosti
-        Fragment home = new SvePonudeFragment();
+        Fragment home = new NovePonudeFragment();
         FragmentManager fragmento = getSupportFragmentManager();
         fragmento.beginTransaction()
                 .replace(R.id.linearlayout, home)
@@ -106,10 +106,10 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 Fragment fragment = null;
                 switch (position){
                     case 0:
-                        fragment = new SvePonudeFragment();
+                        fragment = new NovePonudeFragment();
                         break;
                     case 1:
-                        fragment = new FavoritiFragment();
+                        fragment = new SvePonudeFragment();
                         break;
                     case 2:
                         fragment = new FavoritiFragment();

@@ -5,12 +5,19 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.filip.dajsve.R;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,6 +38,12 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment {
     private TextView ponudaOriginal;
     private TextView ponudaDatum;
     private TextView ponudaUsteda;
+    private FrameLayout mapaPrikaz;
+    private int position;
+    private String name = "Map view";
+    private com.google.android.gms.maps.MapFragment mapFragment;
+    private GoogleMap map = null;
+    private ImageButton gumbDodajUFavorite;
 
     @Nullable
     @Override
@@ -45,7 +58,8 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment {
         ponudaOriginal=(TextView)rootView.findViewById(R.id.ponuda_original);
         ponudaDatum=(TextView)rootView.findViewById(R.id.ponuda_datum);
         ponudaUsteda=(TextView)rootView.findViewById(R.id.ponuda_usteda);
-
+        mapaPrikaz=(FrameLayout)rootView.findViewById(R.id.mapa_prikaz);
+        gumbDodajUFavorite=(ImageButton)rootView.findViewById(R.id.favoriti_dodavanje);
 
         Bundle bundle = getArguments();
         ArrayList<Ponuda> listaDohvacena = bundle.getParcelableArrayList("ponuda");
@@ -61,9 +75,19 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment {
         ponudaDatum.setText("datum=" + ponudaDohvacena.getDatumPonude());
         ponudaUsteda.setText("usteda="+Integer.toString(ponudaDohvacena.getUsteda()));
 
+
+        //dodavanje google karte u layout
+        View v = inflater.inflate(com.example.map.R.layout.map_fragment, container, false);
+        mapFragment = new com.google.android.gms.maps.MapFragment();
+        getActivity().getFragmentManager().beginTransaction().add(com.example.map.R.id.frame, mapFragment).commit();
+        mapaPrikaz.setFocusable(true);
+        mapaPrikaz.addView(v);
+
         return rootView;
 
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
