@@ -54,8 +54,11 @@ public class WebServiceDataLoader extends DataLoader {
         public void onDataArrived(Object result, boolean ok) {
             if(ok){
                 ponude = (List<Ponuda>) result;
+                int i=0;
                 for(Ponuda ponuda : ponude){
                     ponuda.save();
+                    System.out.println(i);
+                    i++;
                 }
                 ponudeUcitane = true;
                 provjeriJesuLiPodaciUcitani();
