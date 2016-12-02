@@ -1,14 +1,27 @@
 package com.example.filip.dajsve.Loaders;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import com.example.core.DataLoadedListener;
 import com.example.core.DataLoader;
 import com.example.webservice.WebServiceCaller;
 import com.example.webservice.WebServiceHandler;
+import com.raizlabs.android.dbflow.annotation.Database;
+import com.raizlabs.android.dbflow.config.DatabaseConfig;
+import com.raizlabs.android.dbflow.config.DatabaseDefinition;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.FastStoreModelTransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.ProcessModelTransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import entities.Grad;
+import entities.MainDatabase;
 import entities.Ponuda;
 
 /**
@@ -19,7 +32,6 @@ public class WebServiceDataLoader extends DataLoader {
 
     private boolean gradoviUcitani = false;
     private boolean ponudeUcitane = false;
-
     public List<Grad> gradovi;
     public List<Ponuda> ponude;
 
@@ -48,18 +60,37 @@ public class WebServiceDataLoader extends DataLoader {
             }
         }
     };
-
+//    Database database = MainDatabase.class;
     WebServiceHandler ponudeHandler = new WebServiceHandler() {
         @Override
         public void onDataArrived(Object result, boolean ok) {
             if(ok){
+                System.out.println("Pokrenula se funkcija za transakcije");
                 ponude = (List<Ponuda>) result;
-                int i=0;
-                for(Ponuda ponuda : ponude){
-                    ponuda.save();
-                    System.out.println(i);
-                    i++;
-                }
+
+                FlowManager.getDatabase(MainDatabase.class)
+                        .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
+                                new ProcessModelTransaction.ProcessModel<Ponuda>() {
+                                    @Override
+                                    public void processModel(Ponuda ponuda) {
+                                        ponuda.save();
+                                    }
+                                }).addAll(ponude).build())
+                        .error(new Transaction.Error() {
+                            @Override
+                            public void onError(Transaction transaction, Throwable error) {
+                                System.out.println("Greška u transakciji");
+                            }
+                        })
+                        .success(new Transaction.Success() {
+                            @Override
+                            public void onSuccess(Transaction transaction) {
+                                System.out.println("Transakcija uspješna");
+                            }
+                        }).build().execute();
+
+                System.out.println("Završava funkcija za transakcije");
+
                 ponudeUcitane = true;
                 provjeriJesuLiPodaciUcitani();
             }
