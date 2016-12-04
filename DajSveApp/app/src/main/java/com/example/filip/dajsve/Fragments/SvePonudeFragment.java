@@ -42,10 +42,8 @@ import static android.support.v4.widget.SwipeRefreshLayout.*;
 public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
 
     private RecyclerView rv;
-    public  RVAdapter adapter;
+    List<Ponuda> sosBaza;
     public SwipeRefreshLayout mSwipeRefreshLayout;
-    Thread dretvaRefresh;
-    boolean daDretvaRadi = true;
 
 
     @Nullable
@@ -60,8 +58,7 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
 
         System.out.println("OVOLIKO : "+Ponuda.getAll().size());
         rv.setLayoutManager(llm);
-        ArrayList<Ponuda> novaLista= new ArrayList<Ponuda>();
-        novaLista= (ArrayList<Ponuda>) Ponuda.getAll();
+        List<Ponuda> novaLista= Ponuda.getAll();
         RVAdapter adapter = new RVAdapter(novaLista,getContext());
         rv.setAdapter(adapter);
 
@@ -69,36 +66,45 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
     }
         class task extends AsyncTask<Void , Void, Void>{
 
+
             @Override
             protected void onPostExecute(Void aVoid) {
+                mSwipeRefreshLayout.setRefreshing(false);
                 System.out.println("USAO SAM U POST IN");
-                ArrayList<Ponuda> novaLista= new ArrayList<Ponuda>();
-                novaLista= (ArrayList<Ponuda>) Ponuda.getAll();
-                RVAdapter adapter = new RVAdapter(novaLista,getContext());
+                if(!Ponuda.getAll().isEmpty()) {
+                    RVAdapter adapter = new RVAdapter(Ponuda.getNew(),getContext());
+                    rv.setAdapter(adapter);
+                }
+                else {
+                    RVAdapter adapter = new RVAdapter(sosBaza, getContext());
+                    rv.setAdapter(adapter);
+                    for (Ponuda ponuda : sosBaza) {
+                        ponuda.save();
+                    }
+
+                }
                 super.onPostExecute(aVoid);
-                 mSwipeRefreshLayout.setRefreshing(false);
             }
+
 
             @Override
             protected Void doInBackground(Void... params) {
-                Looper.prepare();
-                Ponuda.deleteAll();
+                if (Looper.myLooper() == null)
+                {
+                    Looper.prepare();
+                }
                 ((MainActivity)getActivity()).loadData();
                 return null;
 
             }
         }
-
-
-
-
     @Override
     public void onRefresh() {
+        sosBaza = Ponuda.getNew();
+        Ponuda.deleteAll();
         System.out.println("dali se refresta: "+ mSwipeRefreshLayout.isRefreshing());
         System.out.println("Refreshana je stranica");
         new task().execute();
-
-
     }
 
 
