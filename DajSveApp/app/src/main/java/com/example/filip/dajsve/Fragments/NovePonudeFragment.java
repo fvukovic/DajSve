@@ -67,19 +67,9 @@ public class NovePonudeFragment extends Fragment implements OnRefreshListener{
         protected void onPostExecute(Void aVoid) {
             mSwipeRefreshLayout.setRefreshing(false);
             System.out.println("USAO SAM U POST IN");
-            if(!Ponuda.getAll().isEmpty()) {
                 RVAdapter adapter = new RVAdapter(Ponuda.getNew(),getContext());
                 rv.setAdapter(adapter);
-            }
-            else {
-                RVAdapter adapter = new RVAdapter(sosBaza, getContext());
-                rv.setAdapter(adapter);
-                for (Ponuda ponuda : sosBaza) {
-                    ponuda.save();
-                }
-
-            }
-            super.onPostExecute(aVoid);
+                super.onPostExecute(aVoid);
         }
 
 
@@ -89,8 +79,6 @@ public class NovePonudeFragment extends Fragment implements OnRefreshListener{
             {
                 Looper.prepare();
             }
-
-
             ((MainActivity)getActivity()).loadData();
             return null;
 
@@ -98,10 +86,6 @@ public class NovePonudeFragment extends Fragment implements OnRefreshListener{
     }
     @Override
     public void onRefresh() {
-        sosBaza = Ponuda.getNew();
-        Ponuda.deleteAll();
-        System.out.println("dali se refresta: "+ mSwipeRefreshLayout.isRefreshing());
-        System.out.println("Refreshana je stranica");
         new task().execute();
     }
 

@@ -1,6 +1,7 @@
 package com.example.filip.dajsve.Loaders;
 
 import android.nfc.Tag;
+import android.os.Looper;
 import android.util.Log;
 
 import com.example.core.DataLoadedListener;
@@ -64,6 +65,8 @@ public class WebServiceDataLoader extends DataLoader {
     WebServiceHandler ponudeHandler = new WebServiceHandler() {
         @Override
         public void onDataArrived(Object result, boolean ok) {
+            if(Looper.myLooper()!=Looper.getMainLooper())
+                Ponuda.deleteAll();
             if(ok){
                 System.out.println("Pokrenula se funkcija za transakcije");
                 ponude = (List<Ponuda>) result;

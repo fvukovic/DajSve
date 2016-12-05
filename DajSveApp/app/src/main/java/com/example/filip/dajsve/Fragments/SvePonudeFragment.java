@@ -56,7 +56,6 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        System.out.println("OVOLIKO : "+Ponuda.getAll().size());
         rv.setLayoutManager(llm);
         List<Ponuda> novaLista= Ponuda.getAll();
         RVAdapter adapter = new RVAdapter(novaLista,getContext());
@@ -71,18 +70,10 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
             protected void onPostExecute(Void aVoid) {
                 mSwipeRefreshLayout.setRefreshing(false);
                 System.out.println("USAO SAM U POST IN");
-                if(!Ponuda.getAll().isEmpty()) {
-                    RVAdapter adapter = new RVAdapter(Ponuda.getNew(),getContext());
-                    rv.setAdapter(adapter);
-                }
-                else {
-                    RVAdapter adapter = new RVAdapter(sosBaza, getContext());
-                    rv.setAdapter(adapter);
-                    for (Ponuda ponuda : sosBaza) {
-                        ponuda.save();
-                    }
+                RVAdapter adapter = new RVAdapter(Ponuda.getAll(),getContext());
+                rv.setAdapter(adapter);
 
-                }
+
                 super.onPostExecute(aVoid);
             }
 
@@ -100,10 +91,6 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
         }
     @Override
     public void onRefresh() {
-        sosBaza = Ponuda.getNew();
-        Ponuda.deleteAll();
-        System.out.println("dali se refresta: "+ mSwipeRefreshLayout.isRefreshing());
-        System.out.println("Refreshana je stranica");
         new task().execute();
     }
 

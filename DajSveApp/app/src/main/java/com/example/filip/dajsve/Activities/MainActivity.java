@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         DataLoader dataLoader;
         dataLoader = new WebServiceDataLoader();
 
-        if(Ponuda.getAll().isEmpty() || Grad.getAll().isEmpty()){
+        if((Ponuda.getAll().isEmpty() || Grad.getAll().isEmpty()) || Looper.myLooper()!=Looper.getMainLooper()){
             System.out.println("Dohvaćamo web podatke");
             Toast.makeText(this, "Dohvaćamo podatke s weba", Toast.LENGTH_LONG).show();
             dataLoader = new WebServiceDataLoader();
