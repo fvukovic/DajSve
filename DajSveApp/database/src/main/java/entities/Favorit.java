@@ -27,6 +27,7 @@ public class Favorit extends BaseModel {
     @Column  int popust;
     @Column  int cijenaOriginal;
     @Column  String urlSlike;
+    @Column  String urlLogo;
     @Column  int usteda;
     @Column  String kategorija;
     @Column  String grad;
@@ -35,7 +36,7 @@ public class Favorit extends BaseModel {
     public Favorit() {
     }
 
-    public Favorit(int id, boolean aktivan, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, int usteda, String kategorija, String grad, String datumPonude) {
+    public Favorit(int id, boolean aktivan, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, int usteda, String kategorija, String grad, String datumPonude) {
         this.id = id;
         this.aktivan = aktivan;
         this.tekstPonude = tekstPonude;
@@ -43,6 +44,7 @@ public class Favorit extends BaseModel {
         this.popust = popust;
         this.cijenaOriginal = cijenaOriginal;
         this.urlSlike = urlSlike;
+        this.urlLogo = urlLogo;
         this.usteda = usteda;
         this.kategorija = kategorija;
         this.grad = grad;
@@ -103,6 +105,14 @@ public class Favorit extends BaseModel {
 
     public void setUrlSlike(String urlSlike) {
         this.urlSlike = urlSlike;
+    }
+
+    public String getUrlLogo() {
+        return urlLogo;
+    }
+
+    public void setUrlLogo(String urlLogo) {
+        this.urlLogo = urlLogo;
     }
 
     public int getUsteda() {

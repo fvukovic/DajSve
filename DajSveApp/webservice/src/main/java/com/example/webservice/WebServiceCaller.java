@@ -117,6 +117,7 @@ public class WebServiceCaller{
         String popust = "0";
         String cijenaorg = "0";
         String urlSlike = "nema podataka";
+        String urlLogo = "nema podataka";
         String usteda = "0";
         String kategorija = "nemapodataka";
         String grad = "nema podataka";
@@ -163,6 +164,13 @@ public class WebServiceCaller{
                 urlSlike =  (urlSlikeList.item(0).getNodeValue());
             }
 
+            NodeList urlLogoList = fstElmnt.getElementsByTagName("LogoUrl");
+            Element urlLogoElement = (Element) urlLogoList.item(0);
+            if (urlLogoElement.getChildNodes().getLength() > 0){
+                urlLogoList = urlLogoElement.getChildNodes();
+                urlLogo =  (urlLogoList.item(0).getNodeValue());
+            }
+
             NodeList ustedaList = fstElmnt.getElementsByTagName("Usteda");
             Element ustedaElement = (Element) ustedaList.item(0);
             if (ustedaElement.getChildNodes().getLength() > 0){
@@ -191,7 +199,7 @@ public class WebServiceCaller{
                 datum=  (datumList.item(0).getNodeValue());
             }
 
-            Ponuda listElement = new Ponuda(i,tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike,Integer.parseInt(usteda), kategorija, grad, datum);
+            Ponuda listElement = new Ponuda(i,tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike, urlLogo,Integer.parseInt(usteda), kategorija, grad, datum);
             ponudaLista.add(listElement);
 
         }

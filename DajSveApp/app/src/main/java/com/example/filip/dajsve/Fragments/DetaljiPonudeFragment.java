@@ -123,7 +123,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment  {
                Favorit novi = new Favorit(33,true,ponudaDohvacena.getTekstPonude(),
                        Integer.parseInt( ponudaDohvacena.getCijena()),ponudaDohvacena.getPopust()
                        ,ponudaDohvacena.getCijenaOriginal(),
-                       ponudaDohvacena.getUrlSlike(),
+                       ponudaDohvacena.getUrlSlike(), ponudaDohvacena.getUrlLogo(),
                        ponudaDohvacena.getUsteda(),ponudaDohvacena.getKategorija(),ponudaDohvacena.getGrad(),ponudaDohvacena.getDatumPonude());
                        novi.save();
            } else {

@@ -28,6 +28,7 @@ public class Ponuda extends BaseModel implements Parcelable{
     @Column  int popust;
     @Column  int cijenaOriginal;
     @Column  String urlSlike;
+    @Column  String urlLogo;
     @Column  int usteda;
     @Column  String kategorija;
     @Column  String grad;
@@ -36,13 +37,14 @@ public class Ponuda extends BaseModel implements Parcelable{
     public Ponuda() {
     }
 
-    public Ponuda(int id,String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, int usteda, String kategorija, String grad, String datumPonude){
+    public Ponuda(int id,String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, int usteda, String kategorija, String grad, String datumPonude){
         this.id=id;
         this.tekstPonude = tekstPonude;
         this.cijena = cijena;
         this.popust = popust;
         this.cijenaOriginal = cijenaOriginal;
         this.urlSlike = urlSlike;
+        this.urlLogo = urlLogo;
         this.usteda = usteda;
         this.kategorija = kategorija;
         this.grad = grad;
@@ -58,6 +60,8 @@ public class Ponuda extends BaseModel implements Parcelable{
     public String getURL() {
         return urlSlike;
     }
+
+
 
     public void setCijena(int cijena) {
         this.cijena = cijena;
@@ -103,6 +107,14 @@ public class Ponuda extends BaseModel implements Parcelable{
         this.urlSlike = urlSlike;
     }
 
+    public String getUrlLogo() {
+        return urlLogo;
+    }
+
+    public void setUrlLogo(String urlLogo) {
+        this.urlLogo = urlLogo;
+    }
+
     public int getUsteda() {
         return usteda;
     }
@@ -146,6 +158,7 @@ public class Ponuda extends BaseModel implements Parcelable{
         return ponudaList;
     }
 
+
     public static void deleteAll(){
         new Delete().from(Ponuda.class).execute();
     }
@@ -160,6 +173,7 @@ public class Ponuda extends BaseModel implements Parcelable{
         this.popust = in.readInt();
         this.cijenaOriginal = in.readInt();
         this.urlSlike = in.readString();
+        this.urlLogo = in.readString();
         this.usteda = in.readInt();
         this.kategorija = in.readString();
         this.grad = in.readString();
@@ -180,6 +194,7 @@ public class Ponuda extends BaseModel implements Parcelable{
         dest.writeInt(popust);
         dest.writeInt(cijenaOriginal);
         dest.writeString(urlSlike);
+        dest.writeString(urlLogo);
         dest.writeInt(usteda);
         dest.writeString(kategorija);
         dest.writeString(grad);

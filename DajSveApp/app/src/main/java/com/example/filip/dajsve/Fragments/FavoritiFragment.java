@@ -59,7 +59,7 @@ public class FavoritiFragment extends Fragment   {
         for(Favorit favorit : novaLista){
 
             Ponuda novi = new Ponuda(favorit.getId(),favorit.getTekstPonude(),
-                    favorit.getCijena(),favorit.getPopust(),favorit.getCijenaOriginal(),favorit.getUrlSlike(),
+                    favorit.getCijena(),favorit.getPopust(),favorit.getCijenaOriginal(),favorit.getUrlSlike(), favorit.getUrlLogo(),
                     favorit.getUsteda(),"","", favorit.getDatumPonude());
             listaPonuda.add(novi);
 

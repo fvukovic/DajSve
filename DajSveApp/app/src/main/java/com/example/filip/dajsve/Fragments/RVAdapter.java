@@ -1,7 +1,7 @@
 package com.example.filip.dajsve.Fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,15 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.filip.dajsve.Activities.MainActivity;
 import com.example.filip.dajsve.R;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import com.squareup.picasso.Picasso;
 import android.content.Context;
-import android.widget.Toast;
 
 import entities.Ponuda;
 
@@ -34,15 +32,25 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
 
         CardView cv;
         TextView ponudaNaziv;
-        TextView ponudaOpis;
+        TextView ponudaCijena;
+        TextView ponudaStaraCijena;
+        TextView ponudaPopust;
         ImageView ponudaSlika;
+        ImageView ponudivacLogo;
+        ImageView sss;
+
 
         PonudeViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.card_view);
             ponudaNaziv = (TextView)itemView.findViewById(R.id.ponuda_name);
-            ponudaOpis = (TextView)itemView.findViewById(R.id.ponuda_description);
+            ponudaCijena = (TextView)itemView.findViewById(R.id.ponuda_cijena);
             ponudaSlika = (ImageView)itemView.findViewById(R.id.ponuda_image);
+            ponudaStaraCijena = (TextView)itemView.findViewById(R.id.stara_cijena);
+            ponudaPopust = (TextView) itemView.findViewById(R.id.popust);
+            ponudivacLogo = (ImageView) itemView.findViewById(R.id.ponudivacLogo);
+            sss = (ImageView) itemView.findViewById(R.id.sss);
+
         }
     }
 
@@ -69,9 +77,21 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
     @Override
     public void onBindViewHolder(PonudeViewHolder PonudeViewHolder, int i) {
         PonudeViewHolder.ponudaNaziv.setText(ponuda.get(i).getNaziv());
-        PonudeViewHolder.ponudaOpis.setText("Cijena: "+ponuda.get(i).getCijena()+ " kuna");
-        //Context context =PonudeViewHolder.ponudaSlika.getContext();
+        PonudeViewHolder.ponudaCijena.setText(ponuda.get(i).getCijena()+ " kuna");
+        PonudeViewHolder.ponudaStaraCijena.setText(ponuda.get(i).getCijenaOriginal()+ " kuna");
+        PonudeViewHolder.ponudaPopust.setText(ponuda.get(i).getPopust() + "%");
+
+        if(ponuda.get(i).getKategorija().toLowerCase().contains("novo") == true){
+            Picasso.with(context).load(R.drawable.novo).into(PonudeViewHolder.sss);
+            PonudeViewHolder.sss.bringToFront();
+        }else{
+            Picasso.with(context).load(R.drawable.transparent).into(PonudeViewHolder.sss);
+        }
+
         Picasso.with(context).load(ponuda.get(i).getURL()).into(PonudeViewHolder.ponudaSlika);
+        Picasso.with(context).load(ponuda.get(i).getUrlLogo()).into(PonudeViewHolder.ponudivacLogo);
+
+
 
         final int index=i+1;
         final ArrayList<Ponuda> ponudaArrayList=new ArrayList<Ponuda>();
@@ -79,12 +99,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
 
         System.out.println("Trenutno ima: " + getItemCount());
 
+        //funkcija za strikethrough preko teksta
+        PonudeViewHolder.ponudaStaraCijena.setPaintFlags(PonudeViewHolder.ponudaStaraCijena.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         PonudeViewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 AppCompatActivity activity = (AppCompatActivity) context;
                 Fragment detaljiponude = new DetaljiPonudeFragment();
                 Bundle bundle = new Bundle();
