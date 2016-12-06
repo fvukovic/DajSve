@@ -42,7 +42,6 @@ import static android.support.v4.widget.SwipeRefreshLayout.*;
 public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
 
     private RecyclerView rv;
-    List<Ponuda> sosBaza;
     public SwipeRefreshLayout mSwipeRefreshLayout;
 
 

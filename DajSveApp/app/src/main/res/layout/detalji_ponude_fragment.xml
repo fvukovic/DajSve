@@ -4,12 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/ponuda_image"
-        android:layout_height="95dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_width="match_parent" />
-
     <TextView
         android:id="@+id/ponuda_name"
         android:layout_width="wrap_content"
@@ -17,7 +11,6 @@
         android:layout_marginLeft="5dp"
         android:textIsSelectable="false"
         tools:text="Naziv ponude"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:layout_below="@+id/ponuda_image"
         android:layout_alignParentStart="true" />
 
@@ -28,7 +21,6 @@
         android:layout_marginLeft="5dp"
         android:textIsSelectable="false"
         tools:text="Opis ponude"
-        android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
         android:layout_below="@+id/ponuda_name"
         android:layout_alignStart="@+id/ponuda_name"
         android:layout_alignEnd="@+id/ponuda_name" />
@@ -80,25 +72,6 @@
         android:layout_marginBottom="15dp" />
 
     <TextView
-        android:text="Dodaj u favorite!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/favoriti_dodavanje"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/hover_poruka" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:id="@+id/favoriti_dodavanje"
-        android:layout_marginTop="12dp"
-        android:baselineAlignBottom="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/hover_poruka"
-        android:layout_marginStart="19dp" />
-
-    <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -107,5 +80,27 @@
         android:layout_alignBottom="@+id/ponuda_cijena"
         android:layout_alignEnd="@+id/favoriti_dodavanje"
         android:layout_marginEnd="45dp" />
+
+    <TextView
+        android:text="Dodaj u favorite!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hover_poruka"
+        android:layout_alignBottom="@+id/ponuda_image"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="23dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox"
+        android:button="@drawable/favoritebutton"/>
+
+    <ImageView
+        android:id="@+id/ponuda_image"
+        android:layout_height="95dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>
