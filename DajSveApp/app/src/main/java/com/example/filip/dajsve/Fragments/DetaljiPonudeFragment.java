@@ -172,7 +172,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
 
         try {
             if (ponudaDohvacena.getLongitude().contentEquals("nema") || ponudaDohvacena.getLatitude().contentEquals("nema")){
-                //ako nema koordinata v xml-u onda ime grada v kojem je ponuda pretvara v koordinate
+                //Ako nema koordinata v xml-u onda ime grada u kojem je ponuda pretvara u koordinate
                 Geocoder geocoder = new Geocoder(context);
                 String grad = ponudaDohvacena.getGrad();
                 List<Address> adresa;
@@ -189,7 +189,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(gradKoordinate).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }else{
-                //Ovo uzima koordinate koje su dostupne v xml-u
+                //Uzima koordinate koje su dostupne v xml-u
                 double ponudaLatitude = Double.parseDouble(ponudaDohvacena.getLatitude());
                 double ponudaLongitude = Double.parseDouble(ponudaDohvacena.getLongitude());
                 LatLng gradKoordinate = new LatLng(ponudaLatitude, ponudaLongitude);
@@ -207,7 +207,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                         .snippet(cityName +"*"+ stateName+"*" + countryName)
                         .position(gradKoordinate));
 
-                //ovo pozicionira i zumirana lokaciju od koordinata
+                //Pozicionira i zumirana lokaciju od koordinata
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(gradKoordinate).zoom(13).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
