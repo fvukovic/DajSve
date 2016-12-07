@@ -1,106 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/toolbar"
+    android:id="@+id/skrolanje">
 
-    <TextView
-        android:id="@+id/ponuda_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:textIsSelectable="false"
-        tools:text="Naziv ponude"
-        android:layout_below="@+id/ponuda_image"
-        android:layout_alignParentStart="true" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/ponuda_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:textIsSelectable="false"
-        tools:text="Opis ponude"
-        android:layout_below="@+id/ponuda_name"
-        android:layout_alignStart="@+id/ponuda_name"
-        android:layout_alignEnd="@+id/ponuda_name" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
-        android:id="@+id/ponuda_datum"
-        android:layout_below="@+id/ponuda_cijena"
-        android:layout_alignStart="@+id/ponuda_cijena" />
+        <ImageView
+            android:id="@+id/ponuda_image"
+            android:layout_height="160dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="230dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="18dp"
-        android:layout_below="@+id/ponuda_datum"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/mapa_prikaz">
+        <TextView
+            android:id="@+id/ponuda_cijena"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            tools:text="Nova cijena"
+            android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
+            android:textSize="20sp"
+            android:textColor="?android:textColorPrimaryDisableOnly"
+            android:fontFamily="serif"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="25dp"
+            android:layout_alignTop="@+id/ponuda_image"
+            android:layout_alignParentEnd="true" />
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/ponuda_original"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            tools:text="Redovna cijena"
+            android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
+            android:textSize="18sp"
+            android:textColor="?android:textColorSecondaryNoDisable"
+            android:fontFamily="serif"
+            android:layout_below="@+id/ponuda_cijena"
+            android:layout_alignEnd="@+id/ponuda_cijena"
+            android:layout_marginTop="13dp" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:id="@+id/ponuda_cijena"
-        android:layout_below="@+id/ponuda_description"
-        android:layout_alignStart="@+id/ponuda_description" />
+        <TextView
+            android:id="@+id/ponuda_popust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            tools:text="Popust"
+            android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
+            android:textSize="19sp"
+            android:textColor="?android:textColorPrimaryDisableOnly"
+            android:layout_centerInParent="@+id/ponuda_cijena"
+            android:fontFamily="serif"
+            android:layout_below="@+id/ponuda_original"
+            android:layout_alignEnd="@+id/ponuda_original"
+            android:layout_marginTop="8dp" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ponuda_usteda"
-        android:layout_alignBaseline="@+id/ponuda_popust"
-        android:layout_alignBottom="@+id/ponuda_popust"
-        android:layout_alignStart="@+id/ponuda_original" />
+        <TextView
+            android:id="@+id/ponuda_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginStart="0dp"
+            android:layout_below="@+id/ponuda_image"
+            android:textIsSelectable="false"
+            tools:text="Naziv ponude"
+            android:textSize="20sp"
+            android:textColor="?android:textColorPrimaryDisableOnly"
+            android:fontFamily="serif"
+            android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ponuda_popust"
-        android:layout_above="@+id/mapa_prikaz"
-        android:layout_alignStart="@+id/ponuda_datum"
-        android:layout_marginBottom="15dp" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBox"
+            android:layout_below="@id/ponuda_name"
+            android:button="@drawable/favoritebutton"
+            android:layout_marginLeft="20dp"
+            />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ponuda_original"
-        android:layout_alignBaseline="@+id/ponuda_cijena"
-        android:layout_alignBottom="@+id/ponuda_cijena"
-        android:layout_alignEnd="@+id/favoriti_dodavanje"
-        android:layout_marginEnd="45dp" />
+        <TextView
+            android:text="Dodaj u favorite!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hover_poruka"
+            android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
+            android:textSize="19sp"
+            android:textColor="?android:textColorPrimaryDisableOnly"
+            android:layout_alignBaseline="@+id/checkBox"
+            android:layout_toRightOf="@+id/checkBox"
+            android:layout_marginLeft="5dp"/>
 
-    <TextView
-        android:text="Dodaj u favorite!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hover_poruka"
-        android:layout_alignBottom="@+id/ponuda_image"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="23dp" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:id="@+id/mapa_prikaz"
+            android:layout_below="@+id/checkBox"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox"
-        android:button="@drawable/favoritebutton"/>
+        </FrameLayout>
 
-    <ImageView
-        android:id="@+id/ponuda_image"
-        android:layout_height="95dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true" />
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/prozirnaslika"
+            android:layout_alignTop="@+id/mapa_prikaz"
+            android:layout_alignBottom="@+id/mapa_prikaz"
+            android:layout_alignEnd="@+id/mapa_prikaz"
+            android:layout_alignRight="@+id/mapa_prikaz"
+            android:layout_alignLeft="@+id/mapa_prikaz"
+            android:layout_marginLeft="10dp"
+            android:layout_alignStart="@+id/mapa_prikaz"
+            android:alpha=".1"/>
 
-</RelativeLayout>
+
+
+
+        <!--
+        <TextView
+            android:id="@+id/ponuda_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textIsSelectable="false"
+            tools:text="Naziv ponude"
+            android:layout_below="@+id/ponuda_image"
+            android:layout_alignParentStart="true"
+            android:textSize="20sp"
+            android:textColor="?android:textColorPrimaryDisableOnly"
+            android:fontFamily="serif"
+            android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"/>
+
+
+        <TextView
+            android:id="@+id/ponuda_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textIsSelectable="false"
+            tools:text="Opis ponude"
+            android:layout_below="@+id/ponuda_name"
+            android:layout_alignStart="@+id/ponuda_name"
+            android:layout_alignEnd="@+id/ponuda_name" />
+
+
+        <TextView
+            android:text="Datum ponude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            android:id="@+id/ponuda_datum"
+            android:layout_below="@+id/ponuda_cijena"
+            android:layout_alignStart="@+id/ponuda_cijena" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="18dp"
+            android:layout_below="@+id/ponuda_datum"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/mapa_prikaz">
+
+        </FrameLayout>
+
+        <TextView
+            android:text="Cijena"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:id="@+id/ponuda_cijena"
+            android:layout_below="@+id/ponuda_name"
+            android:layout_alignStart="@+id/ponuda_name" />
+
+        <TextView
+            android:text="UĹˇteda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ponuda_usteda"
+            android:layout_alignBaseline="@+id/ponuda_popust"
+            android:layout_alignBottom="@+id/ponuda_popust"
+            android:layout_alignStart="@+id/ponuda_original" />
+
+        <TextView
+            android:text="Popust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ponuda_popust"
+            android:layout_above="@+id/mapa_prikaz"
+            android:layout_alignStart="@+id/ponuda_datum"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:text="Dodaj u favorite!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/hover_poruka"
+            android:layout_alignBottom="@+id/ponuda_image"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="23dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBox"
+            android:layout_above="@+id/hover_poruka"
+            android:button="@drawable/favoritebutton"
+            android:layout_alignEnd="@+id/hover_poruka" />
+
+        <ImageView
+            android:id="@+id/ponuda_image"
+            android:layout_height="95dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="270dp"
+            android:layout_alignParentTop="true" />
+
+
+
+        <TextView
+            android:text="Cijena original"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ponuda_original"
+            android:layout_alignBaseline="@+id/ponuda_cijena"
+            android:layout_alignBottom="@+id/ponuda_cijena"
+            android:layout_centerHorizontal="true" />
+            -->
+
+    </RelativeLayout>
+</ScrollView>

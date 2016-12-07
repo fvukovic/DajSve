@@ -111,8 +111,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
                 activity.getSupportFragmentManager().beginTransaction();
                 bundle.putParcelableArrayList("ponuda", ponudaArrayList);
                 detaljiponude.setArguments(bundle);
-                activity.getSupportFragmentManager().beginTransaction().addToBackStack(null);
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.linearlayout, detaljiponude).commit();
+                activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.linearlayout, detaljiponude).commit();
 
             }
         });

@@ -33,11 +33,13 @@ public class Ponuda extends BaseModel implements Parcelable{
     @Column  String kategorija;
     @Column  String grad;
     @Column  String datumPonude;
+    @Column  String latitude;
+    @Column  String longitude;
 
     public Ponuda() {
     }
 
-    public Ponuda(int id,String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, int usteda, String kategorija, String grad, String datumPonude){
+    public Ponuda(int id,String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, int usteda, String kategorija, String grad, String datumPonude,String latitude, String longitude){
         this.id=id;
         this.tekstPonude = tekstPonude;
         this.cijena = cijena;
@@ -49,6 +51,8 @@ public class Ponuda extends BaseModel implements Parcelable{
         this.kategorija = kategorija;
         this.grad = grad;
         this.datumPonude = datumPonude;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getNaziv() {
@@ -146,6 +150,17 @@ public class Ponuda extends BaseModel implements Parcelable{
     public void setDatumPonude(String datumPonude) {
         this.datumPonude = datumPonude;
     }
+
+    public String getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(String latitude) {this.latitude = latitude;}
+
+    public String getLongitude() {
+        return longitude;
+    }
+    public void setLongitude(String longitude) {this.longitude = longitude;}
+
     public static List<Ponuda> getAll(){
         List<Ponuda> ponudaList;
         ponudaList= new Select().from(Ponuda.class).queryList();
@@ -178,6 +193,8 @@ public class Ponuda extends BaseModel implements Parcelable{
         this.kategorija = in.readString();
         this.grad = in.readString();
         this.datumPonude = in.readString();
+        this.latitude = in.readString();
+        this.longitude = in.readString();
 
     }
 
@@ -199,6 +216,8 @@ public class Ponuda extends BaseModel implements Parcelable{
         dest.writeString(kategorija);
         dest.writeString(grad);
         dest.writeString(datumPonude);
+        dest.writeString(latitude);
+        dest.writeString(longitude);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

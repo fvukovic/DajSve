@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
 
-        System.out.println("FAVORITA IMA : "+ Favorit.getAll().size());
+//        System.out.println("FAVORITA IMA : "+ Favorit.getAll().size());
 
         ActionBar ab = getSupportActionBar();
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 }
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.linearlayout, fragment).commit();
+                fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
                 drawerLayout.closeDrawers();
             }
         });

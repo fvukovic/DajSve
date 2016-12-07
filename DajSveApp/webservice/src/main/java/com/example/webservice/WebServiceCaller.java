@@ -122,6 +122,8 @@ public class WebServiceCaller{
         String kategorija = "nemapodataka";
         String grad = "nema podataka";
         String datum = "nema podataka";
+        String latitude = "";
+        String longitude = "";
 
         for(int i=0; i<nodeList.getLength(); i++){
 
@@ -199,7 +201,39 @@ public class WebServiceCaller{
                 datum=  (datumList.item(0).getNodeValue());
             }
 
-            Ponuda listElement = new Ponuda(i,tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike, urlLogo,Integer.parseInt(usteda), kategorija, grad, datum);
+            NodeList longitudeList = fstElmnt.getElementsByTagName("Longitude");
+            //prvo provjerava da li uopce postoji tag s koordinatama za ponudu
+            if (longitudeList.getLength()!= 0){
+                Element longitudeElement = (Element) longitudeList.item(0);
+                //i onda provjerava dal su upisane koordinate v tagu-u
+                if (longitudeElement.getChildNodes().getLength() > 0){
+                    longitudeList = longitudeElement.getChildNodes();
+                    String cijeliLong = longitudeList.item(0).getNodeValue();
+                    String[] prveKord = cijeliLong.split("#");
+                    longitude=  prveKord[0];
+
+                    //StringTokenizer tokens = new StringTokenizer(cijeliLong, "#");
+                    //longitude = tokens.nextToken();
+
+                }
+            }else longitude = "nema";
+
+
+            NodeList latitudeList = fstElmnt.getElementsByTagName("Latitude");
+            if (latitudeList.getLength()!= 0){
+                Element latitudeElement = (Element) latitudeList.item(0);
+                if (latitudeElement.getChildNodes().getLength() > 0){
+                    latitudeList = latitudeElement.getChildNodes();
+                    String cijeliLat = latitudeList.item(0).getNodeValue();
+                    String[] prveKord = cijeliLat.split("#");
+                    latitude=  prveKord[0];
+
+                    //StringTokenizer tokens = new StringTokenizer(cijeliLat, "#");
+                    //latitude = tokens.nextToken();
+                }
+            }else latitude = "nema";
+
+            Ponuda listElement = new Ponuda(i,tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike, urlLogo,Integer.parseInt(usteda), kategorija, grad, datum,latitude, longitude);
             ponudaLista.add(listElement);
 
         }
