@@ -28,6 +28,7 @@ public class Favorit extends BaseModel {
     @Column  int cijenaOriginal;
     @Column  String urlSlike;
     @Column  String urlLogo;
+    @Column  String urlWeba;
     @Column  int usteda;
     @Column  String kategorija;
     @Column  String grad;
@@ -36,7 +37,7 @@ public class Favorit extends BaseModel {
     public Favorit() {
     }
 
-    public Favorit(int id, boolean aktivan, int idPonuda, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, int usteda, String kategorija, String grad, String datumPonude) {
+    public Favorit(int id, boolean aktivan, int idPonuda, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, String urlWeba, int usteda, String kategorija, String grad, String datumPonude) {
         this.id = id;
         this.aktivan = aktivan;
         this.idPonuda = idPonuda;
@@ -46,6 +47,7 @@ public class Favorit extends BaseModel {
         this.cijenaOriginal = cijenaOriginal;
         this.urlSlike = urlSlike;
         this.urlLogo = urlLogo;
+        this.urlWeba = urlWeba;
         this.usteda = usteda;
         this.kategorija = kategorija;
         this.grad = grad;
@@ -124,6 +126,14 @@ public class Favorit extends BaseModel {
         this.urlLogo = urlLogo;
     }
 
+    public String getUrlWeba() {
+        return urlWeba;
+    }
+
+    public void setUrlWeba(String urlWeba) {
+        this.urlWeba = urlWeba;
+    }
+
     public int getUsteda() {
         return usteda;
     }
@@ -164,7 +174,7 @@ public class Favorit extends BaseModel {
         new Delete().from(Favorit.class).execute();
     }
 
-    public static  void deleteFromId(int i)
+    public static void deleteFromId(int i)
     {
         new Delete().from(Favorit.class).where(Favorit_Table.idPonuda.is(i)).execute();
     }

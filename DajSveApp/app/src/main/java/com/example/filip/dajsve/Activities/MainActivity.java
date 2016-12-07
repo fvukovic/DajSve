@@ -56,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
 
-//        System.out.println("FAVORITA IMA : "+ Favorit.getAll().size());
-
         ActionBar ab = getSupportActionBar();
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

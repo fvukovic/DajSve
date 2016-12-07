@@ -26,6 +26,7 @@ import com.example.filip.dajsve.Activities.MainActivity;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
 import com.example.filip.dajsve.R;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.logging.Handler;
@@ -57,6 +58,7 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
 
         rv.setLayoutManager(llm);
         List<Ponuda> novaLista= Ponuda.getAll();
+        Collections.shuffle(novaLista);
         RVAdapter adapter = new RVAdapter(novaLista,getContext());
         rv.setAdapter(adapter);
 
@@ -69,7 +71,9 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
             protected void onPostExecute(Void aVoid) {
                 mSwipeRefreshLayout.setRefreshing(false);
                 System.out.println("USAO SAM U POST IN");
-                RVAdapter adapter = new RVAdapter(Ponuda.getAll(),getContext());
+                List<Ponuda> novaLista= Ponuda.getAll();
+                Collections.shuffle(novaLista);
+                RVAdapter adapter = new RVAdapter(novaLista,getContext());
                 rv.setAdapter(adapter);
 
 

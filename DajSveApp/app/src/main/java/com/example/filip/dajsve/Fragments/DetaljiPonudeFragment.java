@@ -1,8 +1,11 @@
 package com.example.filip.dajsve.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
@@ -56,6 +59,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     private TextView ponudaDatum;
     private TextView ponudaUsteda;
     private TextView ponudaGrad;
+    private TextView linkNaStranicu;
     private FrameLayout mapaPrikaz;
     private int position;
     private String name = "Map view";
@@ -77,6 +81,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         favoritCheckBox.setOnCheckedChangeListener(CheckBoxListener);
         ponudaSlika=(ImageView)rootView.findViewById(R.id.ponuda_image);
         ponudaNaziv=(TextView) rootView.findViewById(R.id.ponuda_name);
+        linkNaStranicu = (TextView) rootView.findViewById(R.id.link_na_stranicu);
         //ponudaDescription=(TextView)rootView.findViewById(R.id.ponuda_description);
         ponudaCijena=(TextView)rootView.findViewById(R.id.ponuda_cijena);
         ponudaPopust=(TextView)rootView.findViewById(R.id.ponuda_popust);
@@ -96,11 +101,12 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         Picasso.with(context).load(ponudaDohvacena.getURL()).into(ponudaSlika);
         ponudaNaziv.setText(ponudaDohvacena.getNaziv());
         //ponudaDescription.setText(ponudaDohvacena.getTekstPonude());
-        ponudaCijena.setText("cijena=" + ponudaDohvacena.getCijena());
-        ponudaPopust.setText("popust="+(Integer.toString(ponudaDohvacena.getPopust())));
-        ponudaOriginal.setText("stara cijena=" + (Integer.toString(ponudaDohvacena.getCijenaOriginal())));
-        //ponudaDatum.setText("datum=" + ponudaDohvacena.getDatumPonude());
-        //ponudaUsteda.setText("usteda="+Integer.toString(ponudaDohvacena.getUsteda()));
+        ponudaCijena.setText(ponudaDohvacena.getCijena() + " kuna");
+        ponudaPopust.setText((Integer.toString(ponudaDohvacena.getPopust()) + "%"));
+
+        //strike preko stare cijene
+        ponudaOriginal.setPaintFlags(ponudaOriginal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        ponudaOriginal.setText((Integer.toString(ponudaDohvacena.getCijenaOriginal()) + " kuna"));
 
         prozirnaSlika = (ImageView) rootView.findViewById(R.id.prozirnaslika);
         scroll = (ScrollView) rootView.findViewById(R.id.skrolanje);
@@ -130,10 +136,19 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         }
         });
 
+        linkNaStranicu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(ponudaDohvacena.getUrlWeba());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
         //Provjera da li je favorit
         for(Favorit favorit : favoriti)
 
-        {   System.out.println(favorit.getUrlSlike() + " ----------- " +ponudaDohvacena.getUrlSlike());
+        {   System.out.println(favorit.getUrlSlike() + " ----------- " + ponudaDohvacena.getUrlSlike());
 
             //ovo ne valja..treba naci samo da postoji taj url..
             if(favorit.getisIdPonude()==ponudaDohvacena.getId())
@@ -154,15 +169,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         mapaPrikaz.setFocusable(true);
         mapaPrikaz.addView(v);
 
-        //putanja na stranicu DajSve nakon klika na naziv ponude
-        ponudaNaziv.setClickable(true);
-        ponudaNaziv.setMovementMethod(LinkMovementMethod.getInstance());
-        String poveznica = "<a href='http://www.dajsve.com/'>"+ponudaDohvacena.getNaziv()+"</a>";
-        ponudaNaziv.setText(Html.fromHtml(poveznica));
-        ponudaNaziv.setLinkTextColor(BLACK);
-
         return rootView;
-
     }
 
 
@@ -176,10 +183,6 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        //double ponudaLatitude = Double.parseDouble(ponudaDohvacena.getLatitude());
-        //double ponudaLongitude = Double.parseDouble(ponudaDohvacena.getLongitude());
-        //double ponudaLatitude;
-        //double ponudaLongitude;
 
         try {
             if (ponudaDohvacena.getLongitude().contentEquals("nema") || ponudaDohvacena.getLatitude().contentEquals("nema")){
@@ -239,8 +242,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                     System.out.println("Usao sam u  Checked:  " + ponudaDohvacena.getUrlSlike());
                     Favorit novi = new Favorit(favoriti.size(), true, ponudaDohvacena.getId(), ponudaDohvacena.getTekstPonude(),
                             Integer.parseInt(ponudaDohvacena.getCijena()), ponudaDohvacena.getPopust()
-                            , ponudaDohvacena.getCijenaOriginal(),ponudaDohvacena.getUrlLogo(),
-                            ponudaDohvacena.getUrlSlike(),
+                            , ponudaDohvacena.getCijenaOriginal(),ponudaDohvacena.getUrlSlike(), ponudaDohvacena.getUrlLogo(), ponudaDohvacena.getUrlWeba(),
                             ponudaDohvacena.getUsteda(), ponudaDohvacena.getKategorija(), ponudaDohvacena.getGrad(), ponudaDohvacena.getDatumPonude());
                     novi.save();
                 }

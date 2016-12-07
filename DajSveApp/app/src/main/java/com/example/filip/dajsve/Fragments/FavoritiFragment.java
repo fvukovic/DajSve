@@ -58,16 +58,14 @@ public class FavoritiFragment extends Fragment   {
         List<Ponuda> listaPonuda= new ArrayList<Ponuda>() ;
         List<Ponuda> listaSvihPonuda=Ponuda.getAll() ;
         for(Favorit favorit : novaLista){
-            System.out.println("URLOVI U BAZI: "+ favorit.getUrlSlike());
             for(Ponuda ponuda : listaSvihPonuda)
             {
                 if(favorit.getisIdPonude()==ponuda.getId())
                 {
                     Ponuda novi = new Ponuda(favorit.getId(),favorit.getTekstPonude(),
-                            favorit.getCijena(),favorit.getPopust(),favorit.getCijenaOriginal(),favorit.getUrlLogo(),favorit.getUrlSlike(),
+                            favorit.getCijena(),favorit.getPopust(),favorit.getCijenaOriginal(),favorit.getUrlSlike(), favorit.getUrlLogo(), favorit.getUrlWeba(),
                             favorit.getUsteda(),"",favorit.getGrad(), favorit.getDatumPonude(),"nema","nema");
                     listaPonuda.add(novi);
-
                 }
             }
 

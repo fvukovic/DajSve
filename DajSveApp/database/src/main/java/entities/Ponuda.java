@@ -29,6 +29,7 @@ public class Ponuda extends BaseModel implements Parcelable{
     @Column  int cijenaOriginal;
     @Column  String urlSlike;
     @Column  String urlLogo;
+    @Column  String urlWeba;
     @Column  int usteda;
     @Column  String kategorija;
     @Column  String grad;
@@ -36,10 +37,11 @@ public class Ponuda extends BaseModel implements Parcelable{
     @Column  String latitude;
     @Column  String longitude;
 
+
     public Ponuda() {
     }
 
-    public Ponuda(int id,String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, int usteda, String kategorija, String grad, String datumPonude,String latitude, String longitude){
+    public Ponuda(int id,String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, String urlWeba, int usteda, String kategorija, String grad, String datumPonude,String latitude, String longitude){
         this.id=id;
         this.tekstPonude = tekstPonude;
         this.cijena = cijena;
@@ -47,6 +49,7 @@ public class Ponuda extends BaseModel implements Parcelable{
         this.cijenaOriginal = cijenaOriginal;
         this.urlSlike = urlSlike;
         this.urlLogo = urlLogo;
+        this.urlWeba = urlWeba;
         this.usteda = usteda;
         this.kategorija = kategorija;
         this.grad = grad;
@@ -119,6 +122,14 @@ public class Ponuda extends BaseModel implements Parcelable{
         this.urlLogo = urlLogo;
     }
 
+    public String getUrlWeba() {
+        return urlWeba;
+    }
+
+    public void setUrlWeba(String urlWeba) {
+        this.urlWeba = urlWeba;
+    }
+
     public int getUsteda() {
         return usteda;
     }
@@ -189,6 +200,7 @@ public class Ponuda extends BaseModel implements Parcelable{
         this.cijenaOriginal = in.readInt();
         this.urlSlike = in.readString();
         this.urlLogo = in.readString();
+        this.urlWeba = in.readString();
         this.usteda = in.readInt();
         this.kategorija = in.readString();
         this.grad = in.readString();
@@ -212,6 +224,7 @@ public class Ponuda extends BaseModel implements Parcelable{
         dest.writeInt(cijenaOriginal);
         dest.writeString(urlSlike);
         dest.writeString(urlLogo);
+        dest.writeString(urlWeba);
         dest.writeInt(usteda);
         dest.writeString(kategorija);
         dest.writeString(grad);
