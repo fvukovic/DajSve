@@ -5,6 +5,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +35,8 @@ import java.util.List;
 
 import entities.Favorit;
 import entities.Ponuda;
+
+import static android.graphics.Color.BLACK;
 
 /**
  * Created by Helena on 23.11.2016..
@@ -149,6 +153,13 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         getActivity().getFragmentManager().beginTransaction().add(com.example.map.R.id.frame, mapFragment).commit();
         mapaPrikaz.setFocusable(true);
         mapaPrikaz.addView(v);
+
+        //putanja na stranicu DajSve nakon klika na naziv ponude
+        ponudaNaziv.setClickable(true);
+        ponudaNaziv.setMovementMethod(LinkMovementMethod.getInstance());
+        String poveznica = "<a href='http://www.dajsve.com/'>"+ponudaDohvacena.getNaziv()+"</a>";
+        ponudaNaziv.setText(Html.fromHtml(poveznica));
+        ponudaNaziv.setLinkTextColor(BLACK);
 
         return rootView;
 
