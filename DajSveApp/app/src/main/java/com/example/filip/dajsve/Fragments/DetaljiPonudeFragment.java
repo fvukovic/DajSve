@@ -17,6 +17,7 @@ import com.example.filip.dajsve.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.squareup.picasso.Picasso;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import entities.Ponuda;
 public class DetaljiPonudeFragment extends android.support.v4.app.Fragment  {
     public CheckBox favoritCheckBox;
     Favorit trenutni;
+    boolean statusFavoritPonuda;
     public Ponuda ponudaDohvacena;
     private ImageView ponudaSlika;
     private TextView ponudaNaziv;
@@ -69,7 +71,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment  {
         Bundle bundle = getArguments();
         List<Favorit> favoriti= Favorit.getAll();
         ArrayList<Ponuda> listaDohvacena = bundle.getParcelableArrayList("ponuda");
-         ponudaDohvacena = listaDohvacena.get(0);
+        ponudaDohvacena = listaDohvacena.get(0);
 
         Context context=ponudaSlika.getContext();
         Picasso.with(context).load(ponudaDohvacena.getURL()).into(ponudaSlika);
@@ -82,17 +84,19 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment  {
         ponudaUsteda.setText("usteda="+Integer.toString(ponudaDohvacena.getUsteda()));
         //Provjera da li je favorit
         for(Favorit favorit : favoriti)
-        {   System.out.println("DOSAO PRIJE");
-            //ovo ne valja..treba naci samo da postoji taj url..
-            if(favorit.getUrlSlike()==ponudaDohvacena.getUrlSlike())
-            {
 
-                System.out.println("usao sam");
+        {   System.out.println(favorit.getUrlSlike() + " ----------- " +ponudaDohvacena.getUrlSlike());
+
+            //ovo ne valja..treba naci samo da postoji taj url..
+            if(favorit.getisIdPonude()==ponudaDohvacena.getId())
+            {
+                System.out.println("dasdasdasd : "+ favoritCheckBox.isChecked());
+                statusFavoritPonuda=true;
                 favoritCheckBox.setChecked(true);
                 trenutni=favorit;
 
             }
-
+            System.out.println("CHECKBOX JE NA : "+ favoritCheckBox.isChecked());
         }
         //dodavanje google karte u layout
         View v = inflater.inflate(com.example.map.R.layout.map_fragment, container, false);
@@ -118,35 +122,24 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment  {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             List<Favorit> favoriti= Favorit.getAll();
-           if(favoritCheckBox.isChecked()){
-               System.out.println("Usao sam u  Checked");
-               Favorit novi = new Favorit(33,true,ponudaDohvacena.getTekstPonude(),
-                       Integer.parseInt( ponudaDohvacena.getCijena()),ponudaDohvacena.getPopust()
-                       ,ponudaDohvacena.getCijenaOriginal(),
-                       ponudaDohvacena.getUrlSlike(), ponudaDohvacena.getUrlLogo(),
-                       ponudaDohvacena.getUsteda(),ponudaDohvacena.getKategorija(),ponudaDohvacena.getGrad(),ponudaDohvacena.getDatumPonude());
-                       novi.save();
-           } else {
-               System.out.println("Usao sam u NIJE Checked");
-               for(Favorit favorit : favoriti)
-               {
-                   if(favorit.getUrlSlike()==ponudaDohvacena.getURL())
-                   {
-                       favoritCheckBox.setChecked(false);
-
-                       System.out.println("Usao sam u brisanje");
-                       //i ovaj delete vj. ne radi..trebalo bi se napraviti upit..pa onda tako brisat..
-                       favorit.delete();
-
-
-                   }
-               }
+            if(favoritCheckBox.isChecked()){
+                System.out.println("statusFavoritPonuda: "+ statusFavoritPonuda);
+                if( statusFavoritPonuda!=true) {
+                    System.out.println("Usao sam u  Checked:  " + ponudaDohvacena.getUrlSlike());
+                    Favorit novi = new Favorit(favoriti.size(), true, ponudaDohvacena.getId(), ponudaDohvacena.getTekstPonude(),
+                            Integer.parseInt(ponudaDohvacena.getCijena()), ponudaDohvacena.getPopust()
+                            , ponudaDohvacena.getCijenaOriginal(),ponudaDohvacena.getUrlLogo(),
+                            ponudaDohvacena.getUrlSlike(),
+                            ponudaDohvacena.getUsteda(), ponudaDohvacena.getKategorija(), ponudaDohvacena.getGrad(), ponudaDohvacena.getDatumPonude());
+                    novi.save();
+                }
+            } else {
+                System.out.println("Usao sam u NIJE Checked");
+                Favorit.deleteFromId(ponudaDohvacena.getId());
 
 
 
-           }
+            }
         }
     };
 }
-
-

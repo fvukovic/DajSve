@@ -21,7 +21,7 @@ public class Favorit extends BaseModel {
     @Column boolean aktivan;
 
 
-
+    @Column int idPonuda;
     @Column  String tekstPonude;
     @Column  int cijena;
     @Column  int popust;
@@ -36,9 +36,10 @@ public class Favorit extends BaseModel {
     public Favorit() {
     }
 
-    public Favorit(int id, boolean aktivan, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, int usteda, String kategorija, String grad, String datumPonude) {
+    public Favorit(int id, boolean aktivan, int idPonuda, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, int usteda, String kategorija, String grad, String datumPonude) {
         this.id = id;
         this.aktivan = aktivan;
+        this.idPonuda = idPonuda;
         this.tekstPonude = tekstPonude;
         this.cijena = cijena;
         this.popust = popust;
@@ -57,6 +58,14 @@ public class Favorit extends BaseModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getisIdPonude() {
+        return idPonuda;
+    }
+
+    public void setIdPonuda(int idPonuda) {
+        this.idPonuda = idPonuda;
     }
 
     public boolean isAktivan() {
@@ -155,7 +164,10 @@ public class Favorit extends BaseModel {
         new Delete().from(Favorit.class).execute();
     }
 
-
+    public static  void deleteFromId(int i)
+    {
+        new Delete().from(Favorit.class).where(Favorit_Table.idPonuda.is(i)).execute();
+    }
 
 
 

@@ -56,12 +56,21 @@ public class FavoritiFragment extends Fragment   {
         rv.setLayoutManager(llm);
         List<Favorit> novaLista= Favorit.getAll();
         List<Ponuda> listaPonuda= new ArrayList<Ponuda>() ;
+        List<Ponuda> listaSvihPonuda=Ponuda.getAll() ;
         for(Favorit favorit : novaLista){
+            System.out.println("URLOVI U BAZI: "+ favorit.getUrlSlike());
+            for(Ponuda ponuda : listaSvihPonuda)
+            {
+                if(favorit.getisIdPonude()==ponuda.getId())
+                {
+                    Ponuda novi = new Ponuda(favorit.getId(),favorit.getTekstPonude(),
+                            favorit.getCijena(),favorit.getPopust(),favorit.getCijenaOriginal(),favorit.getUrlLogo(),favorit.getUrlSlike(),
+                            favorit.getUsteda(),"","", favorit.getDatumPonude());
+                    listaPonuda.add(novi);
 
-            Ponuda novi = new Ponuda(favorit.getId(),favorit.getTekstPonude(),
-                    favorit.getCijena(),favorit.getPopust(),favorit.getCijenaOriginal(),favorit.getUrlSlike(), favorit.getUrlLogo(),
-                    favorit.getUsteda(),"","", favorit.getDatumPonude());
-            listaPonuda.add(novi);
+                }
+            }
+
 
         }
         RVAdapter adapter = new RVAdapter(listaPonuda,getContext());
@@ -73,6 +82,3 @@ public class FavoritiFragment extends Fragment   {
 
 
 }
-
-
-
