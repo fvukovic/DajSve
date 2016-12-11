@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import entities.Grad;
+import entities.Kategorija;
 import entities.Ponuda;
 
 /**
@@ -80,6 +81,29 @@ public class WebServiceCaller{
             }catch(SAXException se){
                 se.printStackTrace();
             }
+        else if(entityType == Kategorija.class){
+            try{
+                String address = "http://www.dajsve.com/rss.ashx?svekategorije=1";
+                URL kategorijeXmlUrl = new URL(address);
+
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
+                Document doc = db.parse(kategorijeXmlUrl.openStream());
+                doc.getDocumentElement().normalize();
+                NodeList nodeList = doc.getElementsByTagName("Kategorija");
+
+                handleKategorije(nodeList);
+
+            } catch(MalformedURLException e){
+                e.printStackTrace();
+            } catch (ParserConfigurationException pce){
+                pce.printStackTrace();
+            }catch(IOException ioe){
+                ioe.printStackTrace();
+            }catch(SAXException se){
+                se.printStackTrace();
+            }
+        }
     }
 
     private void handleGradovi(NodeList nodeList) {
@@ -105,6 +129,41 @@ public class WebServiceCaller{
 
         if(webServiceHandler != null){
             webServiceHandler.onDataArrived(citiesList, true);
+        }
+
+    }
+
+    private void handleKategorije(NodeList nodeList) {
+        List<Kategorija> kategorijeList = new ArrayList<Kategorija>();
+
+        for(int i=0; i<nodeList.getLength(); i++){
+
+            Node node = nodeList.item(i);
+            Element fstElmnt = (Element) node;
+            NodeList katList = fstElmnt.getElementsByTagName("Naziv");
+            Element nameElement = (Element) katList.item(0);
+            katList = nameElement.getChildNodes();
+            String kategorijaNaziv =  ( ((Node) katList.item(0)).getNodeValue());
+
+            NodeList idList = fstElmnt.getElementsByTagName("Id");
+            NodeList tagList = fstElmnt.getElementsByTagName("UrlPart1");
+            NodeList naslovList = fstElmnt.getElementsByTagName("Naslov");
+            Element idElement = (Element) idList.item(0);
+            Element tagElement = (Element) tagList.item(0);
+            Element naslovElement = (Element) naslovList.item(0);
+            idList = idElement.getChildNodes();
+            tagList = tagElement.getChildNodes();
+            naslovList = naslovElement.getChildNodes();
+            String kategorijaID=  (((Node) idList.item(0)).getNodeValue());
+            String kategorijaTag = (((Node) tagList.item(0)).getNodeValue());
+            String kategorijaNaslov = (((Node) naslovList.item(0)).getNodeValue());
+            Kategorija listElement = new Kategorija( Integer.parseInt(kategorijaID),kategorijaTag,kategorijaNaziv, kategorijaNaslov);
+            kategorijeList.add(listElement);
+
+        }
+
+        if(webServiceHandler != null){
+            webServiceHandler.onDataArrived(kategorijeList, true);
         }
 
     }

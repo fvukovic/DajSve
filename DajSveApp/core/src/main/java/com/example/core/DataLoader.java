@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Grad;
+import entities.Kategorija;
 import entities.Ponuda;
 
 /**
@@ -13,6 +14,7 @@ public abstract class DataLoader {
 
     public List<Grad> gradovi;
     public List<Ponuda> ponude;
+    public List<Kategorija> kategorije;
 
     protected DataLoadedListener mDataLoadedListener;
 

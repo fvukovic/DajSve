@@ -36,6 +36,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import entities.Favorit;
 import entities.Grad;
+import entities.Kategorija;
 import entities.Ponuda;
 
 public class MainActivity extends AppCompatActivity implements DataLoadedListener{
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
     @Override
-    public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude) {
+    public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude, List<Kategorija> kategorije) {
 
         if(  Looper.myLooper() == Looper.getMainLooper()) {
             Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);

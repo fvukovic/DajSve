@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Grad;
+import entities.Kategorija;
 import entities.Ponuda;
 
 /**
@@ -11,5 +12,5 @@ import entities.Ponuda;
  */
 
 public interface DataLoadedListener {
-    void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponuda);
+    void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponuda, List<Kategorija> kategorije);
 }
