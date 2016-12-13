@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.example.core.DataLoader;
 import com.example.filip.dajsve.Fragments.FavoritiFragment;
 import com.example.filip.dajsve.Fragments.MojeKategorijeFragment;
 import com.example.filip.dajsve.Fragments.NovePonudeFragment;
+import com.example.filip.dajsve.Fragments.OdabirKategorijeFragment;
 import com.example.filip.dajsve.Fragments.SvePonudeFragment;
 import com.example.filip.dajsve.Loaders.DatabaseDataLoader;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
@@ -32,6 +35,7 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.CheckedInputStream;
 
 import butterknife.ButterKnife;
 import entities.Favorit;
@@ -86,11 +90,30 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         loadData();
 
         //postavljanje početnog fragmenta glavne aktivnosti
-        Fragment home = new NovePonudeFragment();
+        Boolean prvoPokretanje = getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).getBoolean("prvoPokretanje", true);
+
+        Fragment home = new OdabirKategorijeFragment();
         FragmentManager fragmento = getSupportFragmentManager();
         fragmento.beginTransaction()
                 .replace(R.id.linearlayout, home)
                 .commit();
+
+        getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).edit().putBoolean("prvoPokretanje", false).commit();
+        /*if(prvoPokretanje){
+            Fragment home = new OdabirKategorijeFragment();
+            FragmentManager fragmento = getSupportFragmentManager();
+            fragmento.beginTransaction()
+                    .replace(R.id.linearlayout, home)
+                    .commit();
+
+            getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).edit().putBoolean("prvoPokretanje", false).commit();
+        }else{
+            Fragment home = new NovePonudeFragment();
+            FragmentManager fragmento = getSupportFragmentManager();
+            fragmento.beginTransaction()
+                    .replace(R.id.linearlayout, home)
+                    .commit();
+        }*/
         //!!!kraj postavljanje početnog fragmenta glavne aktivnosti
 
         //postavljanje listenera za klik na item u meniju
@@ -124,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
                 drawerLayout.closeDrawers();
             }
+
+
+
         });
         //!!!kraj postavljanje listenera za klik na item u meniju
 
