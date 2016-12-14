@@ -184,6 +184,12 @@ public class Ponuda extends BaseModel implements Parcelable{
         return ponudaList;
     }
 
+    public static List<Ponuda> getByFavoriteCategory(String kategorija){
+        List<Ponuda> ponudaList;
+        ponudaList = new Select().from(Ponuda.class).where(Ponuda_Table.kategorija.like("%" + kategorija +"%")).queryList();
+        return ponudaList;
+    }
+
 
     public static void deleteAll(){
         new Delete().from(Ponuda.class).execute();

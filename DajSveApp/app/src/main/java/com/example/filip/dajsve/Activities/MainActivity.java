@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String grad = getSharedPreferences("GRAD", MODE_PRIVATE).getString("grad", "Zagreb");
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
