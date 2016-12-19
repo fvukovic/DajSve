@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.filip.dajsve.Activities.MainActivity;
+import com.example.filip.dajsve.Adapters.RVAdapter;
 import com.example.filip.dajsve.R;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import entities.Ponuda;
 
 public class MojeKategorijeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView rv;
-    public  RVAdapter adapter;
+    public RVAdapter adapter;
     public SwipeRefreshLayout mSwipeRefreshLayout;
 
 

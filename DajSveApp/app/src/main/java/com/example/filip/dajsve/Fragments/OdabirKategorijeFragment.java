@@ -11,20 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.TextView;
 
 import com.example.filip.dajsve.Adapters.OdabirKategorijeAdapter;
+import com.example.filip.dajsve.Adapters.RVAdapter;
 import com.example.filip.dajsve.R;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import entities.Kategorija;
-import entities.OmiljenaKategorija;
 
 /**
  * Created by Filip on 13.12.2016..
@@ -78,12 +75,12 @@ public class OdabirKategorijeFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onClick(View v) {
                     AppCompatActivity activity = (AppCompatActivity) getContext();
-                    android.support.v4.app.Fragment novePonude = new NovePonudeFragment();
+                    android.support.v4.app.Fragment pocetnaFragment = new PocetnaFragment();
                     Bundle bundle = new Bundle();
 
 
                     activity.getSupportFragmentManager().beginTransaction();
-                    activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.linearlayout, novePonude).commit();
+                    activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.linearlayout, pocetnaFragment).commit();
                 }
             });
 

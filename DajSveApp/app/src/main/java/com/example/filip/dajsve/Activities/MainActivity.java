@@ -25,6 +25,7 @@ import com.example.filip.dajsve.Fragments.FavoritiFragment;
 import com.example.filip.dajsve.Fragments.MojeKategorijeFragment;
 import com.example.filip.dajsve.Fragments.NovePonudeFragment;
 import com.example.filip.dajsve.Fragments.OdabirKategorijeFragment;
+import com.example.filip.dajsve.Fragments.PocetnaFragment;
 import com.example.filip.dajsve.Fragments.SvePonudeFragment;
 import com.example.filip.dajsve.Loaders.DatabaseDataLoader;
 import com.example.filip.dajsve.Loaders.WebServiceDataLoader;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     SvePonudeFragment svePonudeFragment = new SvePonudeFragment();
     ListView listView;
     ArrayAdapter<String> listAdapter;
-    String arrayFragment[] = {"Nove ponude", "Sve ponude", "Favoriti", "Moje kategorije", "Mapa"};
+    String arrayFragment[] = {"Ponude", "Favoriti", "Moje kategorije", "Mapa"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
 
@@ -93,14 +94,14 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         //postavljanje početnog fragmenta glavne aktivnosti
         Boolean prvoPokretanje = getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).getBoolean("prvoPokretanje", true);
 
-        Fragment home = new OdabirKategorijeFragment();
+        /*Fragment home = new OdabirKategorijeFragment();
         FragmentManager fragmento = getSupportFragmentManager();
         fragmento.beginTransaction()
                 .replace(R.id.linearlayout, home)
                 .commit();
 
-        getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).edit().putBoolean("prvoPokretanje", false).commit();
-        /*if(prvoPokretanje){
+        getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).edit().putBoolean("prvoPokretanje", false).commit();*/
+        if(prvoPokretanje){
             Fragment home = new OdabirKategorijeFragment();
             FragmentManager fragmento = getSupportFragmentManager();
             fragmento.beginTransaction()
@@ -109,12 +110,12 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
             getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).edit().putBoolean("prvoPokretanje", false).commit();
         }else{
-            Fragment home = new NovePonudeFragment();
+            Fragment home = new PocetnaFragment();
             FragmentManager fragmento = getSupportFragmentManager();
             fragmento.beginTransaction()
                     .replace(R.id.linearlayout, home)
                     .commit();
-        }*/
+        }
         //!!!kraj postavljanje početnog fragmenta glavne aktivnosti
 
         //postavljanje listenera za klik na item u meniju
@@ -124,22 +125,19 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 Fragment fragment = null;
                 switch (position){
                     case 0:
-                        fragment = new NovePonudeFragment();
+                        fragment = new PocetnaFragment();
                         break;
                     case 1:
-                        fragment = new SvePonudeFragment();
-                        break;
-                    case 2:
                         fragment = new FavoritiFragment();
                         break;
-                    case 3:
+                    case 2:
                         fragment = new MojeKategorijeFragment();
                         break;
-                    case 4:
+                    case 3:
                         fragment = new MapFragment();
                         break;
                     default:
-                        fragment = new NovePonudeFragment();
+                        fragment = new PocetnaFragment();
                         break;
 
                 }
@@ -153,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
         });
         //!!!kraj postavljanje listenera za klik na item u meniju
+
 
 
     }

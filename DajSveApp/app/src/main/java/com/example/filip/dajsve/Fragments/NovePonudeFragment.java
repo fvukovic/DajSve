@@ -11,16 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.core.DataLoadedListener;
 import com.example.filip.dajsve.Activities.MainActivity;
+import com.example.filip.dajsve.Adapters.RVAdapter;
 import com.example.filip.dajsve.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import entities.Grad;
 import entities.Ponuda;
 
 import static android.support.v4.widget.SwipeRefreshLayout.*;
@@ -31,7 +29,7 @@ import static android.support.v4.widget.SwipeRefreshLayout.*;
 
 public class NovePonudeFragment extends Fragment implements OnRefreshListener{
     private RecyclerView rv;
-    public  RVAdapter adapter;
+    public RVAdapter adapter;
     public SwipeRefreshLayout mSwipeRefreshLayout;
     List<Ponuda> sosBaza;
 
