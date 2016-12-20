@@ -172,6 +172,7 @@ public class WebServiceCaller{
         List<Ponuda> ponudaLista = new ArrayList<>();
 
         String tekstPonude = "nema podataka";
+        String hashPonude = "0";
         String cijenaPonude = "0";
         String popust = "0";
         String cijenaorg = "0";
@@ -215,6 +216,13 @@ public class WebServiceCaller{
                     cijenaList = cijenaElement.getChildNodes();
                     cijenaPonude=  (cijenaList.item(0).getNodeValue());
                 }
+                NodeList hashList = fstElmnt.getElementsByTagName("Hash");
+                Element hashElement = (Element) hashList.item(0);
+                if (hashElement.getChildNodes().getLength() > 0){
+                    hashList = hashElement.getChildNodes();
+                    hashPonude=  (hashList.item(0).getNodeValue());
+                }
+
 
 
                 NodeList popustList = fstElmnt.getElementsByTagName("Popust");
@@ -312,7 +320,7 @@ public class WebServiceCaller{
                     }
                 }else latitude = "nema";
 
-                Ponuda listElement = new Ponuda(i,tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike, urlLogo, urlWeba,Integer.parseInt(usteda), kategorija, grad, datum,latitude, longitude);
+                Ponuda listElement = new Ponuda(i,hashPonude, tekstPonude, Integer.parseInt(cijenaPonude),Integer.parseInt(popust),Integer.parseInt(cijenaorg), urlSlike, urlLogo, urlWeba,Integer.parseInt(usteda), kategorija, grad, datum,latitude, longitude);
                 ponudaLista.add(listElement);
             }
 

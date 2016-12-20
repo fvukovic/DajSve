@@ -22,6 +22,7 @@ public class Favorit extends BaseModel {
 
 
     @Column int idPonuda;
+    @Column String hash;
     @Column  String tekstPonude;
     @Column  int cijena;
     @Column  int popust;
@@ -37,7 +38,8 @@ public class Favorit extends BaseModel {
     public Favorit() {
     }
 
-    public Favorit(int id, boolean aktivan, int idPonuda, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, String urlWeba, int usteda, String kategorija, String grad, String datumPonude) {
+    public Favorit(int id,String hash, boolean aktivan, int idPonuda, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, String urlWeba, int usteda, String kategorija, String grad, String datumPonude) {
+        this.hash = hash;
         this.id = id;
         this.aktivan = aktivan;
         this.idPonuda = idPonuda;
@@ -72,6 +74,12 @@ public class Favorit extends BaseModel {
 
     public boolean isAktivan() {
         return aktivan;
+    }
+
+    public String getHash() {        return hash;    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public void setAktivan(boolean aktivan) {
@@ -174,9 +182,9 @@ public class Favorit extends BaseModel {
         new Delete().from(Favorit.class).execute();
     }
 
-    public static void deleteFromId(int i)
+    public static void deleteFromWebUrl(String i)
     {
-        new Delete().from(Favorit.class).where(Favorit_Table.idPonuda.is(i)).execute();
+        new Delete().from(Favorit.class).where(Favorit_Table.urlWeba.is(i)).execute();
     }
 
 

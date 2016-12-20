@@ -23,6 +23,7 @@ public class Ponuda extends BaseModel implements Parcelable{
 
     @Column
     @PrimaryKey int id;
+    @Column String hash;
     @Column  String tekstPonude;
     @Column  int cijena;
     @Column  int popust;
@@ -41,8 +42,9 @@ public class Ponuda extends BaseModel implements Parcelable{
     public Ponuda() {
     }
 
-    public Ponuda(int id,String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, String urlWeba, int usteda, String kategorija, String grad, String datumPonude,String latitude, String longitude){
+    public Ponuda(int id,String hash, String tekstPonude, int cijena, int popust, int cijenaOriginal, String urlSlike, String urlLogo, String urlWeba, int usteda, String kategorija, String grad, String datumPonude,String latitude, String longitude){
         this.id=id;
+        this.hash =hash;
         this.tekstPonude = tekstPonude;
         this.cijena = cijena;
         this.popust = popust;
@@ -80,6 +82,14 @@ public class Ponuda extends BaseModel implements Parcelable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public String getTekstPonude() {

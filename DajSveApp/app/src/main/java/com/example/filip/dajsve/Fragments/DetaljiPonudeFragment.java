@@ -70,10 +70,12 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     Context context;
     private ImageView prozirnaSlika;
     private ScrollView scroll;
+    private boolean ulazNaFragment=false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
 
         View rootView = inflater.inflate(R.layout.detalji_ponude_fragment, container, false);
         context = rootView.getContext();
@@ -142,24 +144,22 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                 Uri uri = Uri.parse(ponudaDohvacena.getUrlWeba());
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
+
             }
         });
 
         //Provjera da li je favorit
         for(Favorit favorit : favoriti)
 
-        {   System.out.println(favorit.getUrlSlike() + " ----------- " + ponudaDohvacena.getUrlSlike());
-
-            //ovo ne valja..treba naci samo da postoji taj url..
-            if(favorit.getisIdPonude()==ponudaDohvacena.getId())
+        {
+            if(favorit.getHash().equals(ponudaDohvacena.getHash()))
             {
-                System.out.println("dasdasdasd : "+ favoritCheckBox.isChecked());
                 statusFavoritPonuda=true;
+                ulazNaFragment=true;
                 favoritCheckBox.setChecked(true);
                 trenutni=favorit;
 
             }
-            System.out.println("CHECKBOX JE NA : "+ favoritCheckBox.isChecked());
         }
         //dodavanje google karte u layout
         View v = inflater.inflate(com.example.map.R.layout.map_fragment, container, false);
@@ -171,9 +171,6 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
 
         return rootView;
     }
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,23 +233,23 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             List<Favorit> favoriti= Favorit.getAll();
-            if(favoritCheckBox.isChecked()){
-                System.out.println("statusFavoritPonuda: "+ statusFavoritPonuda);
+            if(statusFavoritPonuda==false){
+            if(favoritCheckBox.isChecked() ){
                 if( statusFavoritPonuda!=true) {
-                    System.out.println("Usao sam u  Checked:  " + ponudaDohvacena.getUrlSlike());
-                    Favorit novi = new Favorit(favoriti.size(), true, ponudaDohvacena.getId(), ponudaDohvacena.getTekstPonude(),
+                    Favorit novi = new Favorit(favoriti.size(),ponudaDohvacena.getHash(), true, ponudaDohvacena.getId(), ponudaDohvacena.getTekstPonude(),
                             Integer.parseInt(ponudaDohvacena.getCijena()), ponudaDohvacena.getPopust()
                             , ponudaDohvacena.getCijenaOriginal(),ponudaDohvacena.getUrlSlike(), ponudaDohvacena.getUrlLogo(), ponudaDohvacena.getUrlWeba(),
                             ponudaDohvacena.getUsteda(), ponudaDohvacena.getKategorija(), ponudaDohvacena.getGrad(), ponudaDohvacena.getDatumPonude());
                     novi.save();
                 }
             } else {
-                System.out.println("Usao sam u NIJE Checked");
-                Favorit.deleteFromId(ponudaDohvacena.getId());
+                Favorit.deleteFromWebUrl(ponudaDohvacena.getUrlWeba());
 
 
 
-            }
+            }}
+            statusFavoritPonuda=false;
         }
+
     };
 }
