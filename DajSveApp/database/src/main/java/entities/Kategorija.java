@@ -3,6 +3,7 @@ package entities;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
@@ -66,6 +67,9 @@ public class Kategorija extends BaseModel {
         List<Kategorija> kategorijaList;
         kategorijaList = new Select().from(Kategorija.class).queryList();
         return kategorijaList;
+    }
+    public static void deleteAll(){
+        new Delete().from(Kategorija.class).execute();
     }
 
 }

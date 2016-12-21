@@ -40,7 +40,7 @@ public class FavoritiFragment extends Fragment   {
         TextView textView = (TextView) rootView.findViewById(R.id.textView2);
         if(novaLista.isEmpty())
         {
-            textView.setText("Niste odabrali ni jedan favorit");
+            textView.setText("TRENUTNO NEMATE FAVORITA");
         }
         else
         {
