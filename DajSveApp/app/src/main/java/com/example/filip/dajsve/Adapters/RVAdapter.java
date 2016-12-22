@@ -13,14 +13,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.filip.dajsve.Fragments.DetaljiPonudeFragment;
+import com.example.filip.dajsve.Fragments.MapFragment;
 import com.example.filip.dajsve.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import android.content.Context;
 
 import entities.Ponuda;
+
+import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
 /**
  * Created by Helena on 12.11.2016..
@@ -39,6 +47,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
         ImageView sss;
 
 
+
         PonudeViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.card_view);
@@ -49,7 +58,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
             ponudaPopust = (TextView) itemView.findViewById(R.id.popust);
             ponudivacLogo = (ImageView) itemView.findViewById(R.id.ponudivacLogo);
             sss = (ImageView) itemView.findViewById(R.id.sss);
-
         }
     }
 
@@ -72,6 +80,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
         PonudeViewHolder pvh = new PonudeViewHolder(v);
         return pvh;
     }
+
+
 
     @Override
     public void onBindViewHolder(PonudeViewHolder PonudeViewHolder, int i) {
@@ -114,8 +124,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PonudeViewHolder> 
 
             }
         });
-
     }
+
 
 
     public void clear() {

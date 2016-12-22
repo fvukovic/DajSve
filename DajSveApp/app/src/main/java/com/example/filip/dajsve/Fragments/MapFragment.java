@@ -1,28 +1,23 @@
-package com.example.map;
+package com.example.filip.dajsve.Fragments;
 
-import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.common.internal.DowngradeableSafeParcel;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.example.filip.dajsve.Adapters.RVAdapter;
+import com.example.filip.dajsve.R;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +27,7 @@ import entities.Ponuda;
  * Created by Filip on 27.11.2016..
  */
 
-public class MapFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback{
+public class MapFragment extends Fragment implements OnMapReadyCallback{
 
     private int position;
     private String name = "Map view";
@@ -41,19 +36,23 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
     private String nazivPonude;
     private String nazivGrada;
     List<Ponuda> svePonude = null;
+    protected ArrayList<Ponuda> kliknutePonude = new ArrayList<Ponuda>();
+    private RecyclerView rv;
+
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
+        View v = inflater.inflate(com.example.map.R.layout.map_fragment, container, false);
+        rv = (RecyclerView) v.findViewById(R.id.rv);
         svePonude = Ponuda.getAll();
         System.out.print("Broj ponuda: " + svePonude.size());
 
-        View v = inflater.inflate(R.layout.map_fragment, container, false);
+
         mapFragment = new com.google.android.gms.maps.MapFragment();
         mapFragment.getMapAsync(this);
-        getActivity().getFragmentManager().beginTransaction().add(R.id.frame, mapFragment).commit();
+        getActivity().getFragmentManager().beginTransaction().add(com.example.map.R.id.frame, mapFragment).commit();
         return v;
 
     }
@@ -63,7 +62,7 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
         map = googleMap;
 
 
-        for (Ponuda ponuda : svePonude
+        for (final Ponuda ponuda : svePonude
                 ) {
             String ponudaLat = ponuda.getLatitude();
             String ponudaLon = ponuda.getLongitude();
@@ -79,12 +78,39 @@ public class MapFragment extends android.support.v4.app.Fragment implements OnMa
                         .snippet(nazivGrada)
                         .position(gradKoordinate)
                 );
-            }
 
+                setOnMapClicked(map);
+            }
         }
 
     }
 
+    public void setOnMapClicked (GoogleMap googleMap){
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                for (Ponuda ponuda : svePonude) {
+                    String naziv = marker.getTitle();
+                    if (ponuda.getNaziv().equals(naziv)) {
+                        System.out.print(ponuda.getNaziv());
+                        kliknutePonude.add(0,ponuda);
+                    } else {
+                        continue;
+                    }
+
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+                    Fragment detaljiponude = new DetaljiPonudeFragment();
+                    Bundle bundle = new Bundle();
+                    activity.getSupportFragmentManager().beginTransaction();
+                    bundle.putParcelableArrayList("ponuda", kliknutePonude);
+                    detaljiponude.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.linearlayout, detaljiponude).commit();
+                }
+
+
+           }
+        });
+    }
 
     }
 
