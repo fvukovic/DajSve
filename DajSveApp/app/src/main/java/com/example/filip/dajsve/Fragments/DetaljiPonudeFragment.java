@@ -35,8 +35,11 @@ import com.example.filip.dajsve.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
@@ -55,7 +58,7 @@ import static android.graphics.Color.BLACK;
  */
 
 public class DetaljiPonudeFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
-    public CheckBox favoritCheckBox;
+    //public CheckBox favoritCheckBox;
     Favorit trenutni;
     boolean statusFavoritPonuda;
     public Ponuda ponudaDohvacena;
@@ -91,7 +94,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
 
         View rootView = inflater.inflate(R.layout.detalji_ponude_fragment, container, false);
         context = rootView.getContext();
-        favoritCheckBox= (CheckBox)rootView.findViewById(R.id.checkBox);
+
         ponudaSlika=(ImageView)rootView.findViewById(R.id.ponuda_image);
         ponudaNaziv=(TextView) rootView.findViewById(R.id.ponuda_name);
         linkNaStranicu = (LinearLayout) rootView.findViewById(R.id.link_na_stranicu);
@@ -252,6 +255,8 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        BitmapDescriptor icon1 = BitmapDescriptorFactory.fromResource(R.drawable.popust_ic);
+        BitmapDescriptor icon2 = BitmapDescriptorFactory.fromResource(R.drawable.grad_ic);
 
         try {
             if (ponudaDohvacena.getLongitude().contentEquals("nema") || ponudaDohvacena.getLatitude().contentEquals("nema")){
@@ -264,10 +269,15 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                 double longitude= adresa.get(0).getLongitude();
                 LatLng gradKoordinate = new LatLng(latitude, longitude);
 
-                map.addMarker(new MarkerOptions()
-                        .title(grad)
-                        .snippet("tu neki opis ako treba?")
-                        .position(gradKoordinate));
+                Marker marker1=map.addMarker(new MarkerOptions()
+                        .title("Lokacija ponude:")
+                        .snippet("Grad:" +grad)
+                        .position(gradKoordinate)
+                        .icon(icon2)
+                );
+
+
+                marker1.showInfoWindow();
 
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(gradKoordinate).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -285,10 +295,14 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                 String countryName = adresa.get(0).getAddressLine(2);
                 String Locality = adresa.get(0).getLocality();
 
-                map.addMarker(new MarkerOptions()
-                        .title("grad: " + Locality)
-                        .snippet(cityName +"*"+ stateName+"*" + countryName)
-                        .position(gradKoordinate));
+                Marker marker2=map.addMarker(new MarkerOptions()
+                        .title("Lokacija: " + Locality)
+                        .snippet("Adresa:" +cityName +" "+ stateName+ " " + countryName)
+                        .position(gradKoordinate)
+                        .icon(icon1));
+
+
+                marker2.showInfoWindow();
 
                 //Pozicionira i zumirana lokaciju od koordinata
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(gradKoordinate).zoom(13).build();

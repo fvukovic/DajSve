@@ -1,22 +1,31 @@
 package com.example.filip.dajsve.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.filip.dajsve.Adapters.RVAdapter;
 import com.example.filip.dajsve.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +36,7 @@ import entities.Ponuda;
  * Created by Filip on 27.11.2016..
  */
 
-public class MapFragment extends Fragment implements OnMapReadyCallback{
+public class MapFragment extends Fragment implements OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener{
 
     private int position;
     private String name = "Map view";
@@ -38,6 +47,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     List<Ponuda> svePonude = null;
     protected ArrayList<Ponuda> kliknutePonude = new ArrayList<Ponuda>();
     private RecyclerView rv;
+    private Context context;
 
 
 
@@ -48,6 +58,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         rv = (RecyclerView) v.findViewById(R.id.rv);
         svePonude = Ponuda.getAll();
         System.out.print("Broj ponuda: " + svePonude.size());
+        context = v.getContext();
 
 
         mapFragment = new com.google.android.gms.maps.MapFragment();
@@ -60,6 +71,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onMapReady(GoogleMap googleMap){
         map = googleMap;
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.popust_ic);
+        map.setInfoWindowAdapter(new detaljniInfoWindow());
 
 
         for (final Ponuda ponuda : svePonude
@@ -73,45 +86,93 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 LatLng gradKoordinate = new LatLng(ponudaLatitude, ponudaLongitude);
                 nazivGrada = ponuda.getGrad();
                 nazivPonude = ponuda.getNaziv();
-                map.addMarker(new MarkerOptions()
+                Marker marker3=map.addMarker(new MarkerOptions()
                         .title(nazivPonude)
                         .snippet(nazivGrada)
                         .position(gradKoordinate)
-                );
 
-                setOnMapClicked(map);
+
+                );
+                marker3.setTag(ponuda);
+                //setOnMapClicked(map);
+                map.setOnInfoWindowClickListener(this);
             }
         }
 
     }
 
-    public void setOnMapClicked (GoogleMap googleMap){
-        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                for (Ponuda ponuda : svePonude) {
-                    String naziv = marker.getTitle();
-                    if (ponuda.getNaziv().equals(naziv)) {
-                        System.out.print(ponuda.getNaziv());
-                        kliknutePonude.add(0,ponuda);
-                    } else {
-                        continue;
-                    }
+//detalji koji se prikazuju klikom na marker
+   @Override
+   public void onInfoWindowClick(Marker marker) {
+       ArrayList<Ponuda> ponudaTag = new ArrayList<Ponuda>();
+       ponudaTag.add((Ponuda) marker.getTag());
 
-                    AppCompatActivity activity = (AppCompatActivity) getContext();
-                    Fragment detaljiponude = new DetaljiPonudeFragment();
-                    Bundle bundle = new Bundle();
-                    activity.getSupportFragmentManager().beginTransaction();
-                    bundle.putParcelableArrayList("ponuda", kliknutePonude);
-                    detaljiponude.setArguments(bundle);
-                    activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.linearlayout, detaljiponude).commit();
-                }
+       AppCompatActivity activity = (AppCompatActivity) getContext();
+       Fragment detaljiponude = new DetaljiPonudeFragment();
+       Bundle bundle = new Bundle();
+       activity.getSupportFragmentManager().beginTransaction();
+       bundle.putParcelableArrayList("ponuda", ponudaTag);
+       detaljiponude.setArguments(bundle);
+       activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.linearlayout, detaljiponude).commit();
+   }
+
+    class detaljniInfoWindow implements GoogleMap.InfoWindowAdapter {
+
+        private final View infowindowView;
+
+        detaljniInfoWindow() {
+
+            infowindowView = getActivity().getLayoutInflater().inflate(R.layout.detalji_map_infowindow, null);
+            infowindowView.setLayoutParams(new RelativeLayout.LayoutParams(900, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
 
-           }
-        });
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            Ponuda markerPonuda = (Ponuda) marker.getTag();
+
+            TextView Title = ((TextView) infowindowView.findViewById(R.id.title));
+            Title.setText(marker.getTitle());
+            TextView Snippet = ((TextView) infowindowView.findViewById(R.id.snippet));
+            Snippet.setText(marker.getSnippet());
+
+            ImageView Slika = (ImageView) infowindowView.findViewById(R.id.slika);
+
+            if (Slika != null) {
+                Picasso.with(context).load(markerPonuda.getUrlSlike()).into(Slika, new MarkerCallback(marker));
+            }
+
+            return infowindowView;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            // TODO Auto-generated method stub
+            return null;
+        }
     }
 
+        public class MarkerCallback implements Callback {
+            Marker marker=null;
+
+            MarkerCallback(Marker marker) {
+                this.marker=marker;
+            }
+
+            @Override
+            public void onError() {
+                Log.e(getClass().getSimpleName(), "Error");
+            }
+
+            @Override
+            public void onSuccess() {
+                if (marker != null && marker.isInfoWindowShown()) {
+                    marker.hideInfoWindow();
+                    marker.showInfoWindow();
+                }
+            }
+        }
     }
 
 
