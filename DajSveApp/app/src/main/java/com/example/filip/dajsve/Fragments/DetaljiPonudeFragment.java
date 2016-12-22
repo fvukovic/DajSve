@@ -5,22 +5,31 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.filip.dajsve.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,13 +68,16 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     private TextView ponudaDatum;
     private TextView ponudaUsteda;
     private TextView ponudaGrad;
-    private TextView linkNaStranicu;
+    private LinearLayout linkNaStranicu;
     private FrameLayout mapaPrikaz;
     private int position;
     private String name = "Map view";
     private com.google.android.gms.maps.MapFragment mapFragment;
     private GoogleMap map = null;
-    private ImageButton gumbDodajUFavorite;
+    public LinearLayout gumbDodajUFavorite;
+    public boolean ponudaJeFavorit;
+    public TextView dodajUFavoriteTekst;
+    public ImageView dodajUFavoriteSlika;
 
     Context context;
     private ImageView prozirnaSlika;
@@ -80,29 +92,26 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         View rootView = inflater.inflate(R.layout.detalji_ponude_fragment, container, false);
         context = rootView.getContext();
         favoritCheckBox= (CheckBox)rootView.findViewById(R.id.checkBox);
-        favoritCheckBox.setOnCheckedChangeListener(CheckBoxListener);
         ponudaSlika=(ImageView)rootView.findViewById(R.id.ponuda_image);
         ponudaNaziv=(TextView) rootView.findViewById(R.id.ponuda_name);
-        linkNaStranicu = (TextView) rootView.findViewById(R.id.link_na_stranicu);
-        //ponudaDescription=(TextView)rootView.findViewById(R.id.ponuda_description);
+        linkNaStranicu = (LinearLayout) rootView.findViewById(R.id.link_na_stranicu);
         ponudaCijena=(TextView)rootView.findViewById(R.id.ponuda_cijena);
         ponudaPopust=(TextView)rootView.findViewById(R.id.ponuda_popust);
+        dodajUFavoriteTekst = (TextView) rootView.findViewById(R.id.dodaj_u_favorite_text);
+        dodajUFavoriteSlika = (ImageView) rootView.findViewById(R.id.dodaj_brisi_favorita_slika);
         ponudaOriginal=(TextView)rootView.findViewById(R.id.ponuda_original);
-
-        //ponudaDatum=(TextView)rootView.findViewById(R.id.ponuda_datum);
-        //ponudaUsteda=(TextView)rootView.findViewById(R.id.ponuda_usteda);
+        gumbDodajUFavorite = (LinearLayout) rootView.findViewById(R.id.dodaj_brisi_favorita);
         mapaPrikaz=(FrameLayout)rootView.findViewById(R.id.mapa_prikaz);
-        //gumbDodajUFavorite=(ImageButton)rootView.findViewById(R.id.favoriti_dodavanje);
+
+        ponudaJeFavorit = false;
 
         Bundle bundle = getArguments();
         List<Favorit> favoriti= Favorit.getAll();
         ArrayList<Ponuda> listaDohvacena = bundle.getParcelableArrayList("ponuda");
         ponudaDohvacena = listaDohvacena.get(0);
 
-        //Context context=ponudaSlika.getContext();
         Picasso.with(context).load(ponudaDohvacena.getURL()).into(ponudaSlika);
         ponudaNaziv.setText(ponudaDohvacena.getNaziv());
-        //ponudaDescription.setText(ponudaDohvacena.getTekstPonude());
         ponudaCijena.setText(ponudaDohvacena.getCijena() + " kuna");
         ponudaPopust.setText((Integer.toString(ponudaDohvacena.getPopust()) + "%"));
 
@@ -148,19 +157,82 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
             }
         });
 
-        //Provjera da li je favorit
-        for(Favorit favorit : favoriti)
+        //provjera je li ponuda favorit, ako je pofarba u crveno i mijenja tekst gumba, ako nije onda u zeleno
+        ponudaJeFavorit = false;
+        dodajUFavoriteTekst.setText("Spremi ponudu");
+        dodajUFavoriteSlika.setRotation(0);
+//        gumbDodajUFavorite.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blaga_tamno_zelena));
 
-        {
-            if(favorit.getHash().equals(ponudaDohvacena.getHash()))
-            {
-                statusFavoritPonuda=true;
-                ulazNaFragment=true;
-                favoritCheckBox.setChecked(true);
-                trenutni=favorit;
-
+        for(Favorit favorit : favoriti){
+            if(favorit.getHash().equals(ponudaDohvacena.getHash())){
+                ponudaJeFavorit = true;
+                dodajUFavoriteTekst.setText("Briši iz spremljenih ponuda");
+                dodajUFavoriteSlika.setRotation(45);
+//                gumbDodajUFavorite.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blaga_crvena));
             }
         }
+
+
+        gumbDodajUFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Favorit> favoriti= Favorit.getAll();
+
+                if(ponudaJeFavorit){
+                    Favorit.deleteFromWebUrl(ponudaDohvacena.getUrlWeba());
+                    ponudaJeFavorit = false;
+
+                    Toast.makeText(getActivity(), "Ponuda izbrisana iz Omiljenih ponuda", Toast.LENGTH_LONG).show();
+
+                    dodajUFavoriteTekst.setText("Spremi ponudu");
+
+                    //Animacija okretanja ikonice
+                    AnimationSet animSet = new AnimationSet(true);
+//                    animSet.setInterpolator(new DecelerateInterpolator());
+                    animSet.setFillAfter(true);
+//                    animSet.setFillEnabled(true);
+
+                    final RotateAnimation animRotate = new RotateAnimation(0.0f, 3690.0f,
+                            RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                            RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+
+                    animRotate.setDuration(500);
+                    animRotate.setFillAfter(true);
+                    animSet.addAnimation(animRotate);
+
+                    dodajUFavoriteSlika.startAnimation(animSet);
+
+                }else {
+                    Favorit novi = new Favorit(favoriti.size(),ponudaDohvacena.getHash(), true, ponudaDohvacena.getId(), ponudaDohvacena.getTekstPonude(),
+                            Integer.parseInt(ponudaDohvacena.getCijena()), ponudaDohvacena.getPopust()
+                            , ponudaDohvacena.getCijenaOriginal(),ponudaDohvacena.getUrlSlike(), ponudaDohvacena.getUrlLogo(), ponudaDohvacena.getUrlWeba(),
+                            ponudaDohvacena.getUsteda(), ponudaDohvacena.getKategorija(), ponudaDohvacena.getGrad(), ponudaDohvacena.getDatumPonude());
+                    novi.save();
+                    Toast.makeText(getActivity(), "Ponuda spremljena u Omiljene ponude", Toast.LENGTH_LONG).show();
+
+                    ponudaJeFavorit = true;
+                    dodajUFavoriteTekst.setText("Briši iz spremljenih ponuda");
+
+                    //Animacija okretanja ikonice
+                    AnimationSet animSet = new AnimationSet(true);
+//                    animSet.setInterpolator(new DecelerateInterpolator());
+                    animSet.setFillAfter(true);
+//                    animSet.setFillEnabled(true);
+
+                    final RotateAnimation animRotate = new RotateAnimation(0.0f, 3645.0f,
+                            RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                            RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+
+
+                    animRotate.setDuration(500);
+                    animRotate.setFillAfter(true);
+                    animSet.addAnimation(animRotate);
+
+                    dodajUFavoriteSlika.startAnimation(animSet);
+                }
+            }
+        });
+
         //dodavanje google karte u layout
         View v = inflater.inflate(com.example.map.R.layout.map_fragment, container, false);
         mapFragment = new com.google.android.gms.maps.MapFragment();
@@ -228,28 +300,4 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
             e.printStackTrace();
         }
     }
-
-    private CompoundButton.OnCheckedChangeListener CheckBoxListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            List<Favorit> favoriti= Favorit.getAll();
-            if(statusFavoritPonuda==false){
-            if(favoritCheckBox.isChecked() ){
-                if( statusFavoritPonuda!=true) {
-                    Favorit novi = new Favorit(favoriti.size(),ponudaDohvacena.getHash(), true, ponudaDohvacena.getId(), ponudaDohvacena.getTekstPonude(),
-                            Integer.parseInt(ponudaDohvacena.getCijena()), ponudaDohvacena.getPopust()
-                            , ponudaDohvacena.getCijenaOriginal(),ponudaDohvacena.getUrlSlike(), ponudaDohvacena.getUrlLogo(), ponudaDohvacena.getUrlWeba(),
-                            ponudaDohvacena.getUsteda(), ponudaDohvacena.getKategorija(), ponudaDohvacena.getGrad(), ponudaDohvacena.getDatumPonude());
-                    novi.save();
-                }
-            } else {
-                Favorit.deleteFromWebUrl(ponudaDohvacena.getUrlWeba());
-
-
-
-            }}
-            statusFavoritPonuda=false;
-        }
-
-    };
 }

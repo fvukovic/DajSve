@@ -5,4 +5,11 @@
     <color name="colorAccent">#FF4081</color>
     <color name="navigationColor">#472d70</color>
     <color name="bijela">#ffffff</color>
+    <color name="svijetlo_ljubicasta">#9155D9</color>
+    <color name="blaga_ljubicasta">#7c7d91</color>
+    <color name="blaga_tamno_zelena">#6dae6d</color>
+    <color name="blaga_crvena">#c44043</color>
+    <color name="crna_transparent">#b3000000</color>
+    <color name="white_transparent">#cbffffff</color>
+    <color name="siva">#cb303030</color>
 </resources>

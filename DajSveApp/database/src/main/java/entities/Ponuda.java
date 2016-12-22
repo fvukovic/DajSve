@@ -188,9 +188,29 @@ public class Ponuda extends BaseModel implements Parcelable{
         return ponudaList;
     }
 
+    public static List<Ponuda> getAllOrderBy(String order, boolean asc){
+        List<Ponuda> ponudaList = null;
+        if(order.equals("cijena")){
+            ponudaList = new Select().from(Ponuda.class).orderBy(Ponuda_Table.cijena, asc).queryList();
+        } else if(order.equals("popust")){
+            ponudaList = new Select().from(Ponuda.class).orderBy(Ponuda_Table.popust, asc).queryList();
+        }
+        return ponudaList;
+    }
+
     public static List<Ponuda> getNew(){
         List<Ponuda> ponudaList;
         ponudaList = new Select().from(Ponuda.class).where(Ponuda_Table.kategorija.like("%Novo%")).queryList();
+        return ponudaList;
+    }
+
+    public static List<Ponuda> getNewOrderBy(String order, boolean asc){
+        List<Ponuda> ponudaList = null;
+        if(order.equals("cijena")){
+            ponudaList = new Select().from(Ponuda.class).where(Ponuda_Table.kategorija.like("%Novo%")).orderBy(Ponuda_Table.cijena, asc).queryList();
+        } else if(order.equals("popust")){
+            ponudaList = new Select().from(Ponuda.class).where(Ponuda_Table.kategorija.like("%Novo%")).orderBy(Ponuda_Table.popust, asc).queryList();
+        }
         return ponudaList;
     }
 
@@ -199,7 +219,6 @@ public class Ponuda extends BaseModel implements Parcelable{
         ponudaList = new Select().from(Ponuda.class).where(Ponuda_Table.kategorija.like("%" + kategorija +"%")).queryList();
         return ponudaList;
     }
-
 
     public static void deleteAll(){
         new Delete().from(Ponuda.class).execute();

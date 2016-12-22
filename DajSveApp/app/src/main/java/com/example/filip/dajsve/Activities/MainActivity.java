@@ -92,30 +92,11 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         loadData();
 
         //postavljanje početnog fragmenta glavne aktivnosti
-        Boolean prvoPokretanje = getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).getBoolean("prvoPokretanje", true);
-
-        /*Fragment home = new OdabirKategorijeFragment();
+        Fragment home = new PocetnaFragment();
         FragmentManager fragmento = getSupportFragmentManager();
         fragmento.beginTransaction()
                 .replace(R.id.linearlayout, home)
                 .commit();
-
-        getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).edit().putBoolean("prvoPokretanje", false).commit();*/
-        if(prvoPokretanje){
-            Fragment home = new OdabirKategorijeFragment();
-            FragmentManager fragmento = getSupportFragmentManager();
-            fragmento.beginTransaction()
-                    .replace(R.id.linearlayout, home)
-                    .commit();
-
-            getSharedPreferences("PRVO_POKRETANJE", MODE_PRIVATE).edit().putBoolean("prvoPokretanje", false).commit();
-        }else{
-            Fragment home = new PocetnaFragment();
-            FragmentManager fragmento = getSupportFragmentManager();
-            fragmento.beginTransaction()
-                    .replace(R.id.linearlayout, home)
-                    .commit();
-        }
         //!!!kraj postavljanje početnog fragmenta glavne aktivnosti
 
         //postavljanje listenera za klik na item u meniju

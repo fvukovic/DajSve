@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -40,35 +41,45 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
     public SwipeRefreshLayout mSwipeRefreshLayout;
      public String[] kategorije ;
     public List<String> oznaceneKategorije;
-    public List<Ponuda> ponudePoKategoriji;
     public  boolean[] oznaceneKategorijeDialog ;
-    AlertDialog ad;
-    Button prikaziKategorije;
+    public AlertDialog ad;
+    Button urediOmiljeneKategorije;
+    public FloatingActionButton fab;
+    public String[] opcijeSortiranja;
 
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       AlertDialog.Builder ad =  new AlertDialog.Builder(getActivity());
         View rootView = inflater.inflate(R.layout.moje_kategorije_fragment, container, false);
         rv = (RecyclerView) rootView.findViewById(R.id.rv);
+        final AlertDialog.Builder ad =  new AlertDialog.Builder(getActivity());
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab_sve_ponude);
+        opcijeSortiranja = new String[3];
+        opcijeSortiranja[0] = "Cijena - uzlazno";
+        opcijeSortiranja[1] = "Cijena - silazno";
+        opcijeSortiranja[2] = "Popust";
+
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         final TextView textView = (TextView) rootView.findViewById(R.id.textView3);
         int i=0;
         kategorije = new String[Kategorija.getAll().size()];
         oznaceneKategorijeDialog = new boolean[Kategorija.getAll().size()];
+        urediOmiljeneKategorije = (Button) rootView.findViewById(R.id.uredi_pregled_button);
+
 
 
         for(Kategorija kategorija : Kategorija.getAll())
         {
             kategorije[i]= kategorija.getNaziv();
-                    i++;
+            i++;
         }
         for(int j= 0;j<kategorije.length;j++)
         {
             for(OmiljenaKategorija a : OmiljenaKategorija.getAll())
-            {   System.out.print("PRINT : "+a.getNaziv().equals(kategorije[j]));
+            {
+                System.out.print("PRINT : "+a.getNaziv().equals(kategorije[j]));
                 if(a.getNaziv().equals(kategorije[j]))
                 {
                     oznaceneKategorijeDialog[j]=true;
@@ -97,20 +108,22 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
                         novi.save();
                         System.out.println(kategorije[i]);
                     }
-
                 }
-                ponudePoKategoriji = new ArrayList<Ponuda>();
+                List<Ponuda> ponudePoKategoriji = new ArrayList<Ponuda>();
                 for (OmiljenaKategorija a : OmiljenaKategorija.getAll()){
-                    for(Ponuda b : Ponuda.getByFavoriteCategory(a.getNaziv()))
-                    {
-                        ponudePoKategoriji.add(b);
-                    }
-
+                    ponudePoKategoriji.addAll(Ponuda.getByFavoriteCategory(a.getNaziv()));
                 }
+
+                System.out.println("Ispis ponuda po omiljenim kategorijama: ");
+                for(Ponuda ponuda : ponudePoKategoriji){
+                    System.out.println(ponuda.getNaziv());
+                    System.out.println("         " + ponuda.getKategorija());
+                }
+
                 RVAdapter adapter = new RVAdapter(ponudePoKategoriji,getContext());
                 rv.setAdapter(adapter);
-                if(OmiljenaKategorija.getAll().isEmpty()) {
-                    textView.setText("NISTE ODABRALI KATEGORIJU");
+                if(adapter.getItemCount() == 0) {
+                    textView.setText("Ne postoje ponude za odabrane omiljene kategorije");
                 }
                 else
                 {
@@ -121,7 +134,16 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
         });
 
         ad.setItems(kategorije,null);
-        ad.show();
+
+
+
+        urediOmiljeneKategorije.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ad.show();
+            }
+        });
+
 
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
@@ -162,6 +184,7 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
             for(OmiljenaKategorija omiljenaKategorija : listaOmiljenihKategorija){
                 listaOmiljenihPonuda.addAll(Ponuda.getByFavoriteCategory(omiljenaKategorija.getNaziv()));
             }
+
             Collections.shuffle(listaOmiljenihPonuda);
             RVAdapter adapter = new RVAdapter(listaOmiljenihPonuda,getContext());
             rv.setAdapter(adapter);

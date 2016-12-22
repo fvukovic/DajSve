@@ -6,8 +6,7 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="0dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="10dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:selectableItemBackground">
@@ -20,92 +19,99 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="180dp">
+
+            <ImageView
+                android:id="@+id/ponuda_image"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"
+                android:layout_width="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY" />
+
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/white_transparent"
+                android:layout_alignParentRight="true"
+                android:weightSum="1.0">
+
+                <ImageView
+                    android:id="@+id/ponudivacLogo"
+                    android:layout_width="100dp"
+                    android:layout_weight="0.25"
+                    android:layout_height="0dip"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/ponuda_cijena"
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.25"
+                    android:layout_height="0dip"
+                    android:textIsSelectable="false"
+                    tools:text="Nova cijena"
+                    android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
+                    android:textSize="18sp"
+                    android:textColor="@color/blaga_tamno_zelena"
+                    android:fontFamily="serif"
+                    android:layout_below="@+id/ponudivacLogo"
+                    android:layout_alignEnd="@+id/ponudivacLogo"
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/stara_cijena"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.25"
+                    android:layout_height="0dip"
                     android:textIsSelectable="false"
                     tools:text="Redovna cijena"
                     android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
                     android:textSize="18sp"
-                    android:textColor="?android:textColorSecondaryNoDisable"
+                    android:textColor="@color/siva"
                     android:fontFamily="serif"
                     android:layout_below="@+id/ponuda_cijena"
                     android:layout_alignEnd="@+id/ponuda_cijena"
-                    android:layout_marginTop="13dp" />
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/popust"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.25"
+                    android:layout_height="0dip"
                     android:textIsSelectable="false"
                     tools:text="Popust"
                     android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
                     android:textSize="19sp"
-                    android:textColor="?android:textColorPrimaryDisableOnly"
+                    android:textColor="@color/colorAccent"
                     android:layout_centerInParent="@+id/ponuda_cijena"
                     android:fontFamily="serif"
                     android:layout_below="@+id/stara_cijena"
                     android:layout_alignEnd="@+id/stara_cijena"
-                    android:layout_marginTop="8dp" />
+                    android:gravity="center"/>
 
-                <ImageView
-                    android:id="@+id/ponudivacLogo"
-                    android:layout_height="35dp"
-                    android:layout_width="100dp"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_marginRight="2dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:scaleType="fitEnd"
-                    android:layout_gravity="top|right"/>
-
-                <TextView
-                    android:id="@+id/ponuda_cijena"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textIsSelectable="false"
-                    tools:text="Nova cijena"
-                    android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Info"
-                    android:textSize="20sp"
-                    android:textColor="?android:textColorPrimaryDisableOnly"
-                    android:fontFamily="serif"
-                    android:layout_marginEnd="13dp"
-                    android:layout_marginTop="11dp"
-                    android:layout_below="@+id/ponudivacLogo"
-                    android:layout_alignEnd="@+id/ponudivacLogo" />
-
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:id="@+id/sss"  />
 
-            <ImageView
-                android:id="@+id/ponuda_image"
-                android:layout_height="150dp"
-                android:src="@mipmap/ic_launcher"
-                android:layout_width="230dp"
-                android:scaleType="fitCenter"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="13dp" />
-
-
         </RelativeLayout>
 
         <TextView
             android:id="@+id/ponuda_name"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="17dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:textIsSelectable="false"
             tools:text="Naziv ponude"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
