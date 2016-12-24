@@ -231,16 +231,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onClusterInfoWindowClick(Cluster<MyItem> cluster) {
 
-        ArrayList<Ponuda> ponudaTag = new ArrayList<Ponuda>();
-        ponudaTag.add(clickedClusterItem.getPonuda());
-
-        AppCompatActivity activity = (AppCompatActivity) getContext();
-        Fragment detaljiponude = new DetaljiPonudeFragment();
-        Bundle bundle = new Bundle();
-        activity.getSupportFragmentManager().beginTransaction();
-        bundle.putParcelableArrayList("ponuda", ponudaTag);
-        detaljiponude.setArguments(bundle);
-        activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.linearlayout, detaljiponude).commit();
     }
 
     @Override
@@ -252,7 +242,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onClusterItemInfoWindowClick(MyItem myItem) {
+        ArrayList<Ponuda> ponudaTag = new ArrayList<Ponuda>();
+        ponudaTag.add(clickedClusterItem.getPonuda());
 
+        AppCompatActivity activity = (AppCompatActivity) getContext();
+        Fragment detaljiponude = new DetaljiPonudeFragment();
+        Bundle bundle = new Bundle();
+        activity.getSupportFragmentManager().beginTransaction();
+        bundle.putParcelableArrayList("ponuda", ponudaTag);
+        detaljiponude.setArguments(bundle);
+        activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.linearlayout, detaljiponude).commit();
     }
 
     class detaljniInfoWindow implements GoogleMap.InfoWindowAdapter {
