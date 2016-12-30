@@ -8,7 +8,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
     defaultConfig {
-        applicationId "com.example.filip.dajsve"
+        applicationId "hr.foi.air.dajsve"
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1

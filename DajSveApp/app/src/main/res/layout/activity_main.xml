@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/linearlayout"
-        tools:context="com.example.filip.dajsve.Activities.MainActivity">
+        tools:context="com.example.filip.dajsve.dajsve.example.filip.dajsve.Activities.MainActivity">
 
 
 

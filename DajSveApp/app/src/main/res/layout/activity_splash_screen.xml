@@ -4,7 +4,7 @@
     android:id="@+id/activity_splash_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.filip.dajsve.Activities.SplashScreenActivity"
+    tools:context="com.example.filip.dajsve.dajsve.example.filip.dajsve.Activities.SplashScreenActivity"
     android:background="@color/navigationColor">
 
     <RelativeLayout
