@@ -38,7 +38,7 @@ dependencies {
     compile project (':database')
     compile project (':core')
     compile project (':webservice')
-    compile project (':map')
+
 
     // expandable recycler
     compile 'com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1'

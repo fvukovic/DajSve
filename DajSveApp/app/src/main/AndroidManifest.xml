@@ -22,6 +22,10 @@
             </intent-filter>
         </activity>.Activities.SplashScreenActivity
         <activity android:name="hr.foi.air.dajsve.Activities.MainActivity"></activity>
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBoueBxS3yuZh4JHErb6XZgb6C12mgsE10" />
     </application>
 
 </manifest>
