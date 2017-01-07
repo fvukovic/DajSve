@@ -146,12 +146,13 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
             }
         });
 
-        //provjera je li ponuda favorit, ako je pofarba u crveno i mijenja tekst gumba, ako nije onda u zeleno
+        //provjera je li ponuda favorit, ako je mjenja boju u crveno i mijenja tekst gumba, ako nije onda u zeleno
         ponudaJeFavorit = false;
         dodajUFavoriteTekst.setText("Spremi ponudu");
         dodajUFavoriteSlika.setRotation(0);
 //        gumbDodajUFavorite.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blaga_tamno_zelena));
 
+        // Provjerava da li je trenutna ponuda favorit, ako je mjenja dizajn kao da je ponuda favorit
         for(Favorit favorit : favoriti){
             if(favorit.getHash().equals(ponudaDohvacena.getHash())){
                 ponudaJeFavorit = true;
@@ -161,12 +162,12 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
             }
         }
 
-
+        // klik na gumb dodaj/ukloni favorit
         gumbDodajUFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<Favorit> favoriti= Favorit.getAll();
-
+                //ako je vec favorit,brišemo ga iz tablice Favorit
                 if(ponudaJeFavorit){
                     Favorit.deleteFromWebUrl(ponudaDohvacena.getUrlWeba());
                     ponudaJeFavorit = false;
@@ -191,6 +192,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
 
                     dodajUFavoriteSlika.startAnimation(animSet);
 
+                    //ako nije favorit, kreiramo novi element i tako ga dodajemo u favorite
                 }else {
                     Favorit novi = new Favorit(favoriti.size(),ponudaDohvacena.getHash(), true, ponudaDohvacena.getId(), ponudaDohvacena.getTekstPonude(),
                             Integer.parseInt(ponudaDohvacena.getCijena()), ponudaDohvacena.getPopust()

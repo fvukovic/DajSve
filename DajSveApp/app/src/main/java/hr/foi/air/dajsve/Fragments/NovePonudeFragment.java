@@ -15,15 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import hr.foi.air.dajsve.Activities.MainActivity;
-import hr.foi.air.dajsve.Adapters.RVAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import entities.Ponuda;
+import hr.foi.air.dajsve.Activities.MainActivity;
+import hr.foi.air.dajsve.Adapters.RVAdapter;
 
-import static android.support.v4.widget.SwipeRefreshLayout.*;
+import static android.support.v4.widget.SwipeRefreshLayout.OnClickListener;
+import static android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 
 /**
  * Created by Filip on 29.11.2016..
@@ -109,6 +109,7 @@ public class NovePonudeFragment extends Fragment implements OnRefreshListener{
 
 
 
+// nova dretva koja refresha podatke sa weba
 
     class task extends AsyncTask<Void , Void, Void> {
 

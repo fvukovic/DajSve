@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,16 +15,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import hr.foi.air.dajsve.Activities.MainActivity;
-import hr.foi.air.dajsve.Adapters.RVAdapter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import entities.Ponuda;
+import hr.foi.air.dajsve.Activities.MainActivity;
+import hr.foi.air.dajsve.Adapters.RVAdapter;
 
-import static android.support.v4.widget.SwipeRefreshLayout.*;
+import static android.support.v4.widget.SwipeRefreshLayout.OnClickListener;
+import static android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 
 /**
  * Created by Filip on 28.10.2016..

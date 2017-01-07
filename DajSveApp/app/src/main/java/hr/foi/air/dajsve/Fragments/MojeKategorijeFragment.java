@@ -18,9 +18,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import hr.foi.air.dajsve.Activities.MainActivity;
-import hr.foi.air.dajsve.Adapters.RVAdapter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +25,8 @@ import java.util.List;
 import entities.Kategorija;
 import entities.OmiljenaKategorija;
 import entities.Ponuda;
+import hr.foi.air.dajsve.Activities.MainActivity;
+import hr.foi.air.dajsve.Adapters.RVAdapter;
 
 /**
  * Created by Filip on 28.10.2016..
@@ -67,12 +66,14 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
         urediOmiljeneKategorije = (Button) rootView.findViewById(hr.foi.air.dajsve.R.id.uredi_pregled_button);
 
 
-
+        // Prolazimo kroz sve kategorije u tablici i stavljamo u polje kategorije samo nazive
         for(Kategorija kategorija : Kategorija.getAll())
         {
             kategorije[i]= kategorija.getNaziv();
             i++;
         }
+        // unutar ove petlje, prolazimo kroz omiljene kateogrije(one koje je korisnik odabra) i provjeravamo da li postoji
+        // i stavljamo za tu kategorije true kako bi je pokazali da je oznacena kad se klikne odabir
         for(int j= 0;j<kategorije.length;j++)
         {
             for(OmiljenaKategorija a : OmiljenaKategorija.getAll())
@@ -89,15 +90,17 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                 Toast.makeText(getContext(), kategorije[which], Toast.LENGTH_SHORT).show();
-                for(boolean aa : oznaceneKategorijeDialog)
-                {
-                    System.out.println(aa);
-                }
+
             }
         });
         ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                 /* prvo izbrisemo sve Omiljenekategorije, tada prolazimo kroz sve stare i provjeravamo koje su oznacene
+                i te dodajemo u omiljeneKategorije
+                */
+
                 OmiljenaKategorija.deleteAll();
                 for(int i = 0 ; i<kategorije.length;i++)
                 {
@@ -108,18 +111,18 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
                     }
                 }
                 List<Ponuda> ponudePoKategoriji = new ArrayList<Ponuda>();
+
+                // prolazimo kroz sve omiljene kategorije i prema njima trazimo sve ponude, te ih stavljamo u listu
+
                 for (OmiljenaKategorija a : OmiljenaKategorija.getAll()){
                     ponudePoKategoriji.addAll(Ponuda.getByFavoriteCategory(a.getNaziv()));
                 }
 
-                System.out.println("Ispis ponuda po omiljenim kategorijama: ");
-                for(Ponuda ponuda : ponudePoKategoriji){
-                    System.out.println(ponuda.getNaziv());
-                    System.out.println("         " + ponuda.getKategorija());
-                }
 
                 RVAdapter adapter = new RVAdapter(ponudePoKategoriji,getContext());
                 rv.setAdapter(adapter);
+
+                //ako je lista prazna
                 if(adapter.getItemCount() == 0) {
                     textView.setText("Ne postoje ponude za odabrane omiljene kategorije");
                 }
@@ -156,8 +159,10 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
             textView.setText("");
         }
         ArrayList<Ponuda> listaOmiljenihPonuda = new ArrayList<Ponuda>();
-
         List<OmiljenaKategorija> listaOmiljenihKategorija = OmiljenaKategorija.getAll();
+
+        // Prolazimo kroz sve omiljene kategorije, kako bi dobili sve ponude po toj kategoriji
+
         for(OmiljenaKategorija omiljenaKategorija : listaOmiljenihKategorija){
             listaOmiljenihPonuda.addAll(Ponuda.getByFavoriteCategory(omiljenaKategorija.getNaziv()));
         }
@@ -174,7 +179,8 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
         @Override
         protected void onPostExecute(Void aVoid) {
             mSwipeRefreshLayout.setRefreshing(false);
-            System.out.println("USAO SAM U POST IN");
+
+            //Refresham omiljene kategorije, odnosno ponovno prolazim kroz sve omiljene i stavljam u adapter
 
             ArrayList<Ponuda> listaOmiljenihPonuda = new ArrayList<Ponuda>();
 
