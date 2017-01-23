@@ -26,10 +26,10 @@ public class FavoritiFragment extends Fragment   {
 
     private RecyclerView rv;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.favoriti_fragment, container, false);
         rv = (RecyclerView) rootView.findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -52,11 +52,12 @@ public class FavoritiFragment extends Fragment   {
         /* Prolazimo kroz sve favorite i provjeravamo da li je ta ponuda jos uvijek aktivna,ako je stavljamo novu listu
         i kreiramo adapter sa tom listom
         */
-        for(Favorit favorit : novaLista){
+        for(Favorit favorit : novaLista){ 
             for(Ponuda ponuda : listaSvihPonuda)
             {
-                if(favorit.getisIdPonude()==ponuda.getId())
+                if(favorit.getHash().equals( ponuda.getHash()))
                 {
+
                     Ponuda novi = new Ponuda(favorit.getId(),favorit.getHash(), favorit.getTekstPonude(),
                             favorit.getCijena(),favorit.getPopust(),favorit.getCijenaOriginal(),favorit.getUrlSlike(), favorit.getUrlLogo(), favorit.getUrlWeba(),
                             favorit.getUsteda(),"",favorit.getGrad(), favorit.getDatumPonude(),"nema","nema");
@@ -74,5 +75,6 @@ public class FavoritiFragment extends Fragment   {
 
         return rootView;
     }
+
 
 }

@@ -169,7 +169,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                 List<Favorit> favoriti= Favorit.getAll();
                 //ako je vec favorit,brišemo ga iz tablice Favorit
                 if(ponudaJeFavorit){
-                    Favorit.deleteFromWebUrl(ponudaDohvacena.getUrlWeba());
+                    Favorit.deleteFromHash(ponudaDohvacena.getHash());
                     ponudaJeFavorit = false;
 
                     Toast.makeText(getActivity(), "Ponuda izbrisana iz Omiljenih ponuda", Toast.LENGTH_LONG).show();

@@ -182,9 +182,9 @@ public class Favorit extends BaseModel {
         new Delete().from(Favorit.class).execute();
     }
 
-    public static void deleteFromWebUrl(String i)
+    public static void deleteFromHash(String i)
     {
-        new Delete().from(Favorit.class).where(Favorit_Table.urlWeba.is(i)).execute();
+        new Delete().from(Favorit.class).where(Favorit_Table.hash.is(i)).execute();
     }
 
 
