@@ -23,12 +23,19 @@ import hr.foi.air.dajsve.Fragments.FavoritiFragment;
 import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
 import hr.foi.air.dajsve.Fragments.PocetnaFragment;
 import hr.foi.air.dajsve.Fragments.SvePonudeFragment;
+import hr.foi.air.dajsve.Helpers.Baza;
+import hr.foi.air.dajsve.Helpers.DB;
 import hr.foi.air.dajsve.Loaders.DatabaseDataLoader;
 import hr.foi.air.dajsve.Loaders.WebServiceDataLoader;
 import hr.foi.air.dajsve.R;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
+
+        new Baza().execute();
+//        DB db = new DB();
+//        db.SpojiDB();
 
         ActionBar ab = getSupportActionBar();
         if (android.os.Build.VERSION.SDK_INT > 9) {
