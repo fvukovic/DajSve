@@ -1,13 +1,11 @@
 package hr.foi.air.dajsve.Helpers;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import net.sourceforge.jtds.jdbc.*;
 
 /**
  * Created by Filip on 24.1.2017..
@@ -15,23 +13,20 @@ import net.sourceforge.jtds.jdbc.*;
 
 public class Baza extends AsyncTask<Void, Void, Connection>{
     Connection connection = null;
-    String ipAdresa = "192.168.10.236";
-    String db = "DajSve";
-    String username = "root";
-    String password = null;
     String className = "net.sourceforge.jtds.jdbc.Driver";
 
     @Override
     protected Connection doInBackground(Void... params) {
 
         try {
-
+            /* Povezivanje na bazu sa jtdsom 1.3.0
+            DB = DajSve
+            User = admin, Pass = admin
+             10.0.3.2 - Genymotion
+                 */
             Class.forName(className).newInstance();
-//            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://10.0.2.2/DajSve;");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://10.0.3.2/DajSve;");
-//            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost:1433/DajSve;encrypt=false;user=root;password=null;instance=DajSve;");
-
-            System.out.print("Uspjesno spojeni na bazu");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://10.0.3.2;databaseName=DajSve;user=admin;password=admin;");
+             System.out.print("Uspjesno spojeni na bazu");
             Statement stmt = connection.createStatement();
             ResultSet reset = stmt.executeQuery("select * from Korisnik");
 

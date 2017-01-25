@@ -17,33 +17,27 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import hr.foi.air.core.DataLoadedListener;
-import hr.foi.air.core.DataLoader;
-import hr.foi.air.dajsve.Fragments.FavoritiFragment;
-import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
-import hr.foi.air.dajsve.Fragments.PocetnaFragment;
-import hr.foi.air.dajsve.Fragments.SvePonudeFragment;
-import hr.foi.air.dajsve.Helpers.Baza;
-import hr.foi.air.dajsve.Helpers.DB;
-import hr.foi.air.dajsve.Loaders.DatabaseDataLoader;
-import hr.foi.air.dajsve.Loaders.WebServiceDataLoader;
-import hr.foi.air.dajsve.R;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import hr.foi.air.dajsve.Fragments.MapFragment;
 import entities.Grad;
 import entities.Kategorija;
 import entities.Ponuda;
+import hr.foi.air.core.DataLoadedListener;
+import hr.foi.air.core.DataLoader;
+import hr.foi.air.dajsve.Fragments.FavoritiFragment;
+import hr.foi.air.dajsve.Fragments.MapFragment;
+import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
+import hr.foi.air.dajsve.Fragments.PocetnaFragment;
+import hr.foi.air.dajsve.Fragments.SvePonudeFragment;
+import hr.foi.air.dajsve.Helpers.Baza;
+import hr.foi.air.dajsve.Loaders.DatabaseDataLoader;
+import hr.foi.air.dajsve.Loaders.WebServiceDataLoader;
+import hr.foi.air.dajsve.R;
 
 public class MainActivity extends AppCompatActivity implements DataLoadedListener {
     SvePonudeFragment svePonudeFragment = new SvePonudeFragment();
@@ -64,9 +58,8 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
 
+        //Nova dretva za spajanje na bazu
         new Baza().execute();
-//        DB db = new DB();
-//        db.SpojiDB();
 
         ActionBar ab = getSupportActionBar();
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -146,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         super.onPostCreate(savedInstanceState);
         drawerListener.syncState();
     }
+
 
     //kada kliknem na hamburger
     @Override
