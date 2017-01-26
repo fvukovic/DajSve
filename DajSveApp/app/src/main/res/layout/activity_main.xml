@@ -22,9 +22,6 @@
         android:id="@+id/linearlayout"
         tools:context="com.example.filip.dajsve.dajsve.example.filip.dajsve.Activities.MainActivity">
 
-
-
-
     </LinearLayout>
 
     <RelativeLayout
@@ -53,11 +50,7 @@
                 android:paddingRight="30dp"
                 android:paddingLeft="30dp"
                 android:backgroundTint="#FFFFFF"/>
-
-
         </RelativeLayout>
-
-
         <ListView
             android:layout_width="250dp"
             android:layout_height="match_parent"
@@ -67,9 +60,14 @@
             android:background="#FFFFFF"
             android:paddingTop="25dp"
             android:textAlignment="center">
-
-
         </ListView>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/admin_login_button"
+            android:layout_alignParentBottom="true"
+            android:alpha="0"/>
 
     </RelativeLayout>
 

@@ -11,22 +11,22 @@ import java.sql.Statement;
  * Created by Filip on 24.1.2017..
  */
 
-public class Baza extends AsyncTask<Void, Void, Connection>{
+public class Baza {
     Connection connection = null;
     String className = "net.sourceforge.jtds.jdbc.Driver";
 
-    @Override
-    protected Connection doInBackground(Void... params) {
 
+    public Baza() {
         try {
             /* Povezivanje na bazu sa jtdsom 1.3.0
-            DB = DajSve
-            User = admin, Pass = admin
+            85.94.77.105
+            DB = dajsveandroid
+            User = dajsveappuser, Pass = Pa55word
              10.0.3.2 - Genymotion
                  */
             Class.forName(className).newInstance();
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://10.0.3.2;databaseName=DajSve;user=admin;password=admin;");
-             System.out.print("Uspjesno spojeni na bazu");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://85.94.77.105;databaseName=dajsveandroid;user=dajsveappuser;password=Pa55word!1234;");
+            System.out.print("Uspjesno spojeni na bazu");
             Statement stmt = connection.createStatement();
             ResultSet reset = stmt.executeQuery("select * from Korisnik");
 
@@ -47,7 +47,41 @@ public class Baza extends AsyncTask<Void, Void, Connection>{
             e.printStackTrace();
         }
 
-        return connection;
+    }
+
+    public ResultSet IzvrsiUpit(String upit) throws SQLException {
+        Statement stmt = connection.createStatement();
+        ResultSet reset = stmt.executeQuery(upit);
+
+
+        return reset;
+    }
+
+    public boolean Prijava(String nadimak, String lozinka) throws SQLException {
+        try{
+            String upit = "select * from Korisnik where nadimak ='" + nadimak + "' and lozinka ='" + lozinka +"';";
+
+            ResultSet reset = IzvrsiUpit(upit);
+
+            if (!reset.isBeforeFirst() ) {
+                connection.close();
+                return false;
+            }else{
+                connection.close();
+                return true;
+            }
+        }catch (SQLException ex){
+            connection.close();
+            return false;
+        }
+    }
+
+    public ResultSet DohvatiDnevnikZaKorisnika(String korisnik){
+
+
+        //IzvrsiUpit(upit);
+
+        return null;
     }
 
 }

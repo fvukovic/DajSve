@@ -29,6 +29,7 @@ import entities.Kategorija;
 import entities.Ponuda;
 import hr.foi.air.core.DataLoadedListener;
 import hr.foi.air.core.DataLoader;
+import hr.foi.air.dajsve.Fragments.AdminLoginFragment;
 import hr.foi.air.dajsve.Fragments.FavoritiFragment;
 import hr.foi.air.dajsve.Fragments.MapFragment;
 import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
@@ -58,8 +59,20 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
 
-        //Nova dretva za spajanje na bazu
-        new Baza().execute();
+
+        findViewById(R.id.admin_login_button).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                Fragment fragment =  new AdminLoginFragment();
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
+                drawerLayout.closeDrawers();
+
+                return false;
+            }
+        });
 
         ActionBar ab = getSupportActionBar();
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -196,5 +209,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         }
 
     }
+
+
 
 }
