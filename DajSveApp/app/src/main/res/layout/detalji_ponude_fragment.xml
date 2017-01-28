@@ -189,6 +189,103 @@
             android:layout_alignStart="@+id/mapa_prikaz"
             android:alpha=".1"/>
     </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="450dp"></RelativeLayout>
+
+        <LinearLayout
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" android:orientation="horizontal"
+            android:id="@+id/statistika_layout_detalji_ponude"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="0.33"
+                android:background="@color/blagocrvena"
+                android:gravity="center"
+                android:id="@+id/detalji_ponude_statistika1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/bijela"
+                    android:text="Pregled ponude"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="35sp"
+                    android:textColor="@color/bijela"
+                    android:gravity="center"
+                    android:id="@+id/brojPregledaPonude"
+                    android:text="0"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.33"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@color/blagozelena"
+                android:id="@+id/detalji_ponude_statistika2"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/bijela"
+                    android:textAlignment="center"
+                    android:text="Omiljena ponuda"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="35sp"
+                    android:textColor="@color/bijela"
+                    android:id="@+id/brojOmiljenihPonude"
+                    android:gravity="center"
+                    android:text="0"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.33"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@color/blagoplava"
+                android:id="@+id/detalji_ponude_statistika3"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/bijela"
+                    android:text="Web klikova"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="35sp"
+                    android:textColor="@color/bijela"
+                    android:id="@+id/brojOtvaranjaNaWebuPonude"
+                    android:gravity="center"
+                    android:text="0"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

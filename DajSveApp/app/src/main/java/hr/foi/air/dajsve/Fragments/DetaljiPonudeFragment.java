@@ -2,6 +2,7 @@ package hr.foi.air.dajsve.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,6 +40,8 @@ import java.util.List;
 
 import entities.Favorit;
 import entities.Ponuda;
+import hr.foi.air.dajsve.Helpers.Baza;
+import hr.foi.air.dajsve.R;
 
 /**
  * Created by Helena on 23.11.2016..
@@ -67,11 +71,14 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     public boolean ponudaJeFavorit;
     public TextView dodajUFavoriteTekst;
     public ImageView dodajUFavoriteSlika;
-
+    public LinearLayout detaljiPonudeStatistikaLayout;
     Context context;
     private ImageView prozirnaSlika;
     private ScrollView scroll;
     private boolean ulazNaFragment=false;
+    private TextView brojPregledaPonude;
+    private TextView brojOmiljenihPonude;
+    private TextView brojOtvaranjaNaWebuPonude;
 
     @Nullable
     @Override
@@ -91,7 +98,10 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         ponudaOriginal=(TextView)rootView.findViewById(hr.foi.air.dajsve.R.id.ponuda_original);
         gumbDodajUFavorite = (LinearLayout) rootView.findViewById(hr.foi.air.dajsve.R.id.dodaj_brisi_favorita);
         mapaPrikaz=(FrameLayout)rootView.findViewById(hr.foi.air.dajsve.R.id.mapa_prikaz);
-
+        detaljiPonudeStatistikaLayout = (LinearLayout) rootView.findViewById(R.id.statistika_layout_detalji_ponude) ;
+        brojPregledaPonude = (TextView) rootView.findViewById(R.id.brojPregledaPonude);
+        brojOmiljenihPonude = (TextView) rootView.findViewById(R.id.brojOmiljenihPonude);
+        brojOtvaranjaNaWebuPonude = (TextView) rootView.findViewById(R.id.brojOtvaranjaNaWebuPonude);
         ponudaJeFavorit = false;
 
         Bundle bundle = getArguments();
@@ -110,6 +120,30 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
 
         prozirnaSlika = (ImageView) rootView.findViewById(hr.foi.air.dajsve.R.id.prozirnaslika);
         scroll = (ScrollView) rootView.findViewById(hr.foi.air.dajsve.R.id.skrolanje);
+
+        //dohvaca se id androida i upisuje se zapis u dnevnik korisnika
+        SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+        String android_id = prefs.getString("android_id", null);
+        Baza baza = new Baza(android_id);
+        String tekstPonude = ponudaDohvacena.getTekstPonude();
+        baza.ZapisiUDnevnik(6, android_id, "Otvorena ponuda", ponudaDohvacena.getHash(), 1);
+
+
+        SharedPreferences prefLogged = getActivity().getSharedPreferences("LOGGED", Context.MODE_PRIVATE);
+
+        if(prefLogged.getBoolean("logged", true) == true){
+            String brojOtvaranjaPonude = String.valueOf(baza.DohvatiBrojOtvaranjaPonude(6,ponudaDohvacena.getHash()));
+            String brojOmiljenihPonuda = String.valueOf(baza.DohvatiBrojOtvaranjaPonude(1,ponudaDohvacena.getHash()));
+            String brojOtvaranjaNaWebu = String.valueOf(baza.DohvatiBrojOtvaranjaPonude(7,ponudaDohvacena.getHash()));
+
+            brojPregledaPonude.setText(brojOtvaranjaPonude);
+            brojOmiljenihPonude.setText(brojOmiljenihPonuda);
+            brojOtvaranjaNaWebuPonude.setText(brojOtvaranjaNaWebu);
+
+            detaljiPonudeStatistikaLayout.setVisibility(View.VISIBLE);
+        }else{
+            detaljiPonudeStatistikaLayout.setVisibility(View.GONE);
+        }
 
         prozirnaSlika.setOnTouchListener(new View.OnTouchListener() {@Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -141,6 +175,13 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
             public void onClick(View v) {
                 Uri uri = Uri.parse(ponudaDohvacena.getUrlWeba());
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+
+                SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+                String android_id = prefs.getString("android_id", null);
+                Baza baza = new Baza(android_id);
+                String tekstPonude = ponudaDohvacena.getTekstPonude();
+                baza.ZapisiUDnevnik(7, android_id, "Otvorena ponuda na webu", ponudaDohvacena.getHash(), 1);
+
                 startActivity(intent);
 
             }
@@ -176,6 +217,12 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
 
                     dodajUFavoriteTekst.setText("Spremi ponudu");
 
+                    SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+                    String android_id = prefs.getString("android_id", null);
+                    Baza baza = new Baza(android_id);
+                    String tekstPonude = ponudaDohvacena.getTekstPonude();
+                    baza.ZapisiUDnevnik(1, android_id, "Izbrisana omiljena ponuda", ponudaDohvacena.getHash(), 1);
+
                     //Animacija okretanja ikonice
                     AnimationSet animSet = new AnimationSet(true);
 //                    animSet.setInterpolator(new DecelerateInterpolator());
@@ -200,6 +247,14 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                             ponudaDohvacena.getUsteda(), ponudaDohvacena.getKategorija(), ponudaDohvacena.getGrad(), ponudaDohvacena.getDatumPonude());
                     novi.save();
                     Toast.makeText(getActivity(), "Ponuda spremljena u Omiljene ponude", Toast.LENGTH_LONG).show();
+
+
+                    SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+                    String android_id = prefs.getString("android_id", null);
+                    Baza baza = new Baza(android_id);
+                    String tekstPonude = ponudaDohvacena.getTekstPonude();
+                    baza.ZapisiUDnevnik(1, android_id, "Dodana omiljena ponuda", ponudaDohvacena.getHash(), 1);
+
 
                     ponudaJeFavorit = true;
                     dodajUFavoriteTekst.setText("Briši iz spremljenih ponuda");

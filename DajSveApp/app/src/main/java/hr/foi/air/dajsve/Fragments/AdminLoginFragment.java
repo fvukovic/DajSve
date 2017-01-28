@@ -1,6 +1,8 @@
 package hr.foi.air.dajsve.Fragments;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -34,7 +36,11 @@ public class AdminLoginFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                Baza baza = new Baza();
+
+                SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+                String android_id = prefs.getString("android_id", null);
+
+                Baza baza = new Baza(android_id);
 
 
                 boolean prijavljeni = false;
@@ -45,7 +51,16 @@ public class AdminLoginFragment extends android.support.v4.app.Fragment {
                 }
 
                 if(prijavljeni){
-                    Toast.makeText(getContext(), "Uspješno ste se prijavili", Toast.LENGTH_LONG).show();
+                    AdminPocetna adminPocetna= new AdminPocetna();
+
+                    SharedPreferences.Editor editor = getActivity().getSharedPreferences("LOGGED", Context.MODE_PRIVATE).edit();
+                    editor.putBoolean("logged", true);
+                    editor.commit();
+
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.linearlayout, adminPocetna)
+                            .addToBackStack(null)
+                            .commit();
                 }else{
                     Toast.makeText(getContext(), "Neuspješna prijava", Toast.LENGTH_LONG).show();
                 }

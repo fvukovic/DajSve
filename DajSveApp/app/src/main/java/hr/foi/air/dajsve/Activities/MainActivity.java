@@ -1,5 +1,7 @@
 package hr.foi.air.dajsve.Activities;
-
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.provider.Settings.Secure;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.StrictMode;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     String arrayFragment[] = {"Ponude", "Favoriti", "Moje kategorije", "Mapa"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
-
+    private String android_id;
     List<Grad> gradLista = null;
     List<Ponuda> ponudaLista = null;
 
@@ -55,6 +57,21 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String grad = getSharedPreferences("GRAD", MODE_PRIVATE).getString("grad", "Zagreb");
+
+
+
+        SharedPreferences.Editor spref = getSharedPreferences("LOGGED", Context.MODE_PRIVATE).edit();
+        spref.putBoolean("logged", true);
+        spref.commit();
+
+
+        android_id = Secure.getString(getApplicationContext().getContentResolver(),
+                Secure.ANDROID_ID);
+
+        SharedPreferences.Editor editor = getSharedPreferences("ANDROID", MODE_PRIVATE).edit();
+        editor.putString("android_id", android_id);
+        editor.commit();
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
