@@ -1,10 +1,11 @@
 package hr.foi.air.dajsve.Activities;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.provider.Settings.Secure;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -39,7 +40,8 @@ import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
 import hr.foi.air.dajsve.Fragments.PocetnaFragment;
 import hr.foi.air.dajsve.Fragments.SvePonudeFragment;
 import hr.foi.air.dajsve.Helpers.Baza;
-import hr.foi.air.dajsve.Helpers.SearchAlg;
+import hr.foi.air.dajsve.Helpers.PretrazivanjeKeyword;
+import hr.foi.air.dajsve.Helpers.PretrazivanjeLokacija;
 import hr.foi.air.dajsve.Loaders.DatabaseDataLoader;
 import hr.foi.air.dajsve.Loaders.WebServiceDataLoader;
 import hr.foi.air.dajsve.R;
@@ -78,12 +80,24 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         FlowManager.init(new FlowConfig.Builder(this).build());
         List<String> naziviPonude = new ArrayList<>();
         List<String> hashPonude = new ArrayList<>();
+        List<String> hashPonudeLokacija = new ArrayList<>();
+        List<Double> latPonude = new ArrayList<>();
+        List<Double> longPonude = new ArrayList<>();
         for(Ponuda ponuda : Ponuda.getAll())
         {
             naziviPonude.add(ponuda.getNaziv());
             hashPonude.add(ponuda.getHash());
+            if(!ponuda.getLatitude().equals("nema")){
+                if(!ponuda.getLongitude().equals("nema")) {
+                    latPonude.add(Double.parseDouble(ponuda.getLatitude()));
+                    longPonude.add(Double.parseDouble(ponuda.getLongitude()));
+                    hashPonudeLokacija.add(ponuda.getHash());
+                }
+            }
         }
-        SearchAlg.searchAlgoritam("SAUNA ZAGREB", naziviPonude,hashPonude);
+        System.out.print("KOMADI:" + latPonude.size()+"   "+ longPonude.size()+ "KOLIKO HAŠOVA: "+hashPonudeLokacija.size());
+        PretrazivanjeLokacija.getLocationFromAddress("adasd",this,latPonude,longPonude,hashPonudeLokacija);
+        PretrazivanjeKeyword.searchAlgoritam("SAUNA ZAGREB", naziviPonude,hashPonude);
         findViewById(R.id.admin_login_button).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -183,6 +197,8 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
 
     }
+
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState){
         super.onPostCreate(savedInstanceState);
@@ -218,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         }
 
         dataLoader.loadData(this);
-        System.out.print("molim te ko boga dragoga"+ Looper.myLooper());
     }
 
 
