@@ -12,11 +12,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,6 +41,7 @@ import hr.foi.air.dajsve.Fragments.FavoritiFragment;
 import hr.foi.air.dajsve.Fragments.MapFragment;
 import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
 import hr.foi.air.dajsve.Fragments.PocetnaFragment;
+import hr.foi.air.dajsve.Fragments.PretraživanjeFragment;
 import hr.foi.air.dajsve.Fragments.SvePonudeFragment;
 import hr.foi.air.dajsve.Helpers.Baza;
 import hr.foi.air.dajsve.Helpers.PretrazivanjeKeyword;
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     private String android_id;
     List<Grad> gradLista = null;
     List<Ponuda> ponudaLista = null;
+    private String uneseniUpit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,9 +198,35 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
         });
         //!!!kraj postavljanje listenera za klik na item u meniju
+    }
 
+    //Nekon submit-a u tražilici, uneseni upit se sprema u string uneseniUpit i otvara se fragment PretraživanjeFragment
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem item = menu.findItem(R.id.menuSearch);
+        final SearchView searchView = (SearchView) item.getActionView();
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Fragment fragment = null;
+                uneseniUpit = query;
+                searchView.clearFocus();
+                fragment = new PretraživanjeFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
 

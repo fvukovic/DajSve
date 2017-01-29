@@ -34,13 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="#9879A8">
-
-            <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#A584B8"
-                android:id="@+id/searchview"/>
-
+<!--
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -50,6 +44,7 @@
                 android:paddingRight="30dp"
                 android:paddingLeft="30dp"
                 android:backgroundTint="#FFFFFF"/>
+                -->
         </RelativeLayout>
         <ListView
             android:layout_width="250dp"
