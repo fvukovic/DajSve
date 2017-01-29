@@ -56,6 +56,11 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:9.6.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
 
+    compile 'com.jjoe64:graphview:4.2.1'
+    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+
+    compile 'com.github.deepakbaliga:BeautifulGraphSample:6c3fa7352f@aar'
+
 
 
     compile 'com.google.maps.android:android-maps-utils:0.4+'

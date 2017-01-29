@@ -2,6 +2,7 @@ package hr.foi.air.dajsve.Fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import hr.foi.air.dajsve.Helpers.Baza;
 import hr.foi.air.dajsve.R;
 
 import java.util.ArrayList;
@@ -66,6 +68,12 @@ public class PocetnaFragment extends Fragment{
         Boolean prvoPokretanje = this.getActivity().getSharedPreferences("PRVO_POKRETANJE", Context.MODE_PRIVATE).getBoolean("prvoPokretanje", true);
 
         if(prvoPokretanje){
+            SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+            String android_id = prefs.getString("android_id", null);
+            Baza baza = new Baza(android_id);
+
+            baza.ZapisiUDnevnik(8, android_id, "Korisnik je pokrenuo aplikaciju prvi put", "",1);
+
             Toast.makeText(this.getActivity(), "Ovo je prvo pokretanje, prikazujem dialog", Toast.LENGTH_LONG).show();
             for(Kategorija kategorija : Kategorija.getAll())
             {

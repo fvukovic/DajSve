@@ -67,6 +67,7 @@
             android:layout_height="50dp"
             android:id="@+id/admin_login_button"
             android:layout_alignParentBottom="true"
+            android:text="Administracija"
             android:alpha="0"/>
 
     </RelativeLayout>

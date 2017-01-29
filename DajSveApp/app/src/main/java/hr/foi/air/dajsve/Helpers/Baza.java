@@ -14,10 +14,14 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+
+import com.raizlabs.android.dbflow.sql.language.Condition;
 
 
 /**
@@ -69,12 +73,10 @@ public class Baza extends Activity{
 
     public ResultSet IzvrsiUpit(String upit) throws SQLException {
 //        upit = "select count(*) as broj from Dnevnik GROUP BY dodatneInformacije, tipZapisa having tipZapisa = 5 and dodatneInformacije = 'ffaletar';";
+
         Statement stmt = connection.createStatement();
         ResultSet reset = stmt.executeQuery(upit);
-//        int brojOtvaranja = 0;
-//        while(reset.next()){
-//            brojOtvaranja = reset.getInt("broj");
-//        }
+
         return reset;
     }
 
@@ -120,6 +122,7 @@ public class Baza extends Activity{
         return currentTimestamp;
     }
 
+    //funkcija za dohvaćanje statistike za određenu ponudu
     public Integer DohvatiBrojOtvaranjaPonude(int tipZapisa,String nazivPonude){
         try{
 //            String upit = "select count(*) from Dnevnik where tipZapisa = " + tipZapisa + " and dodatneInformacije ='" + nazivPonude +"';";
@@ -133,6 +136,77 @@ public class Baza extends Activity{
         }catch (SQLException ex){
             return 0;
         }
+    }
+
+    public Integer DohvatiBrojPreuzimanjaAplikacije(){
+        try{
+            String upit2 = "select count(*) as broj from Dnevnik where tipZapisa = 8;";
+            ResultSet reset = IzvrsiUpit(upit2);
+            int brojPreuzimanja = 0;
+            while(reset.next()){
+                brojPreuzimanja = reset.getInt("broj");
+            }
+            return brojPreuzimanja;
+        }catch (SQLException ex){
+            return 0;
+        }
+
+    }
+
+    public Integer DohvatiBrojOmiljenihPonuda(){
+        try{
+            String upit2 = "select count(*) as broj from Dnevnik where tipZapisa = 1;";
+            ResultSet reset = IzvrsiUpit(upit2);
+            int brojOmiljenih = 0;
+            while(reset.next()){
+                brojOmiljenih = reset.getInt("broj");
+            }
+            return brojOmiljenih;
+        }catch (SQLException ex){
+            return 0;
+        }
+
+    }
+
+    public Integer DohvatiBrojOmiljenihKategorija(){
+        try{
+            String upit2 = "select count(*) as broj from Dnevnik where tipZapisa = 2;";
+            ResultSet reset = IzvrsiUpit(upit2);
+            int brojOmiljenihKategorija = 0;
+            while(reset.next()){
+                brojOmiljenihKategorija = reset.getInt("broj");
+            }
+            return brojOmiljenihKategorija;
+        }catch (SQLException ex){
+            return 0;
+        }
+
+    }
+
+    public List<Integer> DohvatiBrojPokretanjaZaDan(int a){
+        int brojPokretanja = 0;
+        String upit1;
+        String upit2;
+        ResultSet reset;
+        List<Integer> lista = new ArrayList<Integer>();
+        try{
+            if(a == 0){
+                upit1 = "select count(*) as count from Dnevnik where tipZapisa = 9 and vrijeme > getdate() - 7 group by  CAST(vrijeme as date);";
+                reset = IzvrsiUpit(upit1);
+            }else{
+                upit2 = "select count(*) as count from Dnevnik where tipZapisa = 9 and vrijeme >= getdate() - 14 and vrijeme < getdate() - 7 group by  CAST(vrijeme as date);";
+                reset = IzvrsiUpit(upit2);
+            }
+
+            while(reset.next()){
+                lista.add(reset.getInt("count"));
+            }
+
+            return lista;
+        }catch (SQLException ex){
+            return lista;
+        }
+
     }
 
 }

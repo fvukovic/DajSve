@@ -32,6 +32,7 @@ import entities.Ponuda;
 import hr.foi.air.core.DataLoadedListener;
 import hr.foi.air.core.DataLoader;
 import hr.foi.air.dajsve.Fragments.AdminLoginFragment;
+import hr.foi.air.dajsve.Fragments.AdminPocetna;
 import hr.foi.air.dajsve.Fragments.FavoritiFragment;
 import hr.foi.air.dajsve.Fragments.MapFragment;
 import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         String grad = getSharedPreferences("GRAD", MODE_PRIVATE).getString("grad", "Zagreb");
 
 
-
         SharedPreferences.Editor spref = getSharedPreferences("LOGGED", Context.MODE_PRIVATE).edit();
         spref.putBoolean("logged", true);
         spref.commit();
@@ -80,9 +80,13 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         findViewById(R.id.admin_login_button).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-                Fragment fragment =  new AdminLoginFragment();
-
+                SharedPreferences prefLogged = getSharedPreferences("LOGGED", Context.MODE_PRIVATE);
+                Fragment fragment = null;
+                if(prefLogged.getBoolean("logged", true) == true){
+                    fragment = new AdminPocetna();
+                }else{
+                    fragment =  new AdminLoginFragment();
+                }
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
                 drawerLayout.closeDrawers();
@@ -95,6 +99,14 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
+        }
+
+        SharedPreferences prefs = getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+        if(prefs != null){
+            String android_id = prefs.getString("android_id", null);
+            Baza baza = new Baza(android_id);
+
+            baza.ZapisiUDnevnik(9, android_id, "Korisnik je pokrenuo aplikaciju", "", 1);
         }
 
         listView = (ListView) findViewById(R.id.listview);

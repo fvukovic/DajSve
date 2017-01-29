@@ -1,12 +1,16 @@
 package hr.foi.air.dajsve.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import hr.foi.air.dajsve.Helpers.Baza;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -33,6 +37,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         };
         splashScreenThread.start();
+
 
 
         TranslateAnimation anim = new TranslateAnimation(0,0,0,1200);
