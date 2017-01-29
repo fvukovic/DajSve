@@ -24,13 +24,12 @@ import hr.foi.air.dajsve.Activities.MainActivity;
 import hr.foi.air.dajsve.Adapters.RVAdapter;
 
 import static android.support.v4.widget.SwipeRefreshLayout.OnClickListener;
-import static android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 
 /**
  * Created by Filip on 28.10.2016..
  */
 
-public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
+public class PretraživanjeFragment extends Fragment   {
 
     private RecyclerView rv;
     public SwipeRefreshLayout mSwipeRefreshLayout;
@@ -50,10 +49,6 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
         opcijeSortiranja[0] = "Cijena - uzlazno";
         opcijeSortiranja[1] = "Cijena - silazno";
         opcijeSortiranja[2] = "Popust";
-
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(hr.foi.air.dajsve.R.id.swipeContainer);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         rv.setLayoutManager(llm);
         List<Ponuda> novaLista= Ponuda.getAll();
@@ -128,10 +123,6 @@ public class SvePonudeFragment extends Fragment implements  OnRefreshListener  {
         }
     }
 
-    @Override
-    public void onRefresh() {
-        new task().execute();
-    }
 
 
 }

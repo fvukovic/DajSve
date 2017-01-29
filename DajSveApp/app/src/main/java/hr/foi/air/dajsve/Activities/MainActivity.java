@@ -39,6 +39,7 @@ import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
 import hr.foi.air.dajsve.Fragments.PocetnaFragment;
 import hr.foi.air.dajsve.Fragments.SvePonudeFragment;
 import hr.foi.air.dajsve.Helpers.Baza;
+import hr.foi.air.dajsve.Helpers.SearchAlg;
 import hr.foi.air.dajsve.Loaders.DatabaseDataLoader;
 import hr.foi.air.dajsve.Loaders.WebServiceDataLoader;
 import hr.foi.air.dajsve.R;
@@ -75,8 +76,14 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
-
-
+        List<String> naziviPonude = new ArrayList<>();
+        List<String> hashPonude = new ArrayList<>();
+        for(Ponuda ponuda : Ponuda.getAll())
+        {
+            naziviPonude.add(ponuda.getNaziv());
+            hashPonude.add(ponuda.getHash());
+        }
+        SearchAlg.searchAlgoritam("SAUNA ZAGREB", naziviPonude,hashPonude);
         findViewById(R.id.admin_login_button).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
