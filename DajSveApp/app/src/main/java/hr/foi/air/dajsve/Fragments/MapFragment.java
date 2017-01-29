@@ -52,6 +52,7 @@ import java.util.Random;
 
 import entities.MyItem;
 import entities.Ponuda;
+import hr.foi.air.dajsve.Helpers.PretrazivanjeLokacija;
 
 /**
  * Created by Filip on 27.11.2016..
@@ -373,34 +374,56 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
         ArrayList<LatLng> spremljeneKoordinate = new ArrayList<>();
         spremljeneKoordinate.add(new LatLng(1.0,1.0));
+        List<String> hashPonude = new ArrayList<>();
+        List<Double> latPonude = new ArrayList<>();
+        List<Double> longPonude = new ArrayList<>();
+        for(Ponuda ponuda : Ponuda.getAll())
+        {
 
+            if(!ponuda.getLatitude().equals("nema")){
+                if(!ponuda.getLongitude().equals("nema")) {
+                    latPonude.add(Double.parseDouble(ponuda.getLatitude()));
+                    longPonude.add(Double.parseDouble(ponuda.getLongitude()));
+                    hashPonude.add(ponuda.getHash());
+                }
+            }
+        }
+        List<String> hashs =PretrazivanjeLokacija.getLocationFromAddress("Turopoljska 15, Lekenik",getActivity(),latPonude,longPonude,hashPonude);
         for (final Ponuda ponuda : svePonude) {
-            String ponudaLat = ponuda.getLatitude();
-            String ponudaLon = ponuda.getLongitude();
-            LatLng izracunato;
-            LatLng gradKoordinate;
+             for (String hash : hashs) {
+                 if(ponuda.getHash().equals(hash)){
+                     String ponudaLat = ponuda.getLatitude();
+                     String ponudaLon = ponuda.getLongitude();
+                     LatLng izracunato;
+                     LatLng gradKoordinate;
 
-            /**
-             if(!ponudaLat.contentEquals("nema") && !ponudaLon.contentEquals("nema")){
-             double ponudaLatitude = Double.parseDouble(ponudaLat);
-             double ponudaLongitude = Double.parseDouble(ponudaLon);
-             gradKoordinate = new LatLng(ponudaLatitude, ponudaLongitude);
-             mClusterManager.addItem(new MyItem(gradKoordinate, ponuda));
+
+                     /**
+                      if(!ponudaLat.contentEquals("nema") && !ponudaLon.contentEquals("nema")){
+                      double ponudaLatitude = Double.parseDouble(ponudaLat);
+                      double ponudaLongitude = Double.parseDouble(ponudaLon);
+                      gradKoordinate = new LatLng(ponudaLatitude, ponudaLongitude);
+                      mClusterManager.addItem(new MyItem(gradKoordinate, ponuda));
+                      }
+                      */
+
+                     if(ponudaLat.contentEquals("nema") || ponudaLon.contentEquals("nema")){continue;}
+                     else{
+                         do{
+                             double ponudaLatitude = Double.parseDouble(ponudaLat);
+                             double ponudaLongitude = Double.parseDouble(ponudaLon);
+                             gradKoordinate = new LatLng(ponudaLatitude, ponudaLongitude);
+
+                             izracunato = izracunajOffset(ponudaLatitude, ponudaLongitude);
+                             spremljeneKoordinate.add(izracunato);
+                         }while(!spremljeneKoordinate.contains(izracunato));
+
+                         mClusterManager.addItem(new MyItem(izracunato, ponuda));
+
+
+                     }
+
              }
-             */
-
-            if(ponudaLat.contentEquals("nema") || ponudaLon.contentEquals("nema")){continue;}
-            else{
-                do{
-                    double ponudaLatitude = Double.parseDouble(ponudaLat);
-                    double ponudaLongitude = Double.parseDouble(ponudaLon);
-                    gradKoordinate = new LatLng(ponudaLatitude, ponudaLongitude);
-
-                    izracunato = izracunajOffset(ponudaLatitude, ponudaLongitude);
-                    spremljeneKoordinate.add(izracunato);
-                }while(!spremljeneKoordinate.contains(izracunato));
-
-                mClusterManager.addItem(new MyItem(izracunato, ponuda));
 
             }
 

@@ -13,13 +13,13 @@ import java.util.regex.Pattern;
  * Created by Filip on 29.1.2017..
  */
 
-public class SearchAlg {
+public class PretrazivanjeKeyword {
 
     public  static List<String> searchAlgoritam(String keywords, List<String> allElements, List<String> ID)
     {
 
         int Slength = keywords.length();
-        int brojac=0;
+        int brojac=-1;
         String word ="";
         List<String> ListaKljučnihRiječi = new ArrayList<>();
         for (int i = 0 ; i<Slength;i++)
