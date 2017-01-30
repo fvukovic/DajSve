@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
             }
         }
         System.out.print("KOMADI:" + latPonude.size()+"   "+ longPonude.size()+ "KOLIKO HAŠOVA: "+hashPonudeLokacija.size());
-        PretrazivanjeLokacija.getLocationFromAddress("adasd",this,latPonude,longPonude,hashPonudeLokacija);
+//        PretrazivanjeLokacija.getLocationFromAddress("adasd",this,latPonude,longPonude,hashPonudeLokacija);
         PretrazivanjeKeyword.searchAlgoritam("SAUNA ZAGREB", naziviPonude,hashPonude);
         findViewById(R.id.admin_login_button).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -128,12 +128,16 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         }
 
         SharedPreferences prefs = getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
-        if(prefs != null){
-            String android_id = prefs.getString("android_id", null);
-            Baza baza = new Baza(android_id);
-
-            baza.ZapisiUDnevnik(9, android_id, "Korisnik je pokrenuo aplikaciju", "", 1);
+        try{
+            if(prefs != null){
+                String android_id = prefs.getString("android_id", null);
+                Baza baza = new Baza(android_id);
+                baza.ZapisiUDnevnik(9, android_id, "Korisnik je pokrenuo aplikaciju", "", 1);
+            }
+        }catch (Exception ex){
+            System.out.println("Exception");
         }
+
 
         listView = (ListView) findViewById(R.id.listview);
         listAdapter = new ArrayAdapter<String>(this, R.layout.textview_item, arrayFragment);

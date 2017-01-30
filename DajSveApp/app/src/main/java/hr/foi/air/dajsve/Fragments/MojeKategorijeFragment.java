@@ -1,6 +1,8 @@
 package hr.foi.air.dajsve.Fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -27,6 +29,7 @@ import entities.OmiljenaKategorija;
 import entities.Ponuda;
 import hr.foi.air.dajsve.Activities.MainActivity;
 import hr.foi.air.dajsve.Adapters.RVAdapter;
+import hr.foi.air.dajsve.Helpers.Baza;
 
 /**
  * Created by Filip on 28.10.2016..
@@ -101,12 +104,19 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
                 i te dodajemo u omiljeneKategorije
                 */
 
+                SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+                String android_id = prefs.getString("android_id", null);
+                Baza baza = new Baza(android_id);
+
                 OmiljenaKategorija.deleteAll();
+                baza.IzbrisiSveOmiljeneKategorijeZaKorisnika(android_id);
+                System.out.println("Izbrisane su sve omiljene kategorije za ovog korisnika");
                 for(int i = 0 ; i<kategorije.length;i++)
                 {
                     if(oznaceneKategorijeDialog[i]==true) {
                         OmiljenaKategorija novi = new OmiljenaKategorija(kategorije[i]);
                         novi.save();
+                        baza.ZapisiUDnevnik(2, android_id, "Dodano u omiljene kategorije", kategorije[i], 1);
                         System.out.println(kategorije[i]);
                     }
                 }

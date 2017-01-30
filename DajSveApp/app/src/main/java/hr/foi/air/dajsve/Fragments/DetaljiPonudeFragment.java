@@ -133,7 +133,8 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
 
         if(prefLogged.getBoolean("logged", true) == true){
             String brojOtvaranjaPonude = String.valueOf(baza.DohvatiBrojOtvaranjaPonude(6,ponudaDohvacena.getHash()));
-            String brojOmiljenihPonuda = String.valueOf(baza.DohvatiBrojOtvaranjaPonude(1,ponudaDohvacena.getHash()));
+            String brojOmiljenihPonuda = String.valueOf(baza.DohvatiLajkoveNaPonudu(ponudaDohvacena.getHash()));
+
             String brojOtvaranjaNaWebu = String.valueOf(baza.DohvatiBrojOtvaranjaPonude(7,ponudaDohvacena.getHash()));
 
             brojPregledaPonude.setText(brojOtvaranjaPonude);
@@ -221,7 +222,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
                     String android_id = prefs.getString("android_id", null);
                     Baza baza = new Baza(android_id);
                     String tekstPonude = ponudaDohvacena.getTekstPonude();
-                    baza.ZapisiUDnevnik(1, android_id, "Izbrisana omiljena ponuda", ponudaDohvacena.getHash(), 1);
+                    baza.ZapisiUDnevnik(1, android_id, "Izbrisana omiljena ponuda", ponudaDohvacena.getHash(), 0);
 
                     //Animacija okretanja ikonice
                     AnimationSet animSet = new AnimationSet(true);

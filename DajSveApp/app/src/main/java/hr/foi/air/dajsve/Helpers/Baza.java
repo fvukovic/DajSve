@@ -72,17 +72,19 @@ public class Baza extends Activity{
     }
 
     public ResultSet IzvrsiUpit(String upit) throws SQLException {
-//        upit = "select count(*) as broj from Dnevnik GROUP BY dodatneInformacije, tipZapisa having tipZapisa = 5 and dodatneInformacije = 'ffaletar';";
-
-        Statement stmt = connection.createStatement();
-        ResultSet reset = stmt.executeQuery(upit);
-
+        ResultSet reset = null;
+        if(connection!=null) {
+            Statement stmt = connection.createStatement();
+            reset = stmt.executeQuery(upit);
+        }
         return reset;
     }
 
     public void Upisi(String upit) throws SQLException {
-        Statement stmt = connection.createStatement();
-        stmt.executeUpdate(upit);
+        if(connection!=null){
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(upit);
+        }
     }
 
     public boolean Prijava(String nadimak, String lozinka) throws SQLException {
@@ -123,16 +125,46 @@ public class Baza extends Activity{
     }
 
     //funkcija za dohvaćanje statistike za određenu ponudu
-    public Integer DohvatiBrojOtvaranjaPonude(int tipZapisa,String nazivPonude){
+    public Integer DohvatiBrojOtvaranjaPonude(int tipZapisa,String hash){
         try{
 //            String upit = "select count(*) from Dnevnik where tipZapisa = " + tipZapisa + " and dodatneInformacije ='" + nazivPonude +"';";
-            String upit2 = "select count(*) as broj from Dnevnik GROUP BY dodatneInformacije, tipZapisa having tipZapisa = "+tipZapisa+" and dodatneInformacije = '"+nazivPonude+"';";
+            String upit2 = "select count(*) as broj from Dnevnik GROUP BY dodatneInformacije, tipZapisa having tipZapisa = "+tipZapisa+" and dodatneInformacije = '"+hash+"';";
             ResultSet reset = IzvrsiUpit(upit2);
             int brojOtvaranja = 0;
-            while(reset.next()){
-                brojOtvaranja = reset.getInt("broj");
+            if(reset!=null){
+                while(reset.next()){
+                    brojOtvaranja = reset.getInt("broj");
+                }
             }
+
             return brojOtvaranja;
+        }catch (SQLException ex){
+            return 0;
+        }
+    }
+
+    public Integer DohvatiLajkoveNaPonudu(String hash){
+        try{
+//            String upit = "select count(*) from Dnevnik where tipZapisa = " + tipZapisa + " and dodatneInformacije ='" + nazivPonude +"';";
+            String upit1 = "select count(*) as broj from Dnevnik GROUP BY dodatneInformacije, tipZapisa, status having tipZapisa = 1 and dodatneInformacije = '"+hash+"' and status = 1;";
+            String upit2 = "select count(*) as broj from Dnevnik GROUP BY dodatneInformacije, tipZapisa, status having tipZapisa = 1 and dodatneInformacije = '"+hash+"' and status = 0;";
+            ResultSet resetOmiljenih = IzvrsiUpit(upit1);
+            ResultSet resetBrisanja = IzvrsiUpit(upit2);
+            int brojOmiljenih = 0;
+            int brojBrisanja = 0;
+            if(resetOmiljenih!=null){
+                while(resetOmiljenih.next()){
+                    brojOmiljenih = resetOmiljenih.getInt("broj");
+                }
+            }
+
+            if(resetBrisanja!=null){
+                while(resetBrisanja.next()){
+                    brojBrisanja = resetBrisanja.getInt("broj");
+                }
+            }
+
+            return brojOmiljenih - brojBrisanja;
         }catch (SQLException ex){
             return 0;
         }
@@ -143,9 +175,12 @@ public class Baza extends Activity{
             String upit2 = "select count(*) as broj from Dnevnik where tipZapisa = 8;";
             ResultSet reset = IzvrsiUpit(upit2);
             int brojPreuzimanja = 0;
-            while(reset.next()){
-                brojPreuzimanja = reset.getInt("broj");
+            if(reset!=null){
+                while(reset.next()){
+                    brojPreuzimanja = reset.getInt("broj");
+                }
             }
+
             return brojPreuzimanja;
         }catch (SQLException ex){
             return 0;
@@ -158,9 +193,12 @@ public class Baza extends Activity{
             String upit2 = "select count(*) as broj from Dnevnik where tipZapisa = 1;";
             ResultSet reset = IzvrsiUpit(upit2);
             int brojOmiljenih = 0;
-            while(reset.next()){
-                brojOmiljenih = reset.getInt("broj");
+            if(reset!=null){
+                while(reset.next()){
+                    brojOmiljenih = reset.getInt("broj");
+                }
             }
+
             return brojOmiljenih;
         }catch (SQLException ex){
             return 0;
@@ -173,9 +211,12 @@ public class Baza extends Activity{
             String upit2 = "select count(*) as broj from Dnevnik where tipZapisa = 2;";
             ResultSet reset = IzvrsiUpit(upit2);
             int brojOmiljenihKategorija = 0;
-            while(reset.next()){
-                brojOmiljenihKategorija = reset.getInt("broj");
+            if(reset!=null){
+                while(reset.next()){
+                    brojOmiljenihKategorija = reset.getInt("broj");
+                }
             }
+
             return brojOmiljenihKategorija;
         }catch (SQLException ex){
             return 0;
@@ -197,16 +238,25 @@ public class Baza extends Activity{
                 upit2 = "select count(*) as count from Dnevnik where tipZapisa = 9 and vrijeme >= getdate() - 14 and vrijeme < getdate() - 7 group by  CAST(vrijeme as date);";
                 reset = IzvrsiUpit(upit2);
             }
-
-            while(reset.next()){
-                lista.add(reset.getInt("count"));
+            if(reset!=null){
+                while(reset.next()){
+                    lista.add(reset.getInt("count"));
+                }
             }
-
             return lista;
         }catch (SQLException ex){
             return lista;
         }
 
+    }
+
+    public void IzbrisiSveOmiljeneKategorijeZaKorisnika(String korisnikID) {
+        String upit = "delete from Dnevnik where korisnikID = '"+korisnikID+"' and tipZapisa = 2";
+        try{
+            Upisi(upit);
+        }catch (SQLException ex){
+            System.out.println("Dnevnik nije ažuriran");
+        }
     }
 
 }
