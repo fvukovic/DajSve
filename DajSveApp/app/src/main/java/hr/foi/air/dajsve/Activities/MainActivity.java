@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.StrictMode;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -23,6 +24,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.common.data.DataBufferObserver;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
@@ -46,6 +48,8 @@ import hr.foi.air.dajsve.Fragments.SvePonudeFragment;
 import hr.foi.air.dajsve.Helpers.Baza;
 import hr.foi.air.dajsve.Helpers.PretrazivanjeKeyword;
 import hr.foi.air.dajsve.Helpers.PretrazivanjeLokacija;
+import hr.foi.air.dajsve.Helpers.SearchDataListener;
+import hr.foi.air.dajsve.Helpers.SearchLocationListener;
 import hr.foi.air.dajsve.Loaders.DatabaseDataLoader;
 import hr.foi.air.dajsve.Loaders.WebServiceDataLoader;
 import hr.foi.air.dajsve.R;
@@ -83,26 +87,36 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
-        List<String> naziviPonude = new ArrayList<>();
-        List<String> hashPonude = new ArrayList<>();
-        List<String> hashPonudeLokacija = new ArrayList<>();
-        List<Double> latPonude = new ArrayList<>();
-        List<Double> longPonude = new ArrayList<>();
-        for(Ponuda ponuda : Ponuda.getAll())
-        {
-            naziviPonude.add(ponuda.getNaziv());
-            hashPonude.add(ponuda.getHash());
-            if(!ponuda.getLatitude().equals("nema")){
-                if(!ponuda.getLongitude().equals("nema")) {
-                    latPonude.add(Double.parseDouble(ponuda.getLatitude()));
-                    longPonude.add(Double.parseDouble(ponuda.getLongitude()));
-                    hashPonudeLokacija.add(ponuda.getHash());
-                }
-            }
-        }
-        System.out.print("KOMADI:" + latPonude.size()+"   "+ longPonude.size()+ "KOLIKO HAŠOVA: "+hashPonudeLokacija.size());
-//        PretrazivanjeLokacija.getLocationFromAddress("adasd",this,latPonude,longPonude,hashPonudeLokacija);
-        PretrazivanjeKeyword.searchAlgoritam("SAUNA ZAGREB", naziviPonude,hashPonude);
+//        List<String> naziviPonude = new ArrayList<>();
+//        List<String> hashPonude = new ArrayList<>();
+//        List<String> hashPonudeLokacija = new ArrayList<>();
+//        List<Double> latPonude = new ArrayList<>();
+//        List<Double> longPonude = new ArrayList<>();
+//        for(Ponuda ponuda : Ponuda.getAll())
+//        {
+//            naziviPonude.add(ponuda.getNaziv());
+//            hashPonude.add(ponuda.getHash());
+//            if(!ponuda.getLatitude().equals("nema")){
+//                if(!ponuda.getLongitude().equals("nema")) {
+//                    latPonude.add(Double.parseDouble(ponuda.getLatitude()));
+//                    longPonude.add(Double.parseDouble(ponuda.getLongitude()));
+//                    hashPonudeLokacija.add(ponuda.getHash());
+//                }
+//            }
+//        }
+//        System.out.print("KOMADI:" + latPonude.size()+"   "+ longPonude.size()+ "KOLIKO HAŠOVA: "+hashPonudeLokacija.size());
+//        PretrazivanjeLokacija.getLocationFromAddress("Primorska 17, Varaždin",this,latPonude,longPonude,hashPonudeLokacija);
+
+//        SearchLocationListener a = new PretrazivanjeLokacija();
+//        List<String> bbhb = a.onDataArrived("Primorska 17, Varaždin",this,latPonude,longPonude,hashPonudeLokacija);
+//        System.out.print(bbhb);
+//        //
+//        SearchDataListener b = new PretrazivanjeKeyword();
+//        List<String> aaha = b.onDataArrived("SAUNA ZAGREB", naziviPonude,hashPonude, true);
+//        System.out.print(aaha);
+
+
+//        a.searchAlgoritam("SAUNA ZAGREB", naziviPonude,hashPonude);
         findViewById(R.id.admin_login_button).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -215,10 +229,40 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Fragment fragment = null;
                 uneseniUpit = query;
+
+                List<String> naziviPonude = new ArrayList<>();
+                List<String> hashPonude = new ArrayList<>();
+                List<String> hashPonudeLokacija = new ArrayList<>();
+                List<Double> latPonude = new ArrayList<>();
+                List<Double> longPonude = new ArrayList<>();
+                for(Ponuda ponuda : Ponuda.getAll())
+                {
+                    naziviPonude.add(ponuda.getNaziv());
+                    hashPonude.add(ponuda.getHash());
+                    if(!ponuda.getLatitude().equals("nema")){
+                        if(!ponuda.getLongitude().equals("nema")) {
+                            latPonude.add(Double.parseDouble(ponuda.getLatitude()));
+                            longPonude.add(Double.parseDouble(ponuda.getLongitude()));
+                            hashPonudeLokacija.add(ponuda.getHash());
+                        }
+                    }
+                }
+
+
+                SearchDataListener b = new PretrazivanjeKeyword();
+                ArrayList<String> aaha = b.onDataArrived(uneseniUpit, naziviPonude,hashPonude, true);
+                System.out.print(aaha);
+
+                Fragment fragment = null;
+
+                Bundle bundle = new Bundle();
+
+                bundle.putStringArrayList("AAA",aaha);
+
                 searchView.clearFocus();
                 fragment = new PretraživanjeFragment();
+                fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
                 return false;

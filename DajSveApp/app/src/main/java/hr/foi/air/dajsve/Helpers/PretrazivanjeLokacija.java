@@ -14,41 +14,41 @@ import entities.Ponuda;
  * Created by Filip on 29.1.2017..
  */
 
-public class PretrazivanjeLokacija {
+public class PretrazivanjeLokacija implements SearchLocationListener{
 
-    public static List<String> getLocationFromAddress(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong, List<String> Id) {
+//    public static List<String> getLocationFromAddress(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong, List<String> Id) {
 
-        Geocoder coder = new Geocoder(context);
-        List<Address> address = null;
-        List<String> hashs= new ArrayList<>();
-        int brojac = -1,brojac1=0;
+//        Geocoder coder = new Geocoder(context);
+//        List<Address> address = null;
+//        List<String> hashs= new ArrayList<>();
+//        int brojac = -1,brojac1=0;
+//
+//        try {
+//
+//            address = coder.getFromLocationName(strAddress, 5);
+//        } catch (IOException e) {
+//            System.out.println("GRESKA");
+//        }
+//
+//        Address location = address.get(0);
+//        double unesenaLokacijaLat = location.getLatitude();
+//        double unesenaLokacijaLog = location.getLongitude();
+//        List<Ponuda> test = Ponuda.getAll();
+//
+//        for (Double element : allElementsLat)
+//
+//        {
+//            brojac++;
+//
+//            if(distVincenty(unesenaLokacijaLat, unesenaLokacijaLog, element, allElementsLong.get(brojac))<30)
+//            {
+//                 hashs.add(Id.get(brojac));
+//            }
+//        }
+//        System.out.print(hashs.size());
+//       return hashs;
 
-        try {
-
-            address = coder.getFromLocationName(strAddress, 5);
-        } catch (IOException e) {
-            System.out.println("GRESKA");
-        }
-
-        Address location = address.get(0);
-        double unesenaLokacijaLat = location.getLatitude();
-        double unesenaLokacijaLog = location.getLongitude();
-        List<Ponuda> test = Ponuda.getAll();
-
-        for (Double element : allElementsLat)
-
-        {
-            brojac++;
-
-            if(distVincenty(unesenaLokacijaLat, unesenaLokacijaLog, element, allElementsLong.get(brojac))<30)
-            {
-                 hashs.add(Id.get(brojac));
-            }
-        }
-        System.out.print(hashs.size());
-       return hashs;
-
-    }
+//    }
 
     public static double distVincenty(double lat1, double lon1, double lat2, double lon2) {
         double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563; // WGS-84 ellipsoid params
@@ -95,5 +95,39 @@ public class PretrazivanjeLokacija {
         double dist = b * A * (sigma - deltaSigma);
 
         return dist/1000;
+    }
+
+
+    @Override
+    public List<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong, List<String> Id) {
+        Geocoder coder = new Geocoder(context);
+        List<Address> address = null;
+        List<String> hashs= new ArrayList<>();
+        int brojac = -1,brojac1=0;
+
+        try {
+
+            address = coder.getFromLocationName(strAddress, 5);
+        } catch (IOException e) {
+            System.out.println("GRESKA");
+        }
+
+        Address location = address.get(0);
+        double unesenaLokacijaLat = location.getLatitude();
+        double unesenaLokacijaLog = location.getLongitude();
+        List<Ponuda> test = Ponuda.getAll();
+
+        for (Double element : allElementsLat)
+
+        {
+            brojac++;
+
+            if(distVincenty(unesenaLokacijaLat, unesenaLokacijaLog, element, allElementsLong.get(brojac))<30)
+            {
+                hashs.add(Id.get(brojac));
+            }
+        }
+        System.out.print(hashs.size());
+        return hashs;
     }
 }

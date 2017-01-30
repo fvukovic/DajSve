@@ -49,6 +49,17 @@ public class PretraživanjeFragment extends Fragment   {
         opcijeSortiranja[0] = "Cijena - uzlazno";
         opcijeSortiranja[1] = "Cijena - silazno";
         opcijeSortiranja[2] = "Popust";
+        final ArrayList<Ponuda> svePonude= new ArrayList<>();
+        ArrayList<String> hashs = getArguments().getStringArrayList("AAA");
+
+
+        for (String podatak:hashs) {
+            System.out.println("PRVI "+podatak);
+            for (Ponuda ponuda : Ponuda.getAll())
+                if (podatak.equals(ponuda.getHash())) {
+                    svePonude.add(ponuda);
+                }
+                }
 
         rv.setLayoutManager(llm);
         List<Ponuda> novaLista= Ponuda.getAll();
@@ -75,15 +86,14 @@ public class PretraživanjeFragment extends Fragment   {
                         asc = false;
                         break;
                 }
-                novaLista= (ArrayList<Ponuda>) Ponuda.getAllOrderBy(vrstaSortiranja, asc);
 
-                RVAdapter adapter = new RVAdapter(novaLista, getContext());
+                RVAdapter adapter = new RVAdapter(svePonude, getContext());
                 rv.setAdapter(adapter);
             }
         });
 
-        Collections.shuffle(novaLista);
-        RVAdapter adapter = new RVAdapter(novaLista,getContext());
+
+        RVAdapter adapter = new RVAdapter(svePonude,getContext());
         rv.setAdapter(adapter);
 
         fab.setOnClickListener(new OnClickListener() {

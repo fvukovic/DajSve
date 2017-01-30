@@ -13,11 +13,17 @@ import java.util.regex.Pattern;
  * Created by Filip on 29.1.2017..
  */
 
-public class PretrazivanjeKeyword {
+public class PretrazivanjeKeyword implements SearchDataListener{
 
-    public  static List<String> searchAlgoritam(String keywords, List<String> allElements, List<String> ID)
-    {
+    public String method(String str) {
+        if (str != null && str.length() > 0 && str.charAt(str.length()-1)=='x') {
+            str = str.substring(0, str.length()-1);
+        }
+        return str;
+    }
 
+    @Override
+    public ArrayList<String> onDataArrived(String keywords, List<String> allElements, List<String> ID, boolean ok) {
         int Slength = keywords.length();
         int brojac=-1;
         String word ="";
@@ -44,24 +50,18 @@ public class PretrazivanjeKeyword {
         Set<Integer> targetSetInt = new HashSet();
         String sviKeywords = TextUtils.join("|", ListaKljučnihRiječi);
         System.out.println(sviKeywords);
-        List<String> allMatchedElements = new ArrayList<>();
+        ArrayList<String> allMatchedElements = new ArrayList<>();
         for (String element : allElements)
         {
             brojac++;
             Matcher matcher = Pattern.compile(sviKeywords.toLowerCase()).matcher(element.toLowerCase());
             if (matcher.find()) {
                 targetSet.add(element);
+                System.out.println("OVO : "+element+ " HASH : "+ ID.get(brojac));
                 allMatchedElements.add(ID.get(brojac));
             }
 
         }
-        return  allMatchedElements;
+        return allMatchedElements;
     }
-    public String method(String str) {
-        if (str != null && str.length() > 0 && str.charAt(str.length()-1)=='x') {
-            str = str.substring(0, str.length()-1);
-        }
-        return str;
-    }
-
 }
