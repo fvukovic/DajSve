@@ -272,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     public void onDataLoaded(List<Grad> gradovi, List<Ponuda> ponude, List<Kategorija> kategorije) {
 
         if(  Looper.myLooper() == Looper.getMainLooper()) {
-            Spinner spinnerGradovi = (Spinner) findViewById(R.id.gradovi_spinner);
             ArrayAdapter<String> adapterGradovi;
             List<String> listaGradova = new ArrayList<>();
             ArrayList<Ponuda> ponudaArrayList = new ArrayList<Ponuda>();
@@ -287,7 +286,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 ponudaArrayList.add(ponuda);
             }
             adapterGradovi = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaGradova);
-            spinnerGradovi.setAdapter(adapterGradovi);
         }
 
     }

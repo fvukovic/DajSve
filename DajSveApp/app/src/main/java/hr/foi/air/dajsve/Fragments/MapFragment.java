@@ -58,10 +58,14 @@ import hr.foi.air.dajsve.Helpers.PretrazivanjeLokacija;
  * Created by Filip on 27.11.2016..
  */
 
+
 public class MapFragment extends Fragment implements OnMapReadyCallback,
         ClusterManager.OnClusterClickListener<MyItem>, ClusterManager.OnClusterInfoWindowClickListener<MyItem>,
         ClusterManager.OnClusterItemClickListener<MyItem>, ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
+
+    public MapFragment() {
+    }
 
     protected GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
@@ -89,6 +93,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         View v = inflater.inflate(hr.foi.air.dajsve.R.layout.map_fragment, container, false);
         rv = (RecyclerView) v.findViewById(hr.foi.air.dajsve.R.id.rv);
         svePonude = Ponuda.getAll();
@@ -99,6 +104,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mapFragment = new com.google.android.gms.maps.MapFragment();
         mapFragment.getMapAsync(this);
         getActivity().getFragmentManager().beginTransaction().add(hr.foi.air.dajsve.R.id.frame, mapFragment).commit();
+
 
         //provjera da li je gps omogućen
         LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
@@ -127,12 +133,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 buildGoogleApiClient();
                 map.setMyLocationEnabled(true);
                 map.getUiSettings().setZoomControlsEnabled(true);
+                map.getUiSettings().setRotateGesturesEnabled(true);
             }
         }
         else {
             buildGoogleApiClient();
             map.setMyLocationEnabled(true);
             map.getUiSettings().setZoomControlsEnabled(true);
+            map.getUiSettings().setRotateGesturesEnabled(true);
         }
 
 
@@ -249,7 +257,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         activity.getSupportFragmentManager().beginTransaction();
         bundle.putParcelableArrayList("ponuda", ponudaTag);
         detaljiponude.setArguments(bundle);
-        activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(hr.foi.air.dajsve.R.id.linearlayout, detaljiponude).commit();
+        activity.getSupportFragmentManager().beginTransaction().replace(hr.foi.air.dajsve.R.id.linearlayout, detaljiponude).addToBackStack(null).commit();
     }
 
     class detaljniInfoWindow implements GoogleMap.InfoWindowAdapter {
