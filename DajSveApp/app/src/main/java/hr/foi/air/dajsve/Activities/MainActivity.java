@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.config.FlowConfig;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     ActionBarDrawerToggle drawerListener;
     private String android_id;
     List<Grad> gradLista = null;
+    Boolean adminPrijavljen = false;
     List<Ponuda> ponudaLista = null;
     private String uneseniUpit;
 
@@ -77,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         SharedPreferences.Editor editor = getSharedPreferences("ANDROID", MODE_PRIVATE).edit();
         editor.putString("android_id", android_id);
         editor.commit();
+
+        SharedPreferences prefLogged = getSharedPreferences("LOGGED", Context.MODE_PRIVATE);
+        adminPrijavljen = prefLogged.getBoolean("logged", true);
+
+
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -123,9 +130,20 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         listView.setAdapter(listAdapter);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 
+
         //klasa za otvaranje i zatvaranje drawera
         drawerListener = new ActionBarDrawerToggle(this,drawerLayout,null, R.string.open_drawer,R.string.close_drawer )
         {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                if(adminPrijavljen){
+                    findViewById(R.id.admin_login_button).setAlpha(1);
+                }else {
+                    findViewById(R.id.admin_login_button).setAlpha(0);
+                }
+            }
+
             @Override
             public void onDrawerClosed(View drawerView){
                 super.onDrawerClosed(drawerView);
@@ -137,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         drawerLayout.setDrawerListener(drawerListener);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         loadData();
 
@@ -181,6 +200,13 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
         });
         //!!!kraj postavljanje listenera za klik na item u meniju
+
+        if(adminPrijavljen){
+            findViewById(R.id.admin_login_button).setAlpha(1);
+        }else {
+            findViewById(R.id.admin_login_button).setAlpha(0);
+        }
+
     }
 
     //Nekon submit-a u tražilici, uneseni upit se sprema u string uneseniUpit i otvara se fragment PretraživanjeFragment
@@ -195,6 +221,11 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
             @Override
             public boolean onQueryTextSubmit(String query) {
                 uneseniUpit = query;
+
+                SharedPreferences prefs = getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+                String android_id = prefs.getString("android_id", null);
+                Baza baza = new Baza(android_id);
+                baza.ZapisiUDnevnik(4, android_id, "Pretraga", query, 1);
 
                 List<String> naziviPonude = new ArrayList<>();
                 List<String> hashPonude = new ArrayList<>();
@@ -242,6 +273,16 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         return super.onCreateOptionsMenu(menu);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(adminPrijavljen){
+            findViewById(R.id.admin_login_button).setAlpha(1);
+        }else {
+            findViewById(R.id.admin_login_button).setAlpha(0);
+        }
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState){

@@ -259,4 +259,24 @@ public class Baza extends Activity{
         }
     }
 
+    public List<String> DohvatiNajcescePretrage(){
+        String upit = "select top 5 count(*) as zbroj, dodatneInformacije from Dnevnik where tipZapisa = 4  group by Dnevnik.dodatneInformacije order by zbroj DESC";
+
+        ResultSet reset = null;
+        List<String> listaQuerya = new ArrayList<>();
+        try{
+            reset = IzvrsiUpit(upit);
+            if(reset!=null){
+                while(reset.next()){
+                    listaQuerya.add(reset.getString("dodatneInformacije"));
+                }
+            }
+            return listaQuerya;
+        }catch (SQLException ex){
+            System.out.println("Nije uspio dohvat najučestalijih pretraživanja");
+        }
+
+        return null;
+    }
+
 }
