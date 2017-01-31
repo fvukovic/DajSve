@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface SearchLocationListener {
 
-    List<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong, List<String> Id,int km);
+    List<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong,List<String> Id, int km);
 
 }

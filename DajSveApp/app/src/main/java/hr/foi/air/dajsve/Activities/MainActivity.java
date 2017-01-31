@@ -21,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
 import com.raizlabs.android.dbflow.config.FlowConfig;
