@@ -28,6 +28,9 @@ public class PretrazivanjeKeyword implements SearchDataListener{
         int brojac=-1;
         String word ="";
         List<String> ListaKljučnihRiječi = new ArrayList<>();
+
+        //Petlja za prolaz kroz upisani string u trazilici, te prema razmaku spremanje kljucnih rijeci u listu
+
         for (int i = 0 ; i<Slength;i++)
         {
             if(Character.isWhitespace(keywords.charAt(i)) || i==Slength-1){
@@ -46,11 +49,14 @@ public class PretrazivanjeKeyword implements SearchDataListener{
             }
         }
 
+        //Formatiranje kljucnih rijeci u odgovorajuci string za matcher
+
         Set<String> targetSet = new HashSet();
-        Set<Integer> targetSetInt = new HashSet();
         String sviKeywords = TextUtils.join("|", ListaKljučnihRiječi);
         System.out.println(sviKeywords);
         ArrayList<String> allMatchedElements = new ArrayList<>();
+
+        //Petlja za prolaz kroz sve nazive te pretrazivanje tih naziva po listi kljucnih rijeci
         for (String element : allElements)
         {
             brojac++;

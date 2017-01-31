@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import entities.Ponuda;
 import hr.foi.air.dajsve.Activities.MainActivity;
@@ -31,9 +30,7 @@ import static android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 
 public class NovePonudeFragment extends Fragment implements OnRefreshListener{
     private RecyclerView rv;
-    public RVAdapter adapter;
     public SwipeRefreshLayout mSwipeRefreshLayout;
-    List<Ponuda> sosBaza;
     public FloatingActionButton fab;
     public String[] opcijeSortiranja;
 

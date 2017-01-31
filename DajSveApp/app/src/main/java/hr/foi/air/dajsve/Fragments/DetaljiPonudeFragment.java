@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,9 +47,7 @@ import hr.foi.air.dajsve.R;
  */
 
 public class DetaljiPonudeFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
-    //public CheckBox favoritCheckBox;
-    Favorit trenutni;
-    boolean statusFavoritPonuda;
+
     public Ponuda ponudaDohvacena;
     private ImageView ponudaSlika;
     private TextView ponudaNaziv;
@@ -58,12 +55,8 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     private TextView ponudaCijena;
     private TextView ponudaPopust;
     private TextView ponudaOriginal;
-    private TextView ponudaDatum;
-    private TextView ponudaUsteda;
-    private TextView ponudaGrad;
     private LinearLayout linkNaStranicu;
     private FrameLayout mapaPrikaz;
-    private int position;
     private String name = "Map view";
     private com.google.android.gms.maps.MapFragment mapFragment;
     private GoogleMap map = null;
@@ -75,7 +68,6 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     Context context;
     private ImageView prozirnaSlika;
     private ScrollView scroll;
-    private boolean ulazNaFragment=false;
     private TextView brojPregledaPonude;
     private TextView brojOmiljenihPonude;
     private TextView brojOtvaranjaNaWebuPonude;

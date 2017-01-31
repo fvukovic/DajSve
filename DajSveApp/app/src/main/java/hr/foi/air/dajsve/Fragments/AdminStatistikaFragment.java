@@ -2,7 +2,6 @@ package hr.foi.air.dajsve.Fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,23 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.deepakbaliga.beautifulgraph.Plotter;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
-import net.sourceforge.jtds.jdbc.DateTime;
-
-import org.w3c.dom.Text;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import hr.foi.air.dajsve.Helpers.Baza;
@@ -42,7 +25,6 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ComboLineColumnChartView;
-import lecho.lib.hellocharts.view.LineChartView;
 
 /**
  * Created by Filip on 27.1.2017..
@@ -53,7 +35,6 @@ public class AdminStatistikaFragment extends Fragment {
     private ComboLineColumnChartView chart;
     private ComboLineColumnChartData data;
 
-    private int numberOfLines = 1;
     private int maxNumberOfLines = 4;
     private int numberOfPoints = 12;
 

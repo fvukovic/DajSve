@@ -37,12 +37,9 @@ import hr.foi.air.dajsve.Helpers.Baza;
 
 public class MojeKategorijeFragment extends DialogFragment implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView rv;
-    public RVAdapter adapter;
     public SwipeRefreshLayout mSwipeRefreshLayout;
      public String[] kategorije ;
-    public List<String> oznaceneKategorije;
     public  boolean[] oznaceneKategorijeDialog ;
-    public AlertDialog ad;
     Button urediOmiljeneKategorije;
     public FloatingActionButton fab;
     public String[] opcijeSortiranja;

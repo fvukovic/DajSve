@@ -16,40 +16,7 @@ import entities.Ponuda;
 
 public class PretrazivanjeLokacija implements SearchLocationListener{
 
-//    public static List<String> getLocationFromAddress(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong, List<String> Id) {
-
-//        Geocoder coder = new Geocoder(context);
-//        List<Address> address = null;
-//        List<String> hashs= new ArrayList<>();
-//        int brojac = -1,brojac1=0;
-//
-//        try {
-//
-//            address = coder.getFromLocationName(strAddress, 5);
-//        } catch (IOException e) {
-//            System.out.println("GRESKA");
-//        }
-//
-//        Address location = address.get(0);
-//        double unesenaLokacijaLat = location.getLatitude();
-//        double unesenaLokacijaLog = location.getLongitude();
-//        List<Ponuda> test = Ponuda.getAll();
-//
-//        for (Double element : allElementsLat)
-//
-//        {
-//            brojac++;
-//
-//            if(distVincenty(unesenaLokacijaLat, unesenaLokacijaLog, element, allElementsLong.get(brojac))<30)
-//            {
-//                 hashs.add(Id.get(brojac));
-//            }
-//        }
-//        System.out.print(hashs.size());
-//       return hashs;
-
-//    }
-
+    // Funkcija za izracun udaljenosti od jednog pointa na mapi do drugog(U kilometrima, preciznost algoritma 0,5 mm)
     public static double distVincenty(double lat1, double lon1, double lat2, double lon2) {
         double a = 6378137, b = 6356752.314245, f = 1 / 298.257223563; // WGS-84 ellipsoid params
         double L = Math.toRadians(lon2 - lon1);
@@ -97,13 +64,16 @@ public class PretrazivanjeLokacija implements SearchLocationListener{
         return dist/1000;
     }
 
-
+    // Funkcija za implementaciju pretrazivanje po lokaciji
     @Override
-    public List<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong, List<String> Id) {
+    public List<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong, List<String> Id,int km) {
         Geocoder coder = new Geocoder(context);
         List<Address> address = null;
         List<String> hashs= new ArrayList<>();
-        int brojac = -1,brojac1=0;
+
+
+        //Dobivanje lokacije po upisanoj adresi
+        int brojac = -1 ;
 
         try {
 
@@ -117,12 +87,13 @@ public class PretrazivanjeLokacija implements SearchLocationListener{
         double unesenaLokacijaLog = location.getLongitude();
         List<Ponuda> test = Ponuda.getAll();
 
+        //petlja za prolaz kroz sve lokacije u bazi
         for (Double element : allElementsLat)
 
         {
             brojac++;
-
-            if(distVincenty(unesenaLokacijaLat, unesenaLokacijaLog, element, allElementsLong.get(brojac))<30)
+            //Usporedujemo da lije odredena lokacija unutar odredene kilometraze
+            if(distVincenty(unesenaLokacijaLat, unesenaLokacijaLog, element, allElementsLong.get(brojac))<km)
             {
                 hashs.add(Id.get(brojac));
             }

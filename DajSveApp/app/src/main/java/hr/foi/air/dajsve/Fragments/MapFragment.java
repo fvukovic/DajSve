@@ -52,7 +52,6 @@ import java.util.Random;
 
 import entities.MyItem;
 import entities.Ponuda;
-import hr.foi.air.dajsve.Helpers.PretrazivanjeLokacija;
 
 /**
  * Created by Filip on 27.11.2016..
@@ -76,15 +75,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     private ClusterManager<MyItem> mClusterManager;
     private MyItem clickedClusterItem;
-
-    private int position;
-    private String name = "Map view";
     private com.google.android.gms.maps.MapFragment mapFragment;
     private GoogleMap map = null;
-    private String nazivPonude;
-    private String nazivGrada;
     List<Ponuda> svePonude = null;
-    protected ArrayList<Ponuda> kliknutePonude = new ArrayList<Ponuda>();
     private RecyclerView rv;
     private Context context;
 

@@ -7,7 +7,6 @@ import android.os.Looper;
 import android.os.StrictMode;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -21,10 +20,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.common.data.DataBufferObserver;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
@@ -44,18 +41,15 @@ import hr.foi.air.dajsve.Fragments.MapFragment;
 import hr.foi.air.dajsve.Fragments.MojeKategorijeFragment;
 import hr.foi.air.dajsve.Fragments.PocetnaFragment;
 import hr.foi.air.dajsve.Fragments.PretraživanjeFragment;
-import hr.foi.air.dajsve.Fragments.SvePonudeFragment;
 import hr.foi.air.dajsve.Helpers.Baza;
 import hr.foi.air.dajsve.Helpers.PretrazivanjeKeyword;
-import hr.foi.air.dajsve.Helpers.PretrazivanjeLokacija;
 import hr.foi.air.dajsve.Helpers.SearchDataListener;
-import hr.foi.air.dajsve.Helpers.SearchLocationListener;
 import hr.foi.air.dajsve.Loaders.DatabaseDataLoader;
 import hr.foi.air.dajsve.Loaders.WebServiceDataLoader;
 import hr.foi.air.dajsve.R;
 
 public class MainActivity extends AppCompatActivity implements DataLoadedListener {
-    SvePonudeFragment svePonudeFragment = new SvePonudeFragment();
+
     ListView listView;
     ArrayAdapter<String> listAdapter;
     String arrayFragment[] = {"Ponude", "Favoriti", "Moje kategorije", "Mapa"};
@@ -69,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String grad = getSharedPreferences("GRAD", MODE_PRIVATE).getString("grad", "Zagreb");
+
 
 
         SharedPreferences.Editor spref = getSharedPreferences("LOGGED", Context.MODE_PRIVATE).edit();
@@ -87,36 +81,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
-//        List<String> naziviPonude = new ArrayList<>();
-//        List<String> hashPonude = new ArrayList<>();
-//        List<String> hashPonudeLokacija = new ArrayList<>();
-//        List<Double> latPonude = new ArrayList<>();
-//        List<Double> longPonude = new ArrayList<>();
-//        for(Ponuda ponuda : Ponuda.getAll())
-//        {
-//            naziviPonude.add(ponuda.getNaziv());
-//            hashPonude.add(ponuda.getHash());
-//            if(!ponuda.getLatitude().equals("nema")){
-//                if(!ponuda.getLongitude().equals("nema")) {
-//                    latPonude.add(Double.parseDouble(ponuda.getLatitude()));
-//                    longPonude.add(Double.parseDouble(ponuda.getLongitude()));
-//                    hashPonudeLokacija.add(ponuda.getHash());
-//                }
-//            }
-//        }
-//        System.out.print("KOMADI:" + latPonude.size()+"   "+ longPonude.size()+ "KOLIKO HAŠOVA: "+hashPonudeLokacija.size());
-//        PretrazivanjeLokacija.getLocationFromAddress("Primorska 17, Varaždin",this,latPonude,longPonude,hashPonudeLokacija);
 
-//        SearchLocationListener a = new PretrazivanjeLokacija();
-//        List<String> bbhb = a.onDataArrived("Primorska 17, Varaždin",this,latPonude,longPonude,hashPonudeLokacija);
-//        System.out.print(bbhb);
-//        //
-//        SearchDataListener b = new PretrazivanjeKeyword();
-//        List<String> aaha = b.onDataArrived("SAUNA ZAGREB", naziviPonude,hashPonude, true);
-//        System.out.print(aaha);
-
-
-//        a.searchAlgoritam("SAUNA ZAGREB", naziviPonude,hashPonude);
         findViewById(R.id.admin_login_button).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

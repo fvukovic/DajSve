@@ -13,15 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import hr.foi.air.dajsve.Helpers.Baza;
-import hr.foi.air.dajsve.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import entities.Kategorija;
 import entities.OmiljenaKategorija;
 import entities.Ponuda;
+import hr.foi.air.dajsve.Helpers.Baza;
+import hr.foi.air.dajsve.R;
 
 /**
  * Created by Filip on 19.12.2016..
@@ -29,8 +28,6 @@ import entities.Ponuda;
 
 public class PocetnaFragment extends Fragment{
     public String[] kategorije ;
-    public List<String> oznaceneKategorije;
-//    public List<Ponuda> ponudePoKategoriji;
     public  boolean[] oznaceneKategorijeDialog;
     Button urediOmiljeneKategorije;
 
