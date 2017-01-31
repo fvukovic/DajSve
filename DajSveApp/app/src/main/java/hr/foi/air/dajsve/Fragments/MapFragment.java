@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -115,6 +116,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         arraySpinner = new String[] {
                 "10", "30", "60", "100", "200"
         };
+        try {
+            this.hashs = getArguments().getStringArrayList("AAA");
+        }catch (Exception e){
+
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, arraySpinner);
         spinnerKilometri.setAdapter(adapter);
@@ -162,9 +168,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 }
                 System.out.print("PODACI: "+longPonude.size()+latPonude.size());
                 PretrazivanjeLokacija b = new PretrazivanjeLokacija();
-                List<String> hashs = b.onDataArrived(aa.toString(),getActivity(), latPonude,longPonude,hashPonudeLokacija, Integer.parseInt(kilometri));
+                ArrayList<String> hashs = b.onDataArrived(aa.toString(),getActivity(), latPonude,longPonude,hashPonudeLokacija, Integer.parseInt(kilometri));
                 System.out.print("KOLIKO : " +hashs.size());
                 pokreniCluster(map,hashs);
+
+                Fragment fragment = null;
+
+                Bundle bundle = new Bundle();
+
+                bundle.putStringArrayList("AAA",hashs);
+
+                fragment = new MapFragment();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
             }
         });
 

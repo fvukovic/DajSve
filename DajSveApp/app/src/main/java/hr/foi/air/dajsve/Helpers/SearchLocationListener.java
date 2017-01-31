@@ -2,6 +2,7 @@ package hr.foi.air.dajsve.Helpers;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,6 +11,6 @@ import java.util.List;
 
 public interface SearchLocationListener {
 
-    List<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong,List<String> Id, int km);
+    ArrayList<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat, List<Double> allElementsLong, List<String> Id, int km);
 
 }

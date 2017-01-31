@@ -66,10 +66,10 @@ public class PretrazivanjeLokacija implements SearchLocationListener{
 
     // Funkcija za implementaciju pretrazivanje po lokaciji
     @Override
-    public List<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat,List<Double> allElementsLong, List<String> Id,int km) {
+    public ArrayList<String> onDataArrived(String strAddress, Context context, List<Double> allElementsLat,List<Double> allElementsLong, List<String> Id,int km) {
         Geocoder coder = new Geocoder(context);
         List<Address> address = null;
-        List<String> hashs= new ArrayList<>();
+        ArrayList<String> hashs= new ArrayList<>();
 
 
         //Dobivanje lokacije po upisanoj adresi
