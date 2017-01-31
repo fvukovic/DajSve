@@ -16,12 +16,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +57,9 @@ import java.util.Random;
 
 import entities.MyItem;
 import entities.Ponuda;
+import hr.foi.air.dajsve.Helpers.PretrazivanjeLokacija;
+import hr.foi.air.dajsve.Helpers.SearchLocationListener;
+import hr.foi.air.dajsve.R;
 
 /**
  * Created by Filip on 27.11.2016..
@@ -80,6 +88,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     List<Ponuda> svePonude = null;
     private RecyclerView rv;
     private Context context;
+    private String[] arraySpinner;
 
 
 
@@ -89,6 +98,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(hr.foi.air.dajsve.R.layout.map_fragment, container, false);
         rv = (RecyclerView) v.findViewById(hr.foi.air.dajsve.R.id.rv);
+        Button pretraziMapuButton = (Button) v.findViewById(R.id.pretrazi_mapu_gumb);
+        final android.widget.SearchView pretragaMapeSearch = (android.widget.SearchView) v.findViewById(R.id.map_search);
+        final Spinner spinnerKilometri = (Spinner) v.findViewById(R.id.map_spinner);
         svePonude = Ponuda.getAll();
         System.out.print("Broj ponuda: " + svePonude.size());
         context = v.getContext();
@@ -96,6 +108,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mapFragment = new com.google.android.gms.maps.MapFragment();
         mapFragment.getMapAsync(this);
         getActivity().getFragmentManager().beginTransaction().add(hr.foi.air.dajsve.R.id.frame, mapFragment).commit();
+
+
+        arraySpinner = new String[] {
+                "10", "30", "60", "100", "200"
+        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, arraySpinner);
+        spinnerKilometri.setAdapter(adapter);
 
 
         //provjera da li je gps omogućen
@@ -107,6 +127,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             GPSupozorenje();
         }
         //kraj provjere
+
+
+        pretraziMapuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CharSequence aa = pretragaMapeSearch.getQuery();
+                String kilometri = (String) spinnerKilometri.getSelectedItem();
+
+                //ovo zatvara tipkovnicu
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+                System.out.println("Search : "+ aa + kilometri);
+
+                //fico tu implementiraj sucelje za search prema lokaciji s ovim parametrima
+
+            }
+        });
 
         return v;
 

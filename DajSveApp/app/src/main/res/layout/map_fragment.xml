@@ -32,16 +32,23 @@
         android:weightSum="1">
 
         <SearchView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/map_search"
-            android:layout_weight="0.3"></SearchView>
+            android:layout_weight="0.85"></SearchView>
 
         <Spinner
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/map_spinner"
-            android:layout_weight="0.7"></Spinner>
+            android:layout_weight="0.1"></Spinner>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"
+            android:id="@+id/pretrazi_mapu_gumb"
+            android:text="->" />
 
 
     </LinearLayout>
