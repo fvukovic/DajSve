@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -51,6 +53,7 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -89,6 +92,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private Context context;
     private String[] arraySpinner;
     public  List <String> hashs =new ArrayList<>();
+    public String unos;
+    public boolean dobraAdresa=true;
 
 
 
@@ -118,8 +123,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         };
         try {
             this.hashs = getArguments().getStringArrayList("AAA");
+            this.unos = getArguments().getString("BBB");
+            this.dobraAdresa=true;
+            System.out.println("ISPISIIII");
         }catch (Exception e){
-
+            this.unos="Turopoljska 17,Lekenik";
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, arraySpinner);
@@ -151,7 +159,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
                 //fico tu implementiraj sucelje za search prema lokaciji s ovim parametrima
                 List<String> naziviPonude = new ArrayList<>();
-                List<String> hashPonude = new ArrayList<>();
                 List<String> hashPonudeLokacija = new ArrayList<>();
                 List<Double> latPonude = new ArrayList<>();
                 List<Double> longPonude = new ArrayList<>();
@@ -168,13 +175,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 }
                 System.out.print("PODACI: "+longPonude.size()+latPonude.size());
                 PretrazivanjeLokacija b = new PretrazivanjeLokacija();
-                ArrayList<String> hashs = b.onDataArrived(aa.toString(),getActivity(), latPonude,longPonude,hashPonudeLokacija, Integer.parseInt(kilometri));
+                ArrayList<String> hashs = new ArrayList<>();
+                String unos = aa.toString();
+                Bundle bundle = new Bundle();
+                boolean dobraAdresa= true;
+                try {
+                    hashs = b.onDataArrived(aa.toString(), getActivity(), latPonude, longPonude, hashPonudeLokacija, Integer.parseInt(kilometri));
+                    bundle.putString("BBB",aa.toString());
+                }catch (Exception e){
+                    hashs = (ArrayList<String>) hashPonudeLokacija;
+                    dobraAdresa=false;
+                }
+
                 System.out.print("KOLIKO : " +hashs.size());
-                pokreniCluster(map,hashs);
+
+                pokreniCluster(map,hashs,unos);
 
                 Fragment fragment = null;
 
-                Bundle bundle = new Bundle();
+
 
                 bundle.putStringArrayList("AAA",hashs);
 
@@ -212,8 +231,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             map.getUiSettings().setRotateGesturesEnabled(true);
         }
 
+        List<Address> address = null;
 
-        //map.setInfoWindowAdapter(new detaljniInfoWindow());
+        System.out.println("ADRESA: "+ this.unos);
+        try {
+            Geocoder coder = new Geocoder(getActivity());
+            address = coder.getFromLocationName(this.unos, 5);
+            Address location = address.get(0);
+            if(this.unos.equals("Turopoljska 17,Lekenik")) {
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45, 16), 15));
+                map.animateCamera(CameraUpdateFactory.zoomTo(7), 2000, null);
+            }
+            else {
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()),15));
+                map.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .title("Vaša lokacija"));
+            }
+        } catch (IOException e) {
+            System.out.print("GRESKA");
+
+        }
+
+
+
+
+
+
+
         List<String> hashPonudeLokacija = new ArrayList<>();
         for(Ponuda ponuda : Ponuda.getAll())
         {
@@ -223,7 +269,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
         }
-        pokreniCluster(map,hashPonudeLokacija);
+        pokreniCluster(map,hashPonudeLokacija,"");
 
         mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(new detaljniInfoWindow());
 
@@ -407,36 +453,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 //return true;
             }
         }
-            @Override
-            public void onCameraIdle() {
-                zoomStatus = map.getCameraPosition().zoom;
-                System.out.println("kamera se mice ++: " + zoomStatus);
-            }
-
+        @Override
+        public void onCameraIdle() {
+            zoomStatus = map.getCameraPosition().zoom;
+            System.out.println("kamera se mice ++: " + zoomStatus);
         }
 
+    }
 
-        public class MarkerCallback implements Callback {
-            Marker marker=null;
 
-            MarkerCallback(Marker marker) {
-                this.marker=marker;
-            }
+    public class MarkerCallback implements Callback {
+        Marker marker=null;
 
-            @Override
-            public void onError() {
-                Log.e(getClass().getSimpleName(), "Error");
-            }
+        MarkerCallback(Marker marker) {
+            this.marker=marker;
+        }
 
-            @Override
-            public void onSuccess() {
-                if (marker != null && marker.isInfoWindowShown()) {
-                    marker.hideInfoWindow();
-                    marker.showInfoWindow();
-                }
+        @Override
+        public void onError() {
+            Log.e(getClass().getSimpleName(), "Error");
+        }
+
+        @Override
+        public void onSuccess() {
+            if (marker != null && marker.isInfoWindowShown()) {
+                marker.hideInfoWindow();
+                marker.showInfoWindow();
             }
         }
-    private void pokreniCluster(GoogleMap map, List<String> aa) {
+    }
+    private void pokreniCluster(GoogleMap map, List<String> aa, String adresa) {
 
         mClusterManager = new ClusterManager<MyItem>(context, map);
         //mClusterManager.setRenderer(new PersonRenderer());
@@ -460,7 +506,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
 
 
-
         System.out.print("krauc : "+aa.size());
         ArrayList<LatLng> spremljeneKoordinate = new ArrayList<>();
         spremljeneKoordinate.add(new LatLng(1.0,1.0));
@@ -479,7 +524,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             }
         }
         try {
-             for (final Ponuda ponuda : svePonude) {
+            for (final Ponuda ponuda : svePonude) {
                 for (String hash : this.hashs) {
                     if (ponuda.getHash().equals(hash)) {
                         String ponudaLat = ponuda.getLatitude();
@@ -569,6 +614,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         alert.show();
     }
     //kraj alerta
-    }
+}
 
 
