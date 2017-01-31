@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SlidingDrawer;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     ActionBarDrawerToggle drawerListener;
     private String android_id;
     List<Grad> gradLista = null;
-    Boolean adminPrijavljen = false;
+    Boolean adminPrijavljen = true;
     List<Ponuda> ponudaLista = null;
     private String uneseniUpit;
 
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         ButterKnife.bind(this);
         FlowManager.init(new FlowConfig.Builder(this).build());
 
+        final Button button = (Button)findViewById(R.id.admin_login_button);
+
         findViewById(R.id.admin_login_button).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -96,8 +99,10 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 Fragment fragment = null;
                 if(prefLogged.getBoolean("logged", true) == true){
                     fragment = new AdminPocetna();
+                    button.setVisibility(View.VISIBLE);
                 }else{
                     fragment =  new AdminLoginFragment();
+                    button.setVisibility(View.GONE);
                 }
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
@@ -138,9 +143,12 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 if(adminPrijavljen){
-                    findViewById(R.id.admin_login_button).setAlpha(1);
+                    final Button button = (Button)findViewById(R.id.admin_login_button);
+                    button.setVisibility(View.VISIBLE);
+
                 }else {
-                    findViewById(R.id.admin_login_button).setAlpha(0);
+                    final Button button = (Button)findViewById(R.id.admin_login_button);
+                    button.setVisibility(View.GONE);
                 }
             }
 
@@ -202,9 +210,9 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         //!!!kraj postavljanje listenera za klik na item u meniju
 
         if(adminPrijavljen){
-            findViewById(R.id.admin_login_button).setAlpha(1);
+            button.setVisibility(View.VISIBLE);
         }else {
-            findViewById(R.id.admin_login_button).setAlpha(0);
+            button.setVisibility(View.GONE);
         }
 
     }
@@ -278,9 +286,11 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
     protected void onResume() {
         super.onResume();
         if(adminPrijavljen){
-            findViewById(R.id.admin_login_button).setAlpha(1);
+            final Button button = (Button)findViewById(R.id.admin_login_button);
+            button.setVisibility(View.VISIBLE);
         }else {
-            findViewById(R.id.admin_login_button).setAlpha(0);
+            final Button button = (Button)findViewById(R.id.admin_login_button);
+            button.setVisibility(View.GONE);
         }
     }
 

@@ -52,7 +52,7 @@ public class MojeKategorijeFragment extends DialogFragment implements SwipeRefre
         View rootView = inflater.inflate(hr.foi.air.dajsve.R.layout.moje_kategorije_fragment, container, false);
         rv = (RecyclerView) rootView.findViewById(hr.foi.air.dajsve.R.id.rv);
         final AlertDialog.Builder ad =  new AlertDialog.Builder(getActivity());
-        fab = (FloatingActionButton) rootView.findViewById(hr.foi.air.dajsve.R.id.fab_sve_ponude);
+      // fab = (FloatingActionButton) rootView.findViewById(hr.foi.air.dajsve.R.id.fab_sve_ponude);
         opcijeSortiranja = new String[3];
         opcijeSortiranja[0] = "Cijena - uzlazno";
         opcijeSortiranja[1] = "Cijena - silazno";

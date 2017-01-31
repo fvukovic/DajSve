@@ -44,7 +44,7 @@ public class PretraživanjeFragment extends Fragment   {
         rv = (RecyclerView) rootView.findViewById(hr.foi.air.dajsve.R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         final AlertDialog.Builder ad =  new AlertDialog.Builder(getActivity());
-        fab = (FloatingActionButton) rootView.findViewById(hr.foi.air.dajsve.R.id.fab_sve_ponude);
+        //fab = (FloatingActionButton) rootView.findViewById(hr.foi.air.dajsve.R.id.fab_sve_ponude);
         opcijeSortiranja = new String[3];
         opcijeSortiranja[0] = "Cijena - uzlazno";
         opcijeSortiranja[1] = "Cijena - silazno";
@@ -62,7 +62,7 @@ public class PretraživanjeFragment extends Fragment   {
                 }
 
         rv.setLayoutManager(llm);
-        List<Ponuda> novaLista= Ponuda.getAll();
+        List<Ponuda> novaLista = Ponuda.getAll();
 
         ad.setTitle("Sortiraj prema:");
 
@@ -86,23 +86,24 @@ public class PretraživanjeFragment extends Fragment   {
                         asc = false;
                         break;
                 }
+                novaLista= (ArrayList<Ponuda>) Ponuda.getAllOrderBy(vrstaSortiranja, asc);
 
-                RVAdapter adapter = new RVAdapter(svePonude, getContext());
+                RVAdapter adapter = new RVAdapter(novaLista, getContext());
                 rv.setAdapter(adapter);
             }
         });
 
-
+        Collections.shuffle(novaLista);
         RVAdapter adapter = new RVAdapter(svePonude,getContext());
         rv.setAdapter(adapter);
 
-        fab.setOnClickListener(new OnClickListener() {
+      /*  fab.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 ad.show();
             }
         });
-
+*/
         return rootView;
     }
 
