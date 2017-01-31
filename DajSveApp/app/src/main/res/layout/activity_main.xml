@@ -24,47 +24,37 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:weightSum="1"
         android:id="@+id/navigacija_layout">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="#9879A8">
-<!--
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/gradovi_spinner"
 
-                android:layout_marginTop="64dp"
-                android:paddingRight="30dp"
-                android:paddingLeft="30dp"
-                android:backgroundTint="#FFFFFF"/>
-                -->
-        </RelativeLayout>
+
         <ListView
             android:layout_width="250dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="100dp"
             android:layout_gravity="left"
             android:id="@+id/listview"
             android:background="#FFFFFF"
+            android:layout_weight="0.2"
             android:paddingTop="25dp"
             android:textAlignment="center">
         </ListView>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
             android:id="@+id/admin_login_button"
             android:layout_alignParentBottom="true"
-            android:text="Administracija"
-            android:alpha="0"/>
+            android:alpha="0"
+            android:text="Administracija"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

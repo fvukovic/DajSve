@@ -279,4 +279,41 @@ public class Baza extends Activity{
         return null;
     }
 
+
+    public List<Integer> DohvatiStatistikuZaDetaljnuPonudu(String ponudaHash, int tipZapisa){
+        String upit = "declare @start datetime = CAST(getdate() as date)\n" +
+                "declare @end  datetime = dateadd(day, -10, @start)\n" +
+                "\n" +
+                ";with amonth(day) as\n" +
+                "(\n" +
+                "   select @end as day\n" +
+                "       union all\n" +
+                "   select day + 1\n" +
+                "       from amonth\n" +
+                "       where day < CAST(@start as date)\n" +
+                ")\n" +
+                "select count(vrijeme) as c \n" +
+                "from amonth \n" +
+                "left join Dnevnik on CAST(vrijeme as date) = CAST(amonth.day as date) \n" +
+                "                     and tipZapisa = " + tipZapisa + " and dodatneInformacije = '" + ponudaHash + "'\n" +
+                "group by CAST(amonth.day as date)";
+
+        ResultSet rs = null;
+
+        List<Integer> listaQuerya = new ArrayList<>();
+        try{
+            rs = IzvrsiUpit(upit);
+            if(rs!=null){
+                while(rs.next()){
+                    listaQuerya.add(rs.getInt("c"));
+                }
+            }
+            return listaQuerya;
+        }catch (SQLException ex){
+            System.out.println("Nije uspio dohvat otvaranja ponude");
+        }
+
+        return null;
+    }
+
 }

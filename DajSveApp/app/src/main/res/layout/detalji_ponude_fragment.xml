@@ -190,12 +190,25 @@
             android:alpha=".1"/>
     </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="450dp"></RelativeLayout>
 
         <LinearLayout
-            android:visibility="visible"
+            android:layout_width="match_parent" android:id="@+id/graf_detalji" android:visibility="gone"
+            android:layout_height="wrap_content">
+
+            <lecho.lib.hellocharts.view.ComboLineColumnChartView
+                android:id="@+id/chart2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="100dp" android:orientation="horizontal"
             android:id="@+id/statistika_layout_detalji_ponude"

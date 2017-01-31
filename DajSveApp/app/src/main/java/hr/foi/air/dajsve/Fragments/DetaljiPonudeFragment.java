@@ -41,12 +41,32 @@ import entities.Favorit;
 import entities.Ponuda;
 import hr.foi.air.dajsve.Helpers.Baza;
 import hr.foi.air.dajsve.R;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.ColumnChartData;
+import lecho.lib.hellocharts.model.ComboLineColumnChartData;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.ComboLineColumnChartView;
 
 /**
  * Created by Helena on 23.11.2016..
  */
 
 public class DetaljiPonudeFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
+
+    private ComboLineColumnChartView chart;
+    private ComboLineColumnChartData data;
+
+    private boolean hasAxes = true;
+    private boolean hasAxesNames = true;
+    private boolean hasPoints = true;
+    private boolean hasLines = true;
+    private boolean isCubic = false;
+    private boolean hasLabels = false;
 
     public Ponuda ponudaDohvacena;
     private ImageView ponudaSlika;
@@ -71,6 +91,7 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
     private TextView brojPregledaPonude;
     private TextView brojOmiljenihPonude;
     private TextView brojOtvaranjaNaWebuPonude;
+    private LinearLayout grafDetalji;
 
     @Nullable
     @Override
@@ -94,7 +115,9 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         brojPregledaPonude = (TextView) rootView.findViewById(R.id.brojPregledaPonude);
         brojOmiljenihPonude = (TextView) rootView.findViewById(R.id.brojOmiljenihPonude);
         brojOtvaranjaNaWebuPonude = (TextView) rootView.findViewById(R.id.brojOtvaranjaNaWebuPonude);
+        grafDetalji = (LinearLayout) rootView.findViewById(R.id.graf_detalji);
         ponudaJeFavorit = false;
+        chart = (ComboLineColumnChartView) rootView.findViewById(R.id.chart2);
 
         Bundle bundle = getArguments();
         List<Favorit> favoriti= Favorit.getAll();
@@ -129,13 +152,18 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
 
             String brojOtvaranjaNaWebu = String.valueOf(baza.DohvatiBrojOtvaranjaPonude(7,ponudaDohvacena.getHash()));
 
+            generateData();
+
             brojPregledaPonude.setText(brojOtvaranjaPonude);
             brojOmiljenihPonude.setText(brojOmiljenihPonuda);
             brojOtvaranjaNaWebuPonude.setText(brojOtvaranjaNaWebu);
-
+            grafDetalji.setVisibility(View.VISIBLE);
             detaljiPonudeStatistikaLayout.setVisibility(View.VISIBLE);
+
+
         }else{
             detaljiPonudeStatistikaLayout.setVisibility(View.GONE);
+            grafDetalji.setVisibility(View.GONE);
         }
 
         prozirnaSlika.setOnTouchListener(new View.OnTouchListener() {@Override
@@ -280,6 +308,8 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
         mapaPrikaz.setFocusable(true);
         mapaPrikaz.addView(v);
 
+
+
         return rootView;
     }
     @Override
@@ -349,5 +379,82 @@ public class DetaljiPonudeFragment extends android.support.v4.app.Fragment imple
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+
+    //funkcija koja prima generiranu liniju i stupce i radi graf
+    private void generateData() {
+        data = new ComboLineColumnChartData(generateColumnData(), generateLineData());
+
+        if (hasAxes) {
+            Axis axisX = new Axis().setHasLines(true);
+            Axis axisY = new Axis().setHasLines(true);
+            if (hasAxesNames) {
+                axisX.setName("Dan");
+                axisY.setName("Odnos pregleda ponude i otvaranja ponude na webu");
+            }
+            data.setAxisXBottom(axisX);
+            data.setAxisYLeft(axisY);
+        } else {
+            data.setAxisXBottom(null);
+            data.setAxisYLeft(null);
+        }
+
+        chart.setComboLineColumnChartData(data);
+    }
+
+    //generiranje charta s podacima od ovog tjedna
+    private ColumnChartData generateColumnData() {
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+        String android_id = prefs.getString("android_id", null);
+        Baza baza = new Baza(android_id);
+
+        List<Integer> lista = baza.DohvatiStatistikuZaDetaljnuPonudu(ponudaDohvacena.getHash(), 6);
+
+        List<Column> columns = new ArrayList<Column>();
+        List<SubcolumnValue> values;
+        for (int i = 0; i < lista.size(); i++) {
+
+            values = new ArrayList<SubcolumnValue>();
+
+            values.add(new SubcolumnValue(lista.get(i), ChartUtils.COLOR_GREEN));
+
+            columns.add(new Column(values));
+        }
+
+        ColumnChartData columnChartData = new ColumnChartData(columns);
+        return columnChartData;
+    }
+
+    //generiranje charta s podacima od proslog tjedna
+    private LineChartData generateLineData() {
+        SharedPreferences prefs = getActivity().getSharedPreferences("ANDROID", Context.MODE_PRIVATE);
+        String android_id = prefs.getString("android_id", null);
+        Baza baza = new Baza(android_id);
+
+        List<Integer> lista = baza.DohvatiStatistikuZaDetaljnuPonudu(ponudaDohvacena.getHash(), 7);
+
+
+        List<Line> lines = new ArrayList<Line>();
+
+        for(int b=0; b<lista.size(); b++){
+            List<PointValue> values = new ArrayList<PointValue>();
+
+            values.add(new PointValue(b, lista.get(b)));
+
+            Line line = new Line(values);
+            line.setColor(ChartUtils.COLOR_BLUE);
+            line.setCubic(isCubic);
+            line.setHasLabels(hasLabels);
+            line.setHasLines(true);
+            line.setHasPoints(hasPoints);
+            lines.add(line);
+        }
+
+
+        LineChartData lineChartData = new LineChartData(lines);
+
+        return lineChartData;
     }
 }

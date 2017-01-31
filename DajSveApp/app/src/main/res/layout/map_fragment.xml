@@ -48,7 +48,9 @@
             android:layout_height="match_parent"
             android:layout_weight="0.05"
             android:id="@+id/pretrazi_mapu_gumb"
-            android:text="->" />
+            android:background="@color/colorAccent"
+            android:textColor="#ffffff"
+            android:text="Pronađi" />
 
 
     </LinearLayout>

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
 
     ListView listView;
     ArrayAdapter<String> listAdapter;
-    String arrayFragment[] = {"Ponude", "Favoriti", "Moje kategorije", "Mapa"};
+    String arrayFragment[] = {"Ponude", "Spremljene ponude", "Moje kategorije", "Mapa"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerListener;
     private String android_id;
@@ -67,10 +67,10 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         super.onCreate(savedInstanceState);
 
 
+            SharedPreferences.Editor spref = getSharedPreferences("LOGGED", Context.MODE_PRIVATE).edit();
+            spref.putBoolean("logged", false);
+            spref.commit();
 
-        SharedPreferences.Editor spref = getSharedPreferences("LOGGED", Context.MODE_PRIVATE).edit();
-        spref.putBoolean("logged", true);
-        spref.commit();
 
 
         android_id = Secure.getString(getApplicationContext().getContentResolver(),
@@ -98,10 +98,8 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
                 Fragment fragment = null;
                 if(prefLogged.getBoolean("logged", true) == true){
                     fragment = new AdminPocetna();
-                    button.setVisibility(View.VISIBLE);
                 }else{
                     fragment =  new AdminLoginFragment();
-                    button.setVisibility(View.GONE);
                 }
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().addToBackStack(null).replace(R.id.linearlayout, fragment).commit();
@@ -138,19 +136,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         //klasa za otvaranje i zatvaranje drawera
         drawerListener = new ActionBarDrawerToggle(this,drawerLayout,null, R.string.open_drawer,R.string.close_drawer )
         {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-                if(adminPrijavljen){
-                    final Button button = (Button)findViewById(R.id.admin_login_button);
-                    button.setVisibility(View.VISIBLE);
-
-                }else {
-                    final Button button = (Button)findViewById(R.id.admin_login_button);
-                    button.setVisibility(View.GONE);
-                }
-            }
-
             @Override
             public void onDrawerClosed(View drawerView){
                 super.onDrawerClosed(drawerView);
@@ -208,11 +193,11 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         });
         //!!!kraj postavljanje listenera za klik na item u meniju
 
-        if(adminPrijavljen){
-            button.setVisibility(View.VISIBLE);
-        }else {
-            button.setVisibility(View.GONE);
-        }
+//        if(adminPrijavljen){
+//            button.setVisibility(View.VISIBLE);
+//        }else {
+//            button.setVisibility(View.GONE);
+//        }
 
     }
 
@@ -280,18 +265,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadedListene
         return super.onCreateOptionsMenu(menu);
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(adminPrijavljen){
-            final Button button = (Button)findViewById(R.id.admin_login_button);
-            button.setVisibility(View.VISIBLE);
-        }else {
-            final Button button = (Button)findViewById(R.id.admin_login_button);
-            button.setVisibility(View.GONE);
-        }
-    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState){
